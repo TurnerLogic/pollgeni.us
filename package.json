@@ -1,0 +1,26 @@
+{
+  "name": "node_todo.dev",
+  "version": "1.0.0",
+  "description": "WarpSpeed Sample application",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:keentreat/node_todo.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/keentreat/node_todo/issues"
+  },
+  "homepage": "https://github.com/keentreat/node_todo",
+  "dependencies": {
+    "angular-filter": "^0.5.4",
+    "body-parser": "~1.12",
+    "express": "^4.12.4",
+    "hogan-express": "~0.5",
+    "mongodb": "~2.0"
+  }
+}

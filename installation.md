@@ -1,0 +1,11 @@
+- From Mac env cd into your /Sites or equivalent directory and clone the following respository: git@github.com:warpspeed/node-express-sample.git with the command `git clone git@github.com:warpspeed/node-express-sample.git expresstasklist.dev`.
+
+- Run vagrant ssh from the directory housing your WarpSpeed vagrant box. cd into /sites, run `warpspeed site:create node expresstasklist.dev --force`, to configure your sample site. The `--force` is necessary to overwrite the configuration of the files cloned in the previous step.
+
+- While inside your virtual machine run the command `npm install`, which whill load the dependencies enumerated in the package.json file into your project directory under node_modules.
+
+- Add the IP address and specified domain/root directory name to your /etc/hosts file from your Mac environment with your prefered text editor. The IP address of your WarpSpeed vagrant box is 192.168.88.10. The entry will look like this: `192.168.88.10 expresstasklist.dev`.
+
+- This express sample project uses a MongoDB, which is already installed on your WarpSpeed vagrant box. The interactive JavaScript Mongo shell is accesible from your virtual environment by running the command `mongo` from the home directory. `show dbs` will list all existing databases. `use tasklist` will either select the tasklist database or create it. In Mongo, databases contain collections, roughly equivalent to a SQL database's tables. Your mongo tasklist database needs a tasks collection in which to store task documents, JSON data which become programmatically the Task objects. The command `db.tasks.find();` will return every document -- Task object -- in JSON format. The command `db.tasks.insert({name: "Learn ExpressJS", is_complete: false});` adds a new document to your tasks collections with a string attribute named name with the value of "Learn ExpressJS" and a boolean attribute named is_complete with value false.
+
+- Line 22 of app.js in expresstasklist.dev's root directory connects to the Mongo database by some abtracted funtionality found in db.js. By default, Mongo listens on port 27017 of your virtual machine. The path following the port is the name of the database used by this application, hence 'tasklist'.

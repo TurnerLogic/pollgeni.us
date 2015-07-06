@@ -2,10 +2,12 @@
 	<head>
 		<title>Poll</title>
 	</head>
+	<script>
+	</script>
 	<body>
 		{{#poll}}
 				<h1>{{question}}</h1>
-				<form id="pollForm" action="/poll/{{code}}" method="POST">
+				<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
 				<radiogroup>
 					{{#choices}}
 					<input class="choice" type="radio" name="pollChoice" value="{{.}}">{{.}}</li>

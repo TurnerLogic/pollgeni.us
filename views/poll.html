@@ -1,0 +1,21 @@
+<html>
+	<head>
+		<title>Poll</title>
+	</head>
+	<body>
+		{{#poll}}
+				<h1>{{question}}</h1>
+				<form id="pollForm" action="/poll/{{code}}" method="POST">
+				<radiogroup>
+					{{#choices}}
+					<input class="choice" type="radio" name="pollChoice" value="{{.}}">{{.}}</li>
+					{{/choices}}
+				</radiogroup>
+				<button>Submit</button>
+				</form>
+			</ul>
+		{{/poll}}
+
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+	</body>
+</html>

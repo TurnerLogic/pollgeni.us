@@ -21,6 +21,7 @@
     "body-parser": "~1.12",
     "express": "^4.12.4",
     "hogan-express": "~0.5",
-    "mongodb": "~2.0"
+    "mongodb": "~2.0",
+    "mongojs": "^1.0.2"
   }
 }

@@ -1,78 +1,103 @@
 var express = require('express');
 var mongojs = require('mongojs');
-var db = mongojs('poll_genius_db',['polls']);
+console.log('now attempting connection to db');
+var db = mongojs('polls_db',['polls']);
 var router = express.Router();
+var Poll = require('../models/Poll');
 
-router.get('/', function(req, res) {
-	res.render('index');
-});
-
-
-router.get('/polls', function (req, res) {
+router.get('/', function (req, res) {
 	db.polls.find(function (err, docs) {
 		res.json(docs);
 	});
 });
 
 
-router.post('/polls', function (req, res) {
+router.post('/', function (req, res) {
 
 	for(var i = 0; i < Object.keys(req.body.option).length;i++){
 		req.body.labels.push(req.body.option[i]);
-	}	
+	}
 
 	for(var i = 0; i < Object.keys(req.body.option).length;i++){
 		req.body.data.push(0);
-	}	
+	}
 
 	db.polls.insert(req.body, function (err, doc) {
 		res.json();
 	});
 });
 
-router.delete('/polls/:id', function (req, res) {
+router.delete('/:id', function (req, res) {
 	var id = req.params.id;
 	db.polls.remove({_id: mongojs.ObjectId(id)},function (err, doc) {
 		res.json(doc);
 	});
 });
 
-router.get('/polls/:id', function (req, res) {
-	var id = req.params.id;
-	db.polls.findOne({_id: mongojs.ObjectId(id)},function (err, doc) {
-		res.json(doc);
+router.get('/:code', function (req, res) {
+	var code = req.params.code;
+	Poll.findByCode(code, function(err, poll)
+	{
+		if(err) res.status(404).send('Poll not found.');
+		res.render("poll", {poll: poll});
 	});
 });
 
-router.put('/polls/:id', function (req, res) {
-	var id = req.params.id;
+router.post('/polls/create', function (req, res)
+{
+	var poll = new Poll(req.body);
+	var created_at = Date.now();
+	var expires_at = created_at + 2592000000;
 
-	socket.on('voted',function(incrementedValue,indexToIncrement){
+	poll.set('created_at', created_at);
+	poll.set('expires_at', expires_at);
 
-		// // // set data equal to new data that after it has been incremented
-		req.body.data[indexToIncrement] = incrementedValue;
-					
-		// // POST the updated data to DB
-		$http.put('/polls/' + $scope.polls[index]._id, $scope.polls[index]);
+	poll.save(function(err, result)
+	{
+		if(err) res.send('Poll unable to save. Please try again.');
 
-		console.log($scope.polls[index].data);
-		console.log(indexToIncrement);
-		
+		// TODO: create a successful creation page with links to share via social media
+		res.render('poll', {poll: poll});
+	});
+});
+
+router.put('/:code', function (req, res) {
+	var code = req.params.code;
+	var poll = null;
+	var countToIncrement = null;
+
+	io.on('connection', function(socket)
+	{
+		console.log("Connection from the polls/create post route");
+		socket.join(code);
 	});
 
-	db.polls.findAndModify({query: {_id: mongojs.ObjectId(id)},
-			update: {
-				$set: {
-							title: req.body.title,
-						    options: req.body.options,
-					 		data: req.body.data,
-					 		labels: req.body.labels,
-				 		}},
-						new: true},
+	io.to(code).emit(code);
 
-		function (err,doc) {
-			res.json(doc);
+	Poll.findByCode(code, function(err, instance)
+	{
+		if(err) res.status(500).send('Unable to locate the poll on which you voted.');
+		poll = instance;
+		var responses = poll.get('responses');
+
+		responses.forEach(function(element, index)
+		{
+			if(req.params.pollChoice === element.question)
+			{
+				countToIncrement = element.count + 1;
+				responses[index].count = countToIncrement;
+			}
 		});
+
+		poll.set('responses', responses);
+		poll.save(function(err, result)
+		{
+			if(err) res.status(500).send('Unable to persist your vote to the database');
+			res.render('poll', {'poll': poll});
+		});
+
+	})
+
 });
 
 module.exports = router;

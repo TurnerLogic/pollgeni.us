@@ -19,7 +19,9 @@
 		<script>
 
 			var code = window.location.pathname.toString().split('/')[2];
-			var socket = io('/' + code);
+			var socket = io(); //namespace
+
+			socket.emit('subscribe', code);
 			var poll = null;
 			var ctx = null;
 			var chartData = [];
@@ -56,57 +58,46 @@
 
 					};
 
-			var myDoughnutChart = new Chart(ctx).Doughnut(chartData, chartOptions);
+			var myDoughnutChart = new Chart(ctx).Doughnut([], chartOptions);
 
-			var getJsonData = function(code)
+			var spawnChart = function(code)
 			{
 				var jsonResultsUrl = "/polls/" + code + "/json-results";
 
-				$.get(jsonResultsUrl, function(data) {
+				$.get(jsonResultsUrl, function(data)
+				{
+					console.log(data);
 					var pollData = formatPollData(data);
+					myDoughnutChart = new Chart(ctx).Doughnut(pollData, chartOptions);
 					$( '#pollTitle' ).text(data.question);
-
-					pollData.forEach(function(element, index) {
-						myDoughnutChart.addData(element);
-					});
-
-					myDoughnutChart.update();
+					// updateChartData(pollData);
 				});
 			}
 
-
-
-			socket.on('poll submission', function(poll) {
-
-				resetCanvas();
-				myDoughnutChart = new Chart(ctx).Doughnut(chartData, chartOptions);
-				console.log('poll submission');
-				console.log(poll);
-
-				var pollData = formatPollData(poll);
-
-				pollData.forEach(function(element, index) {
+			var updateChartData = function(data)
+			{
+				data.forEach(function(element, index)
+				{
 					myDoughnutChart.addData(element);
 				});
 
-
 				myDoughnutChart.update();
+			}
 
-			});
+			var formatPollData = function(poll)
+			{
+				var pollData = [];
+				var colorLength = chartColors.length;
 
-			 var formatPollData = function(poll)
-			 {
-			 	var pollData = [];
-			 	var colorLength = chartColors.length;
+				poll.responses.forEach(function(element, index)
+				{
 
-			 	poll.responses.forEach(function(element, index) {
-
-			 		var i = null;
-			 		if(index > colorLength) {
-			 			i = index - colorLength % colorLength;
-			 		} else {
-			 			i = index;
-			 		}
+					var i = null;
+					if(index > colorLength) {
+						i = index - colorLength % colorLength;
+					} else {
+						i = index;
+					}
 
 					pollData.push({
 						value: element.count,
@@ -123,17 +114,26 @@
 			 {
 				  $('#pollResults').remove(); // this is my <canvas> element
 				  $('#pollContainer').append('<canvas width="400" height="400" id="pollResults"><canvas>');
-				  // canvas = document.querySelector('#pollResults');
 				  ctx = $("#pollResults").get(0).getContext("2d");
-				  // ctx.canvas.width = $('#graph').width(); // resize to parent width
-				  // ctx.canvas.height = $('#graph').height(); // resize to parent height
-
-				  // var x = canvas.width/2;
-				  // var y = canvas.height/2;
-				  // ctx.font = '10pt Verdana';
-				  // ctx.textAlign = 'center';
-				  // ctx.fillText('This text is centered on the canvas', x, y);
 			};
+
+			socket.on('poll submission', function(code)
+			{
+				console.log('poll submission');
+				resetCanvas();
+				console.log(chartData);
+				// myDoughnutChart = new Chart(ctx).Doughnut(chartData, chartOptions);
+
+				spawnChart(code);
+			});
+
+			$( document ).ready(function()
+			{
+				spawnChart(code);
+			});
+
+
+
 
 		</script>
 	</body>

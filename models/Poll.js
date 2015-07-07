@@ -41,19 +41,11 @@ Poll.prototype.save = function(callback)
 			});
 		}
 	});
-// 	db.polls.findAndModify({
-// 		query: {code: this.code},
-// 		update: { $set: JSON.stringify(this.data) },
-// 		new: true
-// 		},
-// 		function(err, doc, lastErrorObject)
-// 		{
-// 			console.log('anon function from save poll model');
-// 			if(err) return callback(lastErrorObject);
-// 			console.log(self);
-// 			callback(null, self);
-// 		});
-// };
+};
+
+Poll.find = function(query)
+{
+
 };
 
 

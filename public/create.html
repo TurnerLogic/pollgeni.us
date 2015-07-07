@@ -21,7 +21,6 @@
           <tr ng-repeat="choice in choices">
             <td>{{ choice }}</td>
             <td>
-              <button class="btn btn-default btn-xs" ng-click="editChoice($index)">Edit</button>
               <button class="btn btn-danger btn-xs" ng-click="removeChoice($index)">Remove</button>
             </td>
           </tr>
@@ -31,12 +30,9 @@
       <p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
 
 	<h2>Add Question</h2>
-	<form role="form" ng-submit="addQuestion()">
 		<div class="form-group">
 			<input type="text" class="form-control" ng-model="question" required>
 		</div>
-		<button class="btn btn-default">Add Question</button>
-	</form>
 
       <h2>Add Contact</h2>
       <form role="form" ng-submit="addChoice()">
@@ -68,9 +64,7 @@
 
 		app.controller('PollCreateCtrl', function( $scope, pollService ) {
 
-			$scope.choices = [
-				"Something something something darkside"
-			];
+			$scope.choices = [];
 
 			$scope.choiceNew = "";
 			$scope.choiceEdit = "";
@@ -79,21 +73,27 @@
 
 			$scope.poll = {};
 
-			$scope.addQuestion = function() {
+			$scope.addQuestion = function()
+			{
 				console.log('question added');
 			};
 
-			$scope.removeChoice = function(index) {
+			$scope.removeChoice = function(index)
+			{
 				$scope.choices.splice(index, 1);
 			};
 
-			$scope.addChoice = function() {
+			$scope.addChoice = function()
+			{
 				$scope.choices.push($scope.choiceNew);
 				$scope.choiceNew = '';
 				console.log($scope.choices);
 			};
 
-			$scope.editChoice = function(index) {
+			$scope.editChoice = function(index)
+			{
+
+				$( ".edit-choice:eq(" + index + ")" ).replaceWith("<input type='text'></input>");
 				$scope.choiceEdit.id = index;
 				$scope.choiceEdit.value = $scope.choices[index].value;
 

@@ -28,6 +28,27 @@ app.get('/:code', function(req, res) {
 	res.redirect(redirectUrl);
 });
 
+io.on('connection', function(socket)
+{
+	socket.on('subscribe', function(code)
+	{
+		console.log('somebody subscribed');
+		socket.join(code);
+	});
+
+	socket.on('unsubscribe', function(code)
+	{
+		console.log('somebody un subbed');
+		socket.leave(code);
+	});
+
+	socket.on('disconnect', function()
+	{
+		console.log('disconnecting');
+		socket.leave(code);
+	});
+});
+
 app.use('/polls', require('./controllers/polls'));
 
 

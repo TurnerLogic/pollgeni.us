@@ -13,12 +13,21 @@ router.get('/create', function (req, res) {
 router.post('/create', function (req, res)
 {
 	var data = req.body;
+	var responses = [];
 	var poll = new Poll(data);
 	var created_at = Date.now();
 	var expires_at = created_at + 2592000000;
 	var code = Poll.generateCode();
 
-	console.log(code);
+	poll.get('choices').forEach(function(element, index)
+	{
+		responses[index] = {
+			count: 0,
+			choice: element
+		}
+	});
+
+	poll.set('responses', responses);
 	poll.set('code', code);
 	poll.set('created_at', created_at);
 	poll.set('expires_at', expires_at);
@@ -39,6 +48,7 @@ router.post('/create', function (req, res)
 router.get('/:code', function (req, res)
 {
 	var code = req.params.code;
+
 	Poll.findByCode(code, function(err, poll)
 	{
 		if(err) res.status(404).send('Poll not found.');
@@ -49,38 +59,40 @@ router.get('/:code', function (req, res)
 });
 
 router.put('/:code', function (req, res) {
-	console.log('this is a fucking put!');
 	var code = req.params.code;
 	var poll = null;
 	var countToIncrement = null;
-	var redirectUrl = '/polls/' + code;
+	var redirectUrl = '/polls/' + code + '/results';
 
-	io.on('connection', function(socket)
-	{
-		console.log("Connection from the polls/create post route");
-		socket.join(code);
-	});
+	console.log("Connection from the polls/create get route");
 
-	io.to(code).emit(code);
+	io.to(code).broadcast('poll submission', code);
+
 
 	Poll.findByCode(code, function(err, instance)
 	{
 		if(err) res.status(500).send('Unable to locate the poll on which you voted.');
+
 		poll = instance;
 		var choices = poll.get('choices');
+		var newResponses = poll.get('responses');
 
-		choices.forEach(function(element, index)
+		poll.get('responses').forEach(function(element, index)
 		{
-			if(req.params.pollChoice === element.question)
+			if(req.body.pollChoice === element.choice)
 			{
-				countToIncrement = element.count + 1;
-				choices[index].count = countToIncrement;
+				newResponses[index].count = element.count + 1;
+				newResponses[index].choice = element.choice
+			} else {
+				newResponses[index] = element;
 			}
+
 		});
 
-		poll.set('choices', choices);
+		poll.set('responses', newResponses);
 		poll.save(function(err, result)
 		{
+			console.log('redirecting: ' + redirectUrl);
 			if(err) res.status(500).send('Unable to persist your vote to the database');
 			return res.redirect(redirectUrl);
 		});

@@ -76,11 +76,25 @@
 
 			var updateChartData = function(data)
 			{
-				data.forEach(function(element, index)
+				for(var j = 0; j < data.length; j++)
 				{
-					myDoughnutChart.addData(element);
-				});
+					for(var i = 0; i < myDoughnutChart.segments.length; i++)
+					{
+						if(data[j].label === myDoughnutChart.segments[i].label)
+						{
+							myDoughnutChart[i].value = data[j].value;
+							break;
+						}
 
+						myDoughnutChart.addData(data[j]);
+					}
+				}
+
+
+				// data.forEach(function(element, index)
+				// {
+				// 	myDoughnutChart.addData(element);
+				// });
 				myDoughnutChart.update();
 			}
 
@@ -123,6 +137,8 @@
 				resetCanvas();
 				console.log(chartData);
 				// myDoughnutChart = new Chart(ctx).Doughnut(chartData, chartOptions);
+				chartOptions.animateRotate = false;
+				//chartOptions.animationEasing = 
 
 				spawnChart(code);
 			});

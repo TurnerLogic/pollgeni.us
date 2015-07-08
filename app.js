@@ -44,8 +44,8 @@ io.on('connection', function(socket)
 
 	socket.on('disconnect', function()
 	{
-		console.log('disconnecting');
-		socket.leave(code);
+		// console.log('disconnecting');
+		// socket.leave(code);
 	});
 });
 

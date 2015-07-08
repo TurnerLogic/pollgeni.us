@@ -13,8 +13,7 @@
 			<canvas id="pollResults" width="400" height="400"></canvas>
 		</div>
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-
-		<script src="/js/Chart.js"></script>
+		<script src="/js/Chart.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script>
 
@@ -22,8 +21,10 @@
 			var socket = io(); //namespace
 
 			socket.emit('subscribe', code);
+			var pollResults;
 			var poll = null;
 			var ctx = null;
+			var initialLoad = true;
 			var chartData = [];
 			var chartColors = ["#F7464A", "#ACBEA3", "#157A6E", "#499F68", "#68A357", "#FF33CC", "#444545", "#666699", "#32213A", "#40090D", "#E3D26F"];
 			var ctx = $("#pollResults").get(0).getContext("2d");
@@ -39,13 +40,13 @@
 					    segmentStrokeWidth : 2,
 
 					    //Number - The percentage of the chart that we cut out of the middle
-					    percentageInnerCutout : 50, // This is 0 for Pie charts
+					    percentageInnerCutout : 0, // This is 0 for Pie charts
 
 					    //Number - Amount of animation steps
 					    animationSteps : 100,
 
 					    //String - Animation easing effect
-					    animationEasing : "easeOutBounce",
+					    animationEasing : "easeInOutSine",
 
 					    //Boolean - Whether we animate the rotation of the Doughnut
 					    animateRotate : true,
@@ -58,47 +59,53 @@
 
 					};
 
-			var myDoughnutChart = new Chart(ctx).Doughnut([], chartOptions);
-
 			var spawnChart = function(code)
 			{
 				var jsonResultsUrl = "/polls/" + code + "/json-results";
 
 				$.get(jsonResultsUrl, function(data)
 				{
-					console.log(data);
-					var pollData = formatPollData(data);
-					myDoughnutChart = new Chart(ctx).Doughnut(pollData, chartOptions);
+					chartData = formatJsonData(data);
+
+					if( initialLoad )
+					{
+						pollResults = new Chart(ctx).Pie(chartData, chartOptions);
+					} else {
+						console.log('not inital load');
+						updateChartData(chartData);
+					}
+
 					$( '#pollTitle' ).text(data.question);
-					// updateChartData(pollData);
 				});
 			}
 
 			var updateChartData = function(data)
 			{
+				console.log(pollResults.segments.length);
 				for(var j = 0; j < data.length; j++)
 				{
-					for(var i = 0; i < myDoughnutChart.segments.length; i++)
+					console.log(data[j].label);
+					for(var i = 0; i < pollResults.segments.length; i++)
 					{
-						if(data[j].label === myDoughnutChart.segments[i].label)
+						console.log(pollResults.segments[i].label);
+						if(data[j].label === pollResults.segments[i].label)
 						{
-							myDoughnutChart[i].value = data[j].value;
+							pollResults.segments[i].value = data[j].value;
+							console.log("these match " + pollResults.segments[i].label + ' ' + data[j].label )
 							break;
+						} else if( i === pollResults.segments.length - 1) {
+							console.log('no matches on ' + data[j].label);
+							pollResults.addData(data[j]);
 						}
-
-						myDoughnutChart.addData(data[j]);
 					}
 				}
 
+				console.log(pollResults);
 
-				// data.forEach(function(element, index)
-				// {
-				// 	myDoughnutChart.addData(element);
-				// });
-				myDoughnutChart.update();
+				pollResults.update();
 			}
 
-			var formatPollData = function(poll)
+			var formatJsonData = function(poll)
 			{
 				var pollData = [];
 				var colorLength = chartColors.length;
@@ -124,28 +131,16 @@
 				return pollData;
 			 };
 
-			 var resetCanvas = function()
-			 {
-				  $('#pollResults').remove(); // this is my <canvas> element
-				  $('#pollContainer').append('<canvas width="400" height="400" id="pollResults"><canvas>');
-				  ctx = $("#pollResults").get(0).getContext("2d");
-			};
-
 			socket.on('poll submission', function(code)
 			{
+				initialLoad = false;
 				console.log('poll submission');
-				resetCanvas();
-				console.log(chartData);
-				// myDoughnutChart = new Chart(ctx).Doughnut(chartData, chartOptions);
-				chartOptions.animateRotate = false;
-				//chartOptions.animationEasing = 
-
 				spawnChart(code);
 			});
 
 			$( document ).ready(function()
 			{
-				spawnChart(code);
+				spawnChart(code); // code pulled from url
 			});
 
 

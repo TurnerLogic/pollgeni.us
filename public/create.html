@@ -1,0 +1,125 @@
+<html ng-app="pollCreateApp">
+	<head>
+		<title>Create your poll!</title>
+		<link rel="stylesheet" href="../css/bootstrap.min.css">
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+
+		<!-- <script src="../js/controllers.js"></script> -->
+	</head>
+	<body ng-controller="PollCreateCtrl">
+      <h1>Poll Builder</h1>
+
+      <table class="table table-striped" ng-show="choices.length > 0">
+        <thead>
+          <tr>
+            <th>Value</th>
+            <th>Options</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="choice in choices">
+            <td>{{ choice }}</td>
+            <td>
+              <button class="btn btn-danger btn-xs" ng-click="removeChoice($index)">Remove</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
+
+	<h2>Add Question</h2>
+		<div class="form-group">
+			<input type="text" class="form-control" ng-model="question" required>
+		</div>
+
+      <h2>Add Contact</h2>
+      <form role="form" ng-submit="addChoice()">
+        <div class="form-group">
+          <label for="text">Name</label>
+          <input type="text" class="form-control" id="text" placeholder="Enter name" ng-model="choiceNew" required>
+        </div>
+        <button type="button" class="btn btn-default" ng-click="choiceNew = ''">Clear</button> 
+        <button type="submit" class="btn btn-success">Add Contact</button>
+      </form>
+      <div class="container">
+      	<div class="col-lg-4 col-lg-offset-4">
+      		<button ng-click="submitPoll()">Save</button>
+      	</div>
+      </div>
+	</body>
+	<script>
+	(function() {
+
+		var app = angular.module('pollCreateApp', []);
+
+		app.factory('pollService', function($http) {
+			return {
+				savePoll: function(data, cb) {
+					$http.post('/polls/create', data).success(cb);
+				}
+			}
+		});
+
+		app.controller('PollCreateCtrl', function( $scope, pollService ) {
+
+			$scope.choices = [];
+
+			$scope.choiceNew = "";
+			$scope.choiceEdit = "";
+
+			$scope.question = "";
+
+			$scope.poll = {};
+
+			$scope.addQuestion = function()
+			{
+				console.log('question added');
+			};
+
+			$scope.removeChoice = function(index)
+			{
+				$scope.choices.splice(index, 1);
+			};
+
+			$scope.addChoice = function()
+			{
+				$scope.choices.push($scope.choiceNew);
+				$scope.choiceNew = '';
+				console.log($scope.choices);
+			};
+
+			$scope.editChoice = function(index)
+			{
+
+				$( ".edit-choice:eq(" + index + ")" ).replaceWith("<input type='text'></input>");
+				$scope.choiceEdit.id = index;
+				$scope.choiceEdit.value = $scope.choices[index].value;
+
+				// $('#myModal').show('modal');
+			};
+
+			$scope.saveEditedChoice = function() {
+				$scope.choices[$scope.contactEdit.id] = $scope.choiceEdit;
+
+				// hide modal
+			};
+
+			$scope.submitPoll = function() {
+
+				$scope.poll = {
+					question: $scope.question,
+					choices: $scope.choices
+				};
+
+				pollService.savePoll($scope.poll, function(code) {
+						window.location = code;
+				});
+			};
+
+
+		});
+	}());
+	</script>
+</html>

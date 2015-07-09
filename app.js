@@ -36,6 +36,25 @@ io.on('connection', function(socket)
 		socket.join(code);
 	});
 
+	socket.on('new message', function(data, code)
+	{
+		console.log(data);
+		console.log(code);
+		io.to(code).emit('new message', {
+			username: "Keenan",
+			message: data
+		});
+	});
+
+	// socket.on('add user', function(username)
+	// {
+	// 	socket.username = username;
+
+	// 	usernames[username] = username;
+	// 	++numUsers;
+	// 	addedUser = true;
+	// });
+
 	socket.on('unsubscribe', function(code)
 	{
 		console.log('somebody unsubscribed');
@@ -45,7 +64,11 @@ io.on('connection', function(socket)
 	socket.on('disconnect', function(code)
 	{
 		console.log('disconnecting');
-		socket.leave(code);
+		// if(addedUser)
+		// {
+		// 	delete usernames[scoket.username];
+		// 	--numUsers;
+		// }
 	});
 });
 

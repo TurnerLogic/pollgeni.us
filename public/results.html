@@ -78,7 +78,7 @@
 					$loginPage.off('click');
 					$currentInput = $inputMessage.focus();
 
-					socket.emit('add user', username);
+					socket.emit('add user', username, code);
 				}
 			}
 
@@ -174,7 +174,7 @@
 				if (connected) {
 			      if (!typing) {
 			        typing = true;
-			        socket.emit('typing');
+			        socket.emit('typing', code);
 			      }
 			      lastTypingTime = (new Date()).getTime();
 
@@ -182,7 +182,7 @@
 			        var typingTimer = (new Date()).getTime();
 			        var timeDiff = typingTimer - lastTypingTime;
 			        if (timeDiff >= TYPING_TIMER_LENGTH && typing) {
-			          socket.emit('stop typing');
+			          socket.emit('stop typing', code);
 			          typing = false;
 			        }
 			      }, TYPING_TIMER_LENGTH);
@@ -218,7 +218,7 @@
 			    if (event.which === 13) {
 			      if (username) {
 			        sendMessage();
-			        socket.emit('stop typing');
+			        socket.emit('stop typing', code);
 			        typing = false;
 			      } else {
 			        setUsername();

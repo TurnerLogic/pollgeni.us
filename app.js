@@ -48,7 +48,7 @@ io.on('connection', function(socket)
 		usernames[username] = username;
 		++numUsers;
 		addedUser = true;
-		io.to(code).emit('login', {
+		socket.broadcast.to(code).emit('login', {
 			username: socket.username,
 			numUsers: numUsers
 		});
@@ -56,7 +56,7 @@ io.on('connection', function(socket)
 	console.log('56');
 	socket.on('typing', function(code)
 	{
-		io.to(code).emit('typing', {
+		socket.broadcast.to(code).emit('typing', {
 			username: socket.username
 		});
 	});
@@ -64,7 +64,7 @@ io.on('connection', function(socket)
 	console.log('64');
 	socket.on('stop typing', function(code)
 	{
-		io.to(code).emit('stop typing', {
+		socket.broadcast.to(code).emit('stop typing', {
 			username: socket.username
 		});
 	});
@@ -74,7 +74,7 @@ io.on('connection', function(socket)
 	{
 		console.log(data);
 		console.log(code);
-		io.to(code).emit('new message', {
+		socket.broadcast.to(code).emit('new message', {
 			username: socket.username,
 			message: data
 		});
@@ -86,7 +86,7 @@ io.on('connection', function(socket)
 		socket.leave(code);
 	});
 	console.log('88');
-	socket.on('disconnect', function(code)
+	socket.on('disconnect', function()
 	{
 		console.log('disconnecting');
 	});

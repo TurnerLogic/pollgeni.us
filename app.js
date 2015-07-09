@@ -38,11 +38,11 @@ io.on('connection', function(socket)
 
 	socket.on('unsubscribe', function(code)
 	{
-		console.log('somebody un subbed');
+		console.log('somebody unsubscribed');
 		socket.leave(code);
 	});
 
-	socket.on('disconnect', function()
+	socket.on('disconnect', function(code)
 	{
 		console.log('disconnecting');
 		socket.leave(code);

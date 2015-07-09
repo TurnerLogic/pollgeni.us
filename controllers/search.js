@@ -1,6 +1,6 @@
 var express = require('express');
 var mongojs = require('mongojs');
-var db = mongojs('poll_genius_db',['polls']);
+var db = mongojs('polls_db',['polls']);
 var router = express.Router();
 
 

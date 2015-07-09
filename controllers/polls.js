@@ -59,14 +59,16 @@ router.get('/:code', function (req, res)
 });
 
 router.put('/:code', function (req, res) {
+	console.log('made it to the put action');
 	var code = req.params.code;
 	var poll = null;
 	var countToIncrement = null;
 	var redirectUrl = '/polls/' + code + '/results';
 
 	console.log("Connection from the polls/create get route");
+	console.log(io);
 
-	io.to(code).broadcast('poll submission', code);
+	io.to(code).emit('poll submission', code);
 
 
 	Poll.findByCode(code, function(err, instance)

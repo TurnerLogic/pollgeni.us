@@ -28,47 +28,67 @@ app.get('/:code', function(req, res) {
 	res.redirect(redirectUrl);
 });
 
+var usernames = {};
+var numUsers = 0;
+
 io.on('connection', function(socket)
 {
+	var addedUser = false;
+	console.log('37');
 	socket.on('subscribe', function(code)
 	{
 		console.log('somebody subscribed');
 		socket.join(code);
 	});
+	console.log('43');
+	socket.on('add user', function(username, code)
+	{
+		socket.username = username;
 
+		usernames[username] = username;
+		++numUsers;
+		addedUser = true;
+		io.to(code).emit('login', {
+			username: socket.username,
+			numUsers: numUsers
+		});
+	});
+	console.log('56');
+	socket.on('typing', function(code)
+	{
+		io.to(code).emit('typing', {
+			username: socket.username
+		});
+	});
+
+	console.log('64');
+	socket.on('stop typing', function(code)
+	{
+		io.to(code).emit('stop typing', {
+			username: socket.username
+		});
+	});
+
+	console.log('72');
 	socket.on('new message', function(data, code)
 	{
 		console.log(data);
 		console.log(code);
 		io.to(code).emit('new message', {
-			username: "Keenan",
+			username: socket.username,
 			message: data
 		});
 	});
-
-	// socket.on('add user', function(username)
-	// {
-	// 	socket.username = username;
-
-	// 	usernames[username] = username;
-	// 	++numUsers;
-	// 	addedUser = true;
-	// });
-
+	console.log('82');
 	socket.on('unsubscribe', function(code)
 	{
 		console.log('somebody unsubscribed');
 		socket.leave(code);
 	});
-
+	console.log('88');
 	socket.on('disconnect', function(code)
 	{
 		console.log('disconnecting');
-		// if(addedUser)
-		// {
-		// 	delete usernames[scoket.username];
-		// 	--numUsers;
-		// }
 	});
 });
 

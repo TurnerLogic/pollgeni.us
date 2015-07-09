@@ -24,7 +24,7 @@ router.post('/create', function (req, res)
 		responses[index] = {
 			count: 0,
 			choice: element
-		}
+		};
 	});
 
 	poll.set('responses', responses);
@@ -66,7 +66,7 @@ router.put('/:code', function (req, res) {
 
 	console.log("Connection from the polls/create get route");
 
-	io.to(code).broadcast('poll submission', code);
+	io.to(code).emit('poll submission', code);
 
 
 	Poll.findByCode(code, function(err, instance)
@@ -82,7 +82,7 @@ router.put('/:code', function (req, res) {
 			if(req.body.pollChoice === element.choice)
 			{
 				newResponses[index].count = element.count + 1;
-				newResponses[index].choice = element.choice
+				newResponses[index].choice = element.choice;
 			} else {
 				newResponses[index] = element;
 			}

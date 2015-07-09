@@ -2,55 +2,134 @@
 	<head>
 		<title>Create your poll!</title>
 		<link rel="stylesheet" href="../css/bootstrap.min.css">
+		<link rel="stylesheet" href="../fonts/glyphicons-halflings-regular.ttf">
+		<link rel="stylesheet" href="../fonts/fontawesome-webfont.ttf">
+		<link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+		<script src="../js/floatlabels.min.js"></script>
 
-		<!-- <script src="../js/controllers.js"></script> -->
+		<style>
+			#question, .choice {
+				height: 60px;
+				border: 3px solid #78C0A8;
+				border-radius: 5px;
+			}
+			body {
+				font-family: 'Raleway', sans-serif;
+			}
+
+			input[type='text'] {
+				font-size: 24px;
+				font-family: 'Raleway', sans-serif;
+			}
+
+			#question {
+				padding-left: 20px;
+			}
+
+			#poll-submit {
+				color: #F0A830;
+				background-color: white;
+				border-radius: 5px;
+				border: 3px solid #F0A830;
+			}
+
+			#add-choice-btn, #clear-choice-btn {
+				height: 60px;
+				width: 75px;
+				background-color: #78C0A8;
+				border: 3px solid #78C0A8;
+			}
+
+			#add-choice-btn {
+				border-top-left-radius: 5px;
+				border-bottom-left-radius: 5px;
+			}
+
+			#clear-choice-btn {
+				border-top-right-radius: 5px;
+				border-bottom-right-radius: 5px;
+			}
+
+			span.glyphicon {
+				font-size: 2.25em;
+				position: relative;
+			}
+
+			.glyphicon-left {
+				color: #FCEBB6;
+				top: 0;
+				/*left: 5;*/
+			}
+
+			.glyphicon-right {
+				color: #F07818;
+				top: 0;
+				/*left: -5;*/
+			}
+
+			label.label-floatlabel {
+				padding-left: 17px;
+			}
+
+			.choice-options {
+				width: 50px;
+			}
+		</style>
 	</head>
 	<body ng-controller="PollCreateCtrl">
-      <h1>Poll Builder</h1>
+		<div class="container">
+			<div class="row">
+				<h1>Poll Builder</h1>
+				<input id="question" type="text" class="form-control floatlabel" placeholder="Add a question" ng-model="question" required>
+			</div>
 
-      <table class="table table-striped" ng-show="choices.length > 0">
-        <thead>
-          <tr>
-            <th>Value</th>
-            <th>Options</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr ng-repeat="choice in choices">
-            <td>{{ choice }}</td>
-            <td>
-              <button class="btn btn-danger btn-xs" ng-click="removeChoice($index)">Remove</button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
 
-      <p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
+		      <h2>Add Choice</h2>
+		      <form role="form" ng-submit="addChoice()">
+		        <div class="input-group">
+		        	<span class="input-group-btn">
+		        		<button id="add-choice-btn" class="btn btn-success"><span class="glyphicon glyphicon-plus glyphicon-left"></span></button>
+		        	</span>
+		          <input type="text" class="form-control choice" id="text" placeholder="Add a response" ng-model="choiceNew" required>
+		          <span class="input-group-btn">
+		        	<button id="clear-choice-btn" type="button" class="btn btn-default" ng-click="choiceNew = ''"><i class="fa fa-eraser"></i></button>
+		          </span>
+		        </div>
+		      </form>
+		      <div class="row">
+		      	<div class="col-lg-4 col-lg-offset-4">
+		      		<button id="poll-submit" class="btn-block btn-lg" ng-click="submitPoll()">Submit Poll</button>
+		      	</div>
+		      </div>
 
-	<h2>Add Question</h2>
-		<div class="form-group">
-			<input type="text" class="form-control" ng-model="question" required>
-		</div>
+		      <table class="table" ng-show="choices.length > 0">
+		        <thead>
+		          <tr>
+		            <th class="choice-options">Options</th>
+		            <th>Choice</th>
+		          </tr>
+		        </thead>
+		        <tbody>
+		          <tr ng-repeat="choice in choices">
+		            <td class="choice-options">
+		              <button class="btn btn-danger btn-xs" ng-click="removeChoice($index)">Remove</button>
+		            </td>
+		            <td>{{ choice }}</td>
+		          </tr>
+		        </tbody>
+		      </table>
 
-      <h2>Add Contact</h2>
-      <form role="form" ng-submit="addChoice()">
-        <div class="form-group">
-          <label for="text">Name</label>
-          <input type="text" class="form-control" id="text" placeholder="Enter name" ng-model="choiceNew" required>
-        </div>
-        <button type="button" class="btn btn-default" ng-click="choiceNew = ''">Clear</button> 
-        <button type="submit" class="btn btn-success">Add Contact</button>
-      </form>
-      <div class="container">
-      	<div class="col-lg-4 col-lg-offset-4">
-      		<button ng-click="submitPoll()">Save</button>
-      	</div>
+		      <p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
       </div>
 	</body>
 	<script>
 	(function() {
+		$( 'input.floatlabel' ).floatlabel({
+			slideInput: false,
+			labelEndTop: '7px'
+		});
 
 		var app = angular.module('pollCreateApp', []);
 
@@ -88,22 +167,6 @@
 				$scope.choices.push($scope.choiceNew);
 				$scope.choiceNew = '';
 				console.log($scope.choices);
-			};
-
-			$scope.editChoice = function(index)
-			{
-
-				$( ".edit-choice:eq(" + index + ")" ).replaceWith("<input type='text'></input>");
-				$scope.choiceEdit.id = index;
-				$scope.choiceEdit.value = $scope.choices[index].value;
-
-				// $('#myModal').show('modal');
-			};
-
-			$scope.saveEditedChoice = function() {
-				$scope.choices[$scope.contactEdit.id] = $scope.choiceEdit;
-
-				// hide modal
 			};
 
 			$scope.submitPoll = function() {

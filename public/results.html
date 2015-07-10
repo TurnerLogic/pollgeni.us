@@ -9,10 +9,9 @@
 	</head>
 	<style type="text/css">
 	@font-face { font-family: globerSemiBold; src: url('/fonts/Glober SemiBold Free.otf'); } 
-	@font-face { font-family: globerThin; src: url('/fonts/Glober Thin Free.otf'); } 
-
+	 @font-face { font-family: globerThin; src: url('/fonts/Glober Thin Free.otf'); } 
 	body,html{
-		background-color: #fff;
+		background-color: #001f2f;
 	}
 	h1{
 		font-family: 'globerThin', sans-serif;
@@ -58,7 +57,7 @@
 	.poll-choices{
 		background-color: #124859;
 	}
-	.chatArea{
+	.chat-area{
 		background-color: #00a3d9;
 	}
 	 #messages { 
@@ -68,13 +67,9 @@
 	 }
      #messages li { padding: 5px 10px; }
      #messages li:nth-child(odd) { background: #eee; }
-     #chat-section{
-     	background-color: #00a3d9;
-     }
      .form{
      	display: inline-block;
      }
-
 	</style>
 	<body>
 <div class="row">
@@ -89,25 +84,29 @@
 			</div>
 		</div>
 
-	<section id="chat-section">
-		<ul id="pages">
-			<li class="chat page">
-					<div class="chatArea">
-						<ul id="messages"></ul>
-					</div>
-					<input class="inputMessage" placeholder="Type here..."/>
-			</li>
-			<li class="login page">
-					<div class="form">
-					<h3 class="title">What's your nickname?</h3>
-						<input class="usernameInput" type="text" maxlength="14" />
-					</div>
-			</li>
-		</ul>
+	<section class="chat-area">
+		<div class="col-md-6">
+			<ul id="messages">
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+			</ul>
+			<div class="form">
+			<input class="inputMessage" placeholder="Type here..."/>
+			<h3 class="title">What's your nickname?</h3>
+				<input class="usernameInput" type="text" maxlength="14"/>
+			</div>
+		</div>
 	</section>
 
 </div>
-
 	<section class="poll-choices">
 		<div class="container">
 			<div class="col-md-12">
@@ -157,7 +156,7 @@
   			];
 			var $window = $( window );
 			var $usernameInput = $( '.usernameInput' );
-			var $messages = $( '#messages' );
+			var $messages = $( '.messages' );
 			var $inputMessage = $( '.inputMessage' );
 
 
@@ -199,12 +198,12 @@
 			var sendMessage = function()
 			{
 				var message = cleanInput($inputMessage.val());
-				
+
 				if(message && connected)
 				{
 					$inputMessage.val('');
 					addChatMessage({
-						username: username + " ",
+						username: username,
 						message: message
 					});
 				}
@@ -229,7 +228,7 @@
 				}
 
 				var $usernameDiv = $('<span class="username"/>')
-					.text(data.username + " ")
+					.text(data.username)
 					.css('color', getUsernameColor(data.username));
 
 				var $messageBodyDiv = $('<span class="messageBody">')
@@ -279,7 +278,7 @@
 			 };
 
 			 var cleanInput = function(input)
-			 {	
+			 {
 			 	return $('<div/>').text(input).text();
 			 }
 

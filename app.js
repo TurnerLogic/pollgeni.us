@@ -14,8 +14,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.set('views', './views');
-app.set('view engine', 'html');
-app.engine('html', require('hogan-express'));
+app.set('view engine', 'hjs');
+app.engine('hjs', require('hogan-express'));
+app.set('layout', 'layouts/default');
+app.set('partials', {header: 'includes/navbar'});
 
 app.get('/', function(req, res) {
 	res.render("index");

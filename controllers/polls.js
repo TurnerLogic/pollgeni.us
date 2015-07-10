@@ -54,7 +54,7 @@ router.get('/:code', function (req, res)
 		if(err) res.status(404).send('Poll not found.');
 		console.log(poll);
 		console.log('found poll');
-		res.render("poll", {poll: poll.data});
+		res.render("poll", {poll: poll.data, title: 'Pollgeni.us'});
 	});
 });
 

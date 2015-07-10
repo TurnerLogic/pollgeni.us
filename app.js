@@ -17,10 +17,11 @@ app.set('views', './views');
 app.set('view engine', 'hjs');
 app.engine('hjs', require('hogan-express'));
 app.set('layout', 'layouts/default');
-app.set('partials', {header: 'includes/navbar'});
+app.set('partials', {navbar: 'includes/navbar'});
+// app.set('partials', {footer: 'includes/footer'});
 
 app.get('/', function(req, res) {
-	res.render("index");
+	res.render("index", {title: 'Welcome to Pollgeni.us!'});
 });
 
 app.get('/:code', function(req, res) {
@@ -31,31 +32,38 @@ app.get('/:code', function(req, res) {
 });
 
 var usernames = {};
-var numUsers = 0;
+var numUsers = [];
 
 io.on('connection', function(socket)
 {
 	var addedUser = false;
-	console.log('37');
+
 	socket.on('subscribe', function(code)
 	{
 		console.log('somebody subscribed');
 		socket.join(code);
 	});
-	console.log('43');
+
 	socket.on('add user', function(username, code)
 	{
 		socket.username = username;
+		socket.room = code;
 
-		usernames[username] = username;
-		++numUsers;
+		if(usernames[code]) {
+			usernames[code].push(username);
+			++numUsers[code];
+		} else {
+			usernames[code] = [];
+			usernames[code].push(username);
+			numUsers[code] = 1;
+		}
 		addedUser = true;
 		socket.broadcast.to(code).emit('login', {
 			username: socket.username,
-			numUsers: numUsers
+			numUsers: numUsers[code]
 		});
 	});
-	console.log('56');
+
 	socket.on('typing', function(code)
 	{
 		socket.broadcast.to(code).emit('typing', {
@@ -63,7 +71,7 @@ io.on('connection', function(socket)
 		});
 	});
 
-	console.log('64');
+
 	socket.on('stop typing', function(code)
 	{
 		socket.broadcast.to(code).emit('stop typing', {
@@ -71,25 +79,35 @@ io.on('connection', function(socket)
 		});
 	});
 
-	console.log('72');
+
 	socket.on('new message', function(data, code)
 	{
 		console.log(data);
 		console.log(code);
+		console.log(socket.rooms)
 		socket.broadcast.to(code).emit('new message', {
 			username: socket.username,
 			message: data
 		});
 	});
-	console.log('82');
-	socket.on('unsubscribe', function(code)
-	{
-		console.log('somebody unsubscribed');
-		socket.leave(code);
-	});
-	console.log('88');
+
 	socket.on('disconnect', function()
 	{
+		console.log(socket.username);
+		console.log(socket.room + ' this is the poll\'s room');
+		var room = socket.room || null;
+		if(addedUser) {
+			console.log('true added user');
+			delete usernames[room][socket.username];
+			--numUsers[room];
+		}
+
+		socket.broadcast.to(room).emit('user left', {
+			username: socket.username,
+			numUsers: numUsers[room]
+		});
+
+		socket.leave(room);
 		console.log('disconnecting');
 	});
 });

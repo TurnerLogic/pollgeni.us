@@ -138,6 +138,14 @@
 				});
 			};
 
+			var removeChatTyping = function(data)
+			{
+    			getTypingMessages(data).fadeOut(function ()
+    			{
+      				$(this).remove();
+    			});
+  			}
+
 			var addMessageElement = function(el, options)
 			{
 				var $el = $(el);
@@ -254,11 +262,13 @@
 
 		  // Whenever the server emits 'new message', update the chat body
 		  socket.on('new message', function (data) {
+		  	console.log('new message');
 		    addChatMessage(data);
 		  });
 
 		  // Whenever the server emits 'user joined', log it in the chat body
 		  socket.on('user joined', function (data) {
+		  	console.log(data.username + " joined")
 		    log(data.username + ' joined');
 		    addParticipantsMessage(data);
 		  });

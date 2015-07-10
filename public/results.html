@@ -4,31 +4,144 @@
 
 		<!-- Bootstrap CDN -->
 		<link rel="stylesheet" href="/css/bootstrap.min.css">
-
+		<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
 		<link rel="icon" href="../public/favicon.ico">
 	</head>
+	<style type="text/css">
+	@font-face { font-family: globerSemiBold; src: url('/fonts/Glober SemiBold Free.otf'); } 
+	 @font-face { font-family: globerThin; src: url('/fonts/Glober Thin Free.otf'); } 
+	body,html{
+		background-color: #001f2f;
+	}
+	h1{
+		font-family: 'globerThin', sans-serif;
+		font-size: 60px;
+		line-height: 0.9;
+	}
+	p{
+		font-family: 'globerThin', sans-serif;
+		font-size: 35px;
+		padding-top: 75px;
+	}
+	.col-md-6{
+		background-color: #00a3d9;
+	}
+	.col-md-12{
+		padding-top: 20px;
+	}
+	.col-md-6,.col-md-12{
+		/*border: 1px solid #000;*/
+		padding-bottom: 20px;
+	}
+
+	.col-md-3{
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+
+	.circle{
+		border-radius: 50%;
+		width: 200px;
+		height: 200px;
+		border: 1px solid #000;
+		background-color: #fff;
+	}
+	canvas{
+		padding-bottom: 10px;
+	}
+
+	.pie-box{
+		background-color: #4fc143;
+		color: #fff;
+	}
+	.poll-choices{
+		background-color: #124859;
+	}
+	.chat-area{
+		background-color: #00a3d9;
+	}
+	 #messages { 
+	 	font-family: 'globerThin', sans-serif;
+	 	list-style-type: none; margin: 0; padding: 0; 
+
+	 }
+     #messages li { padding: 5px 10px; }
+     #messages li:nth-child(odd) { background: #eee; }
+     .form{
+     	display: inline-block;
+     }
+	</style>
 	<body>
-		<h1 id="pollTitle"></h1>
-		<div id="pollContainer" class="container">
-			<canvas id="pollResults" width="400" height="400"></canvas>
+<div class="row">
+
+		<div class="col-md-6 pie-box">
+			<h1 id="pollTitle"></h1>
+			<div id="pollContainer" class="container">
+			<div class="col-md-1"></div>
+				<div class="col-md-3">
+					<canvas id="pollResults" width="250" height="240"></canvas>
+				</div>
+			</div>
 		</div>
 
-		<div>
-			<ul class="pages">
-    			<li class="chat page">
-      				<div class="chatArea">
-        				<ul class="messages"></ul>
-      				</div>
-      				<input class="inputMessage" placeholder="Type here..."/>
-    			</li>
-    			<li class="login page">
-      				<div class="form">
-        				<h3 class="title">What's your nickname?</h3>
-        					<input class="usernameInput" type="text" maxlength="14" />
-      				</div>
-    			</li>
-  			</ul>
+	<section class="chat-area">
+		<div class="col-md-6">
+			<ul id="messages">
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+				<li>message1</li>
+			</ul>
+			<div class="form">
+			<input class="inputMessage" placeholder="Type here..."/>
+			<h3 class="title">What's your nickname?</h3>
+				<input class="usernameInput" type="text" maxlength="14"/>
+			</div>
 		</div>
+	</section>
+
+</div>
+	<section class="poll-choices">
+		<div class="container">
+			<div class="col-md-12">
+				<div class="container">
+					<div class="row">
+							<div class="col-md-3">
+									<div class="circle">
+										<p align="center">yes</p>
+									</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="circle">
+									<p align="center">yes</p>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="circle">
+									<p align="center">yes</p>
+								</div>
+							</div>
+
+							<div class="col-md-3">
+								<div class="circle">
+									<p align="center">yes</p>
+								</div>
+							</div>
+
+					</div>
+				</div>
+			</div>
+		</div>
+	</section>
+
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="/js/Chart.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>

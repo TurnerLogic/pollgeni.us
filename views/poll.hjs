@@ -1,0 +1,13 @@
+
+{{#poll}}
+		<h1>{{question}}</h1>
+		<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
+		<radiogroup>
+			{{#choices}}
+			<input class="choice" type="radio" name="pollChoice" value="{{.}}">{{.}}</li>
+			{{/choices}}
+		</radiogroup>
+		<button>Submit</button>
+		</form>
+	</ul>
+{{/poll}}

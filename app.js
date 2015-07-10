@@ -14,8 +14,10 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 app.set('views', './views');
-app.set('view engine', 'html');
-app.engine('html', require('hogan-express'));
+app.set('view engine', 'hjs');
+app.engine('hjs', require('hogan-express'));
+app.set('layout', 'layouts/default');
+app.set('partials', {header: 'includes/navbar'});
 
 app.get('/', function(req, res) {
 	res.render("index");
@@ -28,47 +30,67 @@ app.get('/:code', function(req, res) {
 	res.redirect(redirectUrl);
 });
 
+var usernames = {};
+var numUsers = 0;
+
 io.on('connection', function(socket)
 {
+	var addedUser = false;
+	console.log('37');
 	socket.on('subscribe', function(code)
 	{
 		console.log('somebody subscribed');
 		socket.join(code);
 	});
+	console.log('43');
+	socket.on('add user', function(username, code)
+	{
+		socket.username = username;
 
+		usernames[username] = username;
+		++numUsers;
+		addedUser = true;
+		socket.broadcast.to(code).emit('login', {
+			username: socket.username,
+			numUsers: numUsers
+		});
+	});
+	console.log('56');
+	socket.on('typing', function(code)
+	{
+		socket.broadcast.to(code).emit('typing', {
+			username: socket.username
+		});
+	});
+
+	console.log('64');
+	socket.on('stop typing', function(code)
+	{
+		socket.broadcast.to(code).emit('stop typing', {
+			username: socket.username
+		});
+	});
+
+	console.log('72');
 	socket.on('new message', function(data, code)
 	{
 		console.log(data);
 		console.log(code);
-		io.to(code).emit('new message', {
-			username: "Keenan",
+		socket.broadcast.to(code).emit('new message', {
+			username: socket.username,
 			message: data
 		});
 	});
-
-	// socket.on('add user', function(username)
-	// {
-	// 	socket.username = username;
-
-	// 	usernames[username] = username;
-	// 	++numUsers;
-	// 	addedUser = true;
-	// });
-
+	console.log('82');
 	socket.on('unsubscribe', function(code)
 	{
 		console.log('somebody unsubscribed');
 		socket.leave(code);
 	});
-
-	socket.on('disconnect', function(code)
+	console.log('88');
+	socket.on('disconnect', function()
 	{
 		console.log('disconnecting');
-		// if(addedUser)
-		// {
-		// 	delete usernames[scoket.username];
-		// 	--numUsers;
-		// }
 	});
 });
 

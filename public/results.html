@@ -12,7 +12,6 @@
 		<div id="pollContainer" class="container">
 			<canvas id="pollResults" width="400" height="400"></canvas>
 		</div>
-
 		<div>
 			<ul class="pages">
     			<li class="chat page">
@@ -125,7 +124,7 @@
 			    var $messageDiv = $('<li class="message"/>')
 			      .data('username', data.username)
 			      .addClass(typingClass)
-			      .append($usernameDiv, $messageBodyDiv);
+			      .append($usernameDiv, ' ', $messageBodyDiv);
 
 			    addMessageElement($messageDiv, options);
 			};
@@ -253,7 +252,7 @@
 		  socket.on('login', function (data) {
 		    connected = true;
 		    // Display the welcome message
-		    var message = "Welcome to Socket.IO Chat – ";
+		    var message = "Welcome to Pollgeni.us Chat – ";
 		    log(message, {
 		      prepend: true
 		    });

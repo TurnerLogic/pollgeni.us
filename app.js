@@ -46,6 +46,7 @@ io.on('connection', function(socket)
 
 	socket.on('add user', function(username, code)
 	{
+		console.log(username);
 		socket.username = username;
 		socket.room = code;
 
@@ -58,7 +59,11 @@ io.on('connection', function(socket)
 			numUsers[code] = 1;
 		}
 		addedUser = true;
-		socket.broadcast.to(code).emit('login', {
+		io.to(code).emit('login', {
+			numUsers: numUsers[code]
+		});
+
+		socket.broadcast.to(code).emit('user joined', {
 			username: socket.username,
 			numUsers: numUsers[code]
 		});
@@ -84,7 +89,7 @@ io.on('connection', function(socket)
 	{
 		console.log(data);
 		console.log(code);
-		console.log(socket.rooms)
+		console.log(socket.rooms);
 		socket.broadcast.to(code).emit('new message', {
 			username: socket.username,
 			message: data

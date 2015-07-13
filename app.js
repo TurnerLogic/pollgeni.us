@@ -7,8 +7,19 @@ var mongojs = require('mongojs');
 var db = mongojs('polls_db', ['polls']);
 var path = require('path');
 var methodOverride = require('method-override');
+var cookieParser = require('cookie-parser');
+// var session = require('express-session');
+// var MongoStore = require('connect-mongo')(session);
 var app_root = __dirname;
 
+app.use(cookieParser());
+// app.use(session({
+// 	store: new MongoStore({
+// 		db: 'meta_polls_db',
+// 		host: '127.0.0.1',
+// 		port: 3355
+// 	})
+// }));
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -18,7 +29,6 @@ app.set('view engine', 'html');
 app.engine('html', require('hogan-express'));
 app.set('layout', 'layouts/default');
 app.set('partials', {navbar: 'includes/navbar', footer: 'includes/footer'});
-// app.set('partials', {footer: 'includes/footer'});
 
 app.get('/', function(req, res) {
 	res.render("index", {title: 'Welcome to Pollgeni.us!'});
@@ -44,77 +54,77 @@ io.on('connection', function(socket)
 		socket.join(code);
 	});
 
-	socket.on('add user', function(username, code)
-	{
-		console.log(username);
-		socket.username = username;
-		socket.room = code;
+	// socket.on('add user', function(username, code)
+	// {
+	// 	console.log(username);
+	// 	socket.username = username;
+	// 	socket.room = code;
 
-		if(usernames[code]) {
-			usernames[code].push(username);
-			++numUsers[code];
-		} else {
-			usernames[code] = [];
-			usernames[code].push(username);
-			numUsers[code] = 1;
-		}
-		addedUser = true;
-		io.to(code).emit('login', {
-			numUsers: numUsers[code]
-		});
+	// 	if(usernames[code]) {
+	// 		usernames[code].push(username);
+	// 		++numUsers[code];
+	// 	} else {
+	// 		usernames[code] = [];
+	// 		usernames[code].push(username);
+	// 		numUsers[code] = 1;
+	// 	}
+	// 	addedUser = true;
+	// 	io.to(code).emit('login', {
+	// 		numUsers: numUsers[code]
+	// 	});
 
-		socket.broadcast.to(code).emit('user joined', {
-			username: socket.username,
-			numUsers: numUsers[code]
-		});
-	});
+	// 	socket.broadcast.to(code).emit('user joined', {
+	// 		username: socket.username,
+	// 		numUsers: numUsers[code]
+	// 	});
+	// });
 
-	socket.on('typing', function(code)
-	{
-		socket.broadcast.to(code).emit('typing', {
-			username: socket.username
-		});
-	});
-
-
-	socket.on('stop typing', function(code)
-	{
-		socket.broadcast.to(code).emit('stop typing', {
-			username: socket.username
-		});
-	});
+	// socket.on('typing', function(code)
+	// {
+	// 	socket.broadcast.to(code).emit('typing', {
+	// 		username: socket.username
+	// 	});
+	// });
 
 
-	socket.on('new message', function(data, code)
-	{
-		console.log(data);
-		console.log(code);
-		console.log(socket.rooms);
-		socket.broadcast.to(code).emit('new message', {
-			username: socket.username,
-			message: data
-		});
-	});
+	// socket.on('stop typing', function(code)
+	// {
+	// 	socket.broadcast.to(code).emit('stop typing', {
+	// 		username: socket.username
+	// 	});
+	// });
 
-	socket.on('disconnect', function()
-	{
-		console.log(socket.username);
-		console.log(socket.room + ' this is the poll\'s room');
-		var room = socket.room || null;
-		if(addedUser) {
-			console.log('true added user');
-			delete usernames[room][socket.username];
-			--numUsers[room];
-		}
 
-		socket.broadcast.to(room).emit('user left', {
-			username: socket.username,
-			numUsers: numUsers[room]
-		});
+	// socket.on('new message', function(data, code)
+	// {
+	// 	console.log(data);
+	// 	console.log(code);
+	// 	console.log(socket.rooms);
+	// 	socket.broadcast.to(code).emit('new message', {
+	// 		username: socket.username,
+	// 		message: data
+	// 	});
+	// });
 
-		socket.leave(room);
-		console.log('disconnecting');
-	});
+	// socket.on('disconnect', function()
+	// {
+	// 	console.log(socket.username);
+	// 	console.log(socket.room + ' this is the poll\'s room');
+	// 	var room = socket.room || null;
+	// 	if(addedUser) {
+	// 		console.log('true added user');
+	// 		delete usernames[room][socket.username];
+	// 		--numUsers[room];
+	// 	}
+
+	// 	socket.broadcast.to(room).emit('user left', {
+	// 		username: socket.username,
+	// 		numUsers: numUsers[room]
+	// 	});
+
+	// 	socket.leave(room);
+	// 	console.log('disconnecting');
+	// });
 });
 
 app.use('/polls', require('./controllers/polls'));

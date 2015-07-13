@@ -79,9 +79,10 @@
 		</style>
 	</head>
 	<body ng-controller="PollCreateCtrl">
-		<div class="container">
+		<div style="padding-top: 50px" class="container">
 			<div class="row">
 				<h1>Poll Builder</h1>
+				<p> If you want to edit or delete your poll in the future, save this unique token: <strong><span id="token">{{token}}</span></strong>.</p>
 				<input id="question" type="text" class="form-control floatlabel" placeholder="Add a question" ng-model="question" required>
 			</div>
 
@@ -116,7 +117,7 @@
 		            <td class="choice-options">
 		              <button class="btn btn-danger btn-xs" ng-click="removeChoice($index)">Remove</button>
 		            </td>
-		            <td>{{ choice }}</td>
+		            <td>{[{ choice }]}</td>
 		          </tr>
 		        </tbody>
 		      </table>
@@ -132,6 +133,10 @@
 		});
 
 		var app = angular.module('pollCreateApp', []);
+		app.config(function($interpolateProvider)
+		{
+			$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+		});
 
 		app.factory('pollService', function($http) {
 			return {
@@ -147,15 +152,11 @@
 
 			$scope.choiceNew = "";
 			$scope.choiceEdit = "";
+			$scope.token = $( '#token' ).text();
 
 			$scope.question = "";
 
 			$scope.poll = {};
-
-			$scope.addQuestion = function()
-			{
-				console.log('question added');
-			};
 
 			$scope.removeChoice = function(index)
 			{
@@ -178,16 +179,13 @@
 
 				$scope.poll = {
 					question: $scope.question,
-					choices: $scope.choices
+					choices: $scope.choices,
+					token: $scope.token
 				};
 
 				pollService.savePoll($scope.poll, function(data) {
 					console.log(data);
-					console.log('this is a test');
-					var redirectUrl = data.code + '?token=' + data.token;
-
-					console.log(redirectUrl);
-						window.location = redirectUrl;
+						// window.location = data.code + '?token=' + data.token;
 				});
 			};
 

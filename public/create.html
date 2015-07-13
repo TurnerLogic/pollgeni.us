@@ -164,9 +164,14 @@
 
 			$scope.addChoice = function()
 			{
-				$scope.choices.push($scope.choiceNew);
-				$scope.choiceNew = '';
-				console.log($scope.choices);
+				if($scope.choices.indexOf($scope.choiceNew) === -1)
+				{
+					$scope.choices.push($scope.choiceNew);
+					$scope.choiceNew = '';
+					console.log($scope.choices);
+				} else {
+					console.log('Duplicate choices are not allowed.');
+				}
 			};
 
 			$scope.submitPoll = function() {

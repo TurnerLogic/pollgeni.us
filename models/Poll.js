@@ -2,17 +2,14 @@ var mongojs = require('mongojs');
 var db = mongojs('polls_db',['polls']);
 var randToken = require('rand-token');
 
-var Poll = function(data)
-{
+var Poll = function(data) {
 	this.data = data;
 };
 
 Poll.prototype.data = {};
 
-Poll.findByCode = function(code, callback)
-{
-	db.polls.findOne({code: code}, function(err, data)
-	{
+Poll.findByCode = function(code, callback) {
+	db.polls.findOne({code: code}, function (err, data) {
 		console.log(data);
 		console.log('this is the data from findbyCode');
 		if(err) return callback(err);
@@ -20,26 +17,16 @@ Poll.findByCode = function(code, callback)
 	});
 };
 
-Poll.prototype.save = function(callback)
-{
+Poll.prototype.save = function(callback) {
 	var self = this;
 
-	console.log(this);
-	console.log(self.data);
-
-	db.polls.findOne({code: self.data.code}, function(err, doc)
-	{
-		console.log('inside findeOne');
-		console.log(err);
-		if( !doc )
-		{
-			db.polls.save(self.data, function(error, doc)
-			{
+	db.polls.findOne({code: self.data.code}, function (err, doc) {
+		if (!doc) {
+			db.polls.save(self.data, function (error, doc) {
 				return callback(null, doc);
 			});
 		} else {
-			db.polls.update({code: self.data.code}, self.data, function(error, doc)
-			{
+			db.polls.update({code: self.data.code}, self.data, function (error, doc) {
 				return callback(null, doc);
 			});
 		}
@@ -57,13 +44,11 @@ Poll.prototype.delete = function(callback)
 };
 
 
-Poll.prototype.get = function(key)
-{
+Poll.prototype.get = function(key) {
 	return this.data[key];
 };
 
-Poll.prototype.set = function(key, value)
-{
+Poll.prototype.set = function(key, value) {
 	this.data[key] = value;
 };
 

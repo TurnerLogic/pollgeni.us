@@ -1,22 +1,19 @@
-
 {{#poll}}
-		<h1>{{question}}</h1>
-		<h4>{{token}}</h4>
-		<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
-		<radiogroup>
-			{{#choices}}
-			<input class="choice" type="radio" name="pollChoice" value="{{.}}">{{.}}</li>
-			{{/choices}}
-		</radiogroup>
-		<button>Submit</button>
-		</form>
-	</ul>
+	<h1>{{question}}</h1>
+	<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
+	<radiogroup>
+		{{#choices}}
+		<input class="choice" type="radio" name="pollChoice" value="{{.}}">{{.}}</li>
+		{{/choices}}
+	</radiogroup>
+	<button>Submit</button>
+	</form>
 {{/poll}}
-{{#delete}}
+{{#creator}}
+	<h4>Bookmark this page to return with admin priveleges in the future.</h4>
 	<p>Would you like to remove your poll?</p>
 	<form action='/polls/{{poll.code}}?_method=DELETE' method="POST">
 		<input type="hidden" value="{{poll.token}}" name="token">
-		<input type="submit" value="REMOVE">
+		<input type="submit" value="Remove">
 	</form>
-{{/delete}}
-<p>Testing</p>
+{{/creator}}

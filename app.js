@@ -7,19 +7,10 @@ var mongojs = require('mongojs');
 var db = mongojs('polls_db', ['polls']);
 var path = require('path');
 var methodOverride = require('method-override');
-var cookieParser = require('cookie-parser');
-// var session = require('express-session');
-// var MongoStore = require('connect-mongo')(session);
+var env = require('./.env.js');
 var app_root = __dirname;
 
-app.use(cookieParser());
-// app.use(session({
-// 	store: new MongoStore({
-// 		db: 'meta_polls_db',
-// 		host: '127.0.0.1',
-// 		port: 3355
-// 	})
-// }));
+process.env['RECAPTCHA_SECRET_KEY'] = env['RECAPTCHA_SECRET_KEY'];
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -30,11 +21,11 @@ app.engine('html', require('hogan-express'));
 app.set('layout', 'layouts/default');
 app.set('partials', {navbar: 'includes/navbar', footer: 'includes/footer'});
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
 	res.render("index", {title: 'Welcome to Pollgeni.us!'});
 });
 
-app.get('/:code', function(req, res) {
+app.get('/:code', function (req, res) {
 	var code = req.params.code;
 	var redirectUrl = '/polls/' + code;
 
@@ -44,8 +35,7 @@ app.get('/:code', function(req, res) {
 var usernames = {};
 var numUsers = [];
 
-io.on('connection', function(socket)
-{
+io.on('connection', function (socket) {
 	var addedUser = false;
 
 	socket.on('subscribe', function(code)
@@ -132,8 +122,7 @@ app.use('/polls', require('./controllers/polls'));
 
 app.use(express.static(app_root + "/public"));
 
-// app.use('/models', express.static('models'));
 
-http.listen(3000, function(){
+http.listen(3000, function() {
   console.log('listening on *:3000');
 });

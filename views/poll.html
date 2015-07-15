@@ -1,4 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/css/result_style.css">
+
 {{#poll}}
 	<div class="poll-choices">
 		<h2>{{question}}</h2>
@@ -13,5 +14,14 @@
 			</div>
 	</div>
 {{/poll}}
+
+{{#delete}}
+	<p>Would you like to remove your poll?</p>
+	<form action='/polls/{{poll.code}}?_method=DELETE' method="POST">
+		<input type="hidden" value="{{poll.token}}" name="token">
+		<input type="submit" value="REMOVE">
+	</form>
+{{/delete}}
+<p>Testing</p>
 
 <script type="text/javascript" src="/js/polls_choice.js"></script>

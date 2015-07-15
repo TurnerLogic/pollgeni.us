@@ -1,18 +1,18 @@
 
-	var FADE_TIME = 150; // ms
-	var TYPING_TIMER_LENGTH = 400; // ms
-	var COLORS = [
-	'#e21400', '#91580f', '#f8a700', '#f78b00',
-	'#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
-	'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
-	];
-	
+		var FADE_TIME = 150; // ms
+		var TYPING_TIMER_LENGTH = 400; // ms
+		var COLORS = [
+		'#e21400', '#91580f', '#f8a700', '#f78b00',
+		'#58dc00', '#287b00', '#a8f07a', '#4ae8c4',
+		'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
+		];
 	var $window = $( window );
 	var $usernameInput = $( '.usernameInput' );
 	var $messages = $( '#messages' );
 	var $inputMessage = $( '.inputMessage' );
 
 
+	var $loginPage = $('.login.page'); // The login page
 		var $chatPage = $('.chat.page'); // The chatroom page
 
 	var username;
@@ -20,6 +20,11 @@
 	var typing = false;
 	var lastTypingTime;
 	var $currentInput = $usernameInput.focus();
+
+	$( document ).ready(function()
+	{
+		// $( '.chat.page' ).hide();
+	});
 
 	var addParticipantsMessage = function(data)
 	{
@@ -38,12 +43,14 @@
 		username = cleanInput($usernameInput.val().trim());
 
 		if(username) {
-			$usernameInput.fadeOut();
+			// $loginPage.css('margin-top', '0px');
+			// $loginPage.fadeOut();
+			$loginPage.hide();
 			$chatPage.show();
-			$inputMessage.css('width','100%');
-			$usernameInput.off('click');
+			$loginPage.off('click');
 			$currentInput = $inputMessage.focus();
 
+			console.log('emitting add user ' + username);
 			socket.emit('add user', username, code);
 		}
 	}
@@ -51,16 +58,17 @@
 	var sendMessage = function()
 	{
 		var message = cleanInput($inputMessage.val());
-		
+
 		if(message && connected)
 		{
 			$inputMessage.val('');
 			addChatMessage({
-				username: username,
+				username: username + ' ',
 				message: message
 			});
+
+			socket.emit('new message', message, code);
 		}
-		socket.emit('new message', message, code);
 	};
 
 
@@ -82,16 +90,18 @@
 
 		var $usernameDiv = $('<span class="username"/>')
 			.text(data.username)
-			.css('color', getUsernameColor(data.username));
+			.css('color', getUsernameColor(data.username))
+			.css('font-weight', '800')
+			.css('font-family', 'Helvetica');
 
 		var $messageBodyDiv = $('<span class="messageBody">')
 			.text(data.message);
 
 		var typingClass = data.typing ? 'typing' : '';
-	    var $messageDiv = $('<li class="message" readonly/>')
+	    var $messageDiv = $('<li class="message"/>')
 	      .data('username', data.username)
 	      .addClass(typingClass)
-	      .append($usernameDiv, $messageBodyDiv);
+	      .append($usernameDiv, ' ', $messageBodyDiv);
 
 	    addMessageElement($messageDiv, options);
 	};
@@ -106,11 +116,11 @@
 
 	var removeChatTyping = function(data)
 	{
-		getTypingMessages(data).fadeOut(function()
+		getTypingMessages(data).fadeOut(function ()
 		{
-			$(this).remove();
+				$(this).remove();
 		});
-	};
+		}
 
 	var addMessageElement = function(el, options)
 	{
@@ -139,7 +149,7 @@
 	 };
 
 	 var cleanInput = function(input)
-	 {	
+	 {
 	 	return $('<div/>').text(input).text();
 	 }
 
@@ -205,7 +215,7 @@
 		updateTyping();
 	});
 
-	$usernameInput.click(function ()
+	$loginPage.click(function ()
 	{
 		$currentInput.focus();
 	});
@@ -217,9 +227,10 @@
   });
 
   socket.on('login', function (data) {
+  	console.log('login event');
     connected = true;
     // Display the welcome message
-    var message = "Welcome to Socket.IO Chat – ";
+    var message = "Welcome to Pollgeni.us Chat – ";
     log(message, {
       prepend: true
     });
@@ -228,11 +239,13 @@
 
   // Whenever the server emits 'new message', update the chat body
   socket.on('new message', function (data) {
+  	console.log('new message');
     addChatMessage(data);
   });
 
   // Whenever the server emits 'user joined', log it in the chat body
   socket.on('user joined', function (data) {
+  	console.log(data.username + " joined")
     log(data.username + ' joined');
     addParticipantsMessage(data);
   });
@@ -247,9 +260,4 @@
   // Whenever the server emits 'typing', show the typing message
   socket.on('typing', function (data) {
     addChatTyping(data);
-  });
-
-  // Whenever the server emits 'stop typing', kill the typing message
-  socket.on('stop typing', function (data) {
-    removeChatTyping(data);
   });

@@ -1,5 +1,6 @@
 var mongojs = require('mongojs');
 var db = mongojs('polls_db',['polls']);
+var randToken = require('rand-token');
 
 var Poll = function(data)
 {
@@ -12,6 +13,8 @@ Poll.findByCode = function(code, callback)
 {
 	db.polls.findOne({code: code}, function(err, data)
 	{
+		console.log(data);
+		console.log('this is the data from findbyCode');
 		if(err) return callback(err);
 		callback(null, new Poll(data));
 	});
@@ -43,9 +46,14 @@ Poll.prototype.save = function(callback)
 	});
 };
 
-Poll.find = function(query)
+Poll.prototype.delete = function(callback)
 {
-
+	console.log('detele from model');
+	db.polls.remove({code: this.data.code}, function(err, data)
+	{
+		if(err) return callback(err);
+		return callback(null, data);
+	});
 };
 
 
@@ -79,6 +87,11 @@ Poll.generateCode = function()
 
 	return code;
 };
+
+Poll.generateToken = function()
+{
+	return randToken.generate(16);
+}
 
 
 var getRandomInt = function(max, min)

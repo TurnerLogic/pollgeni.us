@@ -7,6 +7,10 @@ var Poll = require('../models/Poll');
 
 router.get('/create', function (req, res) {
 	console.log('This is the get polls/create route');
+	var token = Poll.generateToken();
+	// req.session.token = token;
+	// res.locals = {token: token};
+	// res.render('create');
 	res.sendFile('create.html', { root: path.join(__dirname, '../public') });
 });
 
@@ -18,6 +22,8 @@ router.post('/create', function (req, res)
 	var created_at = Date.now();
 	var expires_at = created_at + 2592000000;
 	var code = Poll.generateCode();
+	var token = Poll.generateToken();
+	// console.log(req.session.token + ' this is from the post create route');
 
 	poll.get('choices').forEach(function(element, index)
 	{
@@ -31,6 +37,7 @@ router.post('/create', function (req, res)
 	poll.set('code', code);
 	poll.set('created_at', created_at);
 	poll.set('expires_at', expires_at);
+	poll.set('token', token);
 
 	poll.save(function(err, result)
 	{
@@ -40,21 +47,36 @@ router.post('/create', function (req, res)
 
 		// TODO: create a successful creation page with links to share via social media
 		// res.sendFile(path.join(__dirname, '../public', 'results.html'));
-		return res.status(200).send(code);
+		return res.status(200).send({code: code, token: token});
 		// return res.render('poll', {poll: result});
+		// return res.redirect('/' + code + '?token=' + token);
 	});
 });
 
 router.get('/:code', function (req, res)
 {
 	var code = req.params.code;
+	var token = req.query.token || null;
+	var poll = null;
+	var deletePoll = false;
 
-	Poll.findByCode(code, function(err, poll)
+	Poll.findByCode(code, function(err, instance)
 	{
 		if(err) res.status(404).send('Poll not found.');
+		poll = instance;
+		console.log(poll);
+		if(poll.get('token') === token)
+		{
+			deletePoll = true;
+			// poll.delete(function(err, status)
+			// {
+			// 	if(err) res.status(500).send('Unable to delete your poll.');
+			// 	res.send(status);
+			// });
+		}
 		console.log(poll);
 		console.log('found poll');
-		res.render("poll", {poll: poll.data});
+		res.render("poll", {poll: poll.data, title: 'Pollgeni.us', delete: deletePoll});
 	});
 });
 
@@ -102,6 +124,34 @@ router.put('/:code', function (req, res) {
 	});
 
 });
+
+router.delete('/:code', function(req, res)
+{
+	console.log(req.body);
+	console.log('dis da body');
+	var token = req.body.token; //not from url params to avoid hacking
+	var code = req.params.code;
+	var poll = null;
+
+	Poll.findByCode(code, function(err, instance)
+	{
+		if(err) return res.status(404).send('Poll not found.');
+		poll = instance;
+		if(poll.get('token') === token)
+		{
+			poll.delete(function(err, status)
+			{
+				if(err) return res.status(500).send('Unable to delete your poll. Please contact Turner Logic.');
+
+				return res.redirect('/');
+			});
+		}
+
+		return res.status(403).send('Quit trying to hack us, asshole.');
+
+	});
+});
+
 
 router.get('/:code/results', function (req, res)
 {

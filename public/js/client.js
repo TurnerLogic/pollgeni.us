@@ -8,7 +8,7 @@ var ctx = null;
 var initialLoad = true;
 var chartData = [];
 var chartColors = ["#F7464A", "#ACBEA3", "#157A6E", "#499F68", "#68A357", "#FF33CC", "#444545", "#666699", "#32213A", "#40090D", "#E3D26F"];
-var ctx = $("#pollResults").get(0).getContext("2d");
+var ctx = $("#poll-results").get(0).getContext("2d");
 
 	var chartOptions = {
 		    //Boolean - Whether we should show a stroke on each segment

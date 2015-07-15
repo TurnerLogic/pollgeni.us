@@ -6,6 +6,14 @@ var path = require('path');
 var request = require('request');
 var Poll = require('../models/Poll');
 
+router.get('/', function (req, res) {
+	Poll.all(function (err, polls) {
+		if (err) res.status(500).send('Unable to load all polls at this time.');
+
+		return res.render('all', {polls: polls});
+	});
+});
+
 router.get('/create', function (req, res) {
 	res.render('create');
 	// res.sendFile('create.html', { root: path.join(__dirname, '../public') });

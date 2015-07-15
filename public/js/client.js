@@ -59,6 +59,8 @@ var chartOptions = {
 
 		};
 
+socket.emit('subscribe', code);
+
 var spawnChart = function(code) {
 	var jsonResultsUrl = "/polls/" + code + "/json-results";
 
@@ -112,6 +114,7 @@ var formatJsonData = function(poll) {
 
 
 $( document ).ready(function () {
+	console.log('spawning chart');
 	spawnChart(code); // code pulled from url
 });
 

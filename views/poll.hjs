@@ -1,13 +1,17 @@
-
+<link rel="stylesheet" type="text/css" href="/css/result_style.css">
 {{#poll}}
-		<h1>{{question}}</h1>
-		<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
-		<radiogroup>
-			{{#choices}}
-			<input class="choice" type="radio" name="pollChoice" value="{{.}}">{{.}}</li>
-			{{/choices}}
-		</radiogroup>
-		<button>Submit</button>
-		</form>
-	</ul>
+	<div class="poll-choices">
+		<h2>{{question}}</h2>
+			<div class="poll-holder col-md-12">
+			<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
+					{{#choices}}
+						<div class="choice-holder col-xs-4">
+								<button class="circle" name="pollChoice" value="{{.}}">{{.}}</button>
+						</div>
+					{{/choices}}
+			</form>
+			</div>
+	</div>
 {{/poll}}
+
+<script type="text/javascript" src="/js/polls_choice.js"></script>

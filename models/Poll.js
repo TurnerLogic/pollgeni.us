@@ -48,7 +48,7 @@ Poll.prototype.save = function(callback)
 
 Poll.prototype.delete = function(callback)
 {
-	console.log('detele from model');
+	console.log('delete from model');
 	db.polls.remove({code: this.data.code}, function(err, data)
 	{
 		if(err) return callback(err);

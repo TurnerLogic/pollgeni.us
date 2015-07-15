@@ -707,7 +707,8 @@ a.nav-order-btn:hover {
     text-decoration: none
 }
 .footer-top {
-    padding: 70px 0;
+    padding-top: 20px;
+    padding-bottom: 10px;
     margin: 0
 }
 .footer-nav ul {
@@ -857,6 +858,19 @@ div.modal-footer{
     color: #ecd078;
 }
 
+ul.pull-right{
+    margin-top: 48px;
+}
+
+#company-name{
+    font-size: 40px;
+    color: #47a3da; 
+}
+.col-md-12.footer-about.animated.fadeInUp.visible{
+    color: #fff;
+    font-size: 20px;
+    padding-left: 5px;
+}
 @media (max-width: 1400px) {
     .port-image .mask {
         padding-top: 23%
@@ -1035,6 +1049,12 @@ div.modal-footer{
     .big-txt-counter span.count {
         font-size: 60px;
         line-height: 100px
+    }
+     #company-name{
+        text-align: center;
+    }
+    ul.social-footer{
+        margin-left: 305px;
     }
 }
 @media (max-width: 480px) {
@@ -1279,7 +1299,19 @@ div.modal-footer{
         font-size: 24px;
         line-height: 30px
     }
+
+    ul.pull-right{
+        margin-right: 80px;
+    }
+
+    ul.social-footer{
+        margin-left: 129px;
+    }
+    #company-name{
+        text-align: center;
+    }
 }
+
 @media (max-width: 380px) {
     h1.animated.fadeInUp.visible{
         font-size: 35px;

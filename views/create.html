@@ -2,13 +2,8 @@
 	<head>
 		<title>Create your poll!</title>
 		<link rel="stylesheet" href="../css/bootstrap.min.css">
-		<link rel="stylesheet" href="../fonts/glyphicons-halflings-regular.ttf">
-		<link rel="stylesheet" href="../fonts/fontawesome-webfont.ttf">
+		<link rel="stylesheet" href="/css/font-awesome.min.css">
 		<link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
-		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
-		<script src="../js/floatlabels.min.js"></script>
-
 		<style>
 			#question, .choice {
 				height: 60px;
@@ -125,7 +120,12 @@
 		      <p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
       </div>
 	</body>
+	
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+		<script src="/js/floatlabels.min.js"></script>
 	<script>
+
 	(function() {
 		$( 'input.floatlabel' ).floatlabel({
 			slideInput: false,
@@ -191,6 +191,7 @@
 
 
 		});
-	}());
+	})();
+
 	</script>
 </html>

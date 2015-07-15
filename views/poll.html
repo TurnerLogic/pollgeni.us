@@ -16,12 +16,11 @@
 {{/poll}}
 
 {{#delete}}
-	<p>Would you like to remove your poll?</p>
+	<p id="remove-text">Would you like to remove your poll?</p>
 	<form action='/polls/{{poll.code}}?_method=DELETE' method="POST">
-		<input type="hidden" value="{{poll.token}}" name="token">
-		<input type="submit" value="REMOVE">
+		<input type="hidden" value="{{poll.token}}" name="token" readonly>
+		<input type="submit" id="remove" class="btn btn-info btn-default" value="REMOVE">
 	</form>
 {{/delete}}
-<p>Testing</p>
 
 <script type="text/javascript" src="/js/polls_choice.js"></script>

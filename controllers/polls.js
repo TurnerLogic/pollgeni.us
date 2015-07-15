@@ -65,15 +65,15 @@ router.get('/:code', function (req, res)
 		if(err) res.status(404).send('Poll not found.');
 		poll = instance;
 		console.log(poll);
-		if(poll.get('token') === token)
-		{
+		// if(poll.get('token') === token)
+		// {
 			deletePoll = true;
 			// poll.delete(function(err, status)
 			// {
 			// 	if(err) res.status(500).send('Unable to delete your poll.');
 			// 	res.send(status);
 			// });
-		}
+		// }
 		console.log(poll);
 		console.log('found poll');
 		res.render("poll", {poll: poll.data, title: 'Pollgeni.us', delete: deletePoll});
@@ -155,7 +155,7 @@ router.delete('/:code', function(req, res)
 
 router.get('/:code/results', function (req, res)
 {
-	res.sendFile('results.html', { root: path.join(__dirname, '../public') });
+	res.render('results');
 });
 
 router.get('/:code/json-results', function (req, res)

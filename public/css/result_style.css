@@ -29,6 +29,7 @@ p{
 	font-family: 'globerThin', sans-serif;
 	font-size: 35px;
 	padding-top: 75px;
+	line-height: 1.0;
 }
 .row{
 	margin-right: 0px;
@@ -115,7 +116,8 @@ div.chatArea{
  }
  button{
  	font-family: 'globerThin', sans-serif;
- 	font-size: 35px;
+ 	font-size: 30px;
+ 	line-height: 1.2;
  	color: #E9BC1B;
  }
 
@@ -141,6 +143,40 @@ div.chatArea{
 
 .choice-holder{
 	margin-bottom: 15px;
+}
+
+.footer-text{
+	font-family: 'Roboto', sans-serif;
+	font-size: 14px;
+}
+
+.footer-area{
+	background-color: #212635;
+}
+
+.footer-bottom{
+	background-color: #191e2b;
+	padding: 0px;
+}
+
+.footer-bottom > .container{
+	margin-left: 10px;
+} 
+
+.container > p {
+	padding-top: 20px;
+}
+
+#remove-text{
+	padding-top: 5px;
+	color: #fff;
+	font-size: 28px;
+	margin-left: 10px;
+}
+
+#remove{
+	margin-left: 10px;
+
 }
  @media (max-width: 991px) {
 	 h2{

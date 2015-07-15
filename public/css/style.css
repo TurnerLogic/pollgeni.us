@@ -93,6 +93,10 @@ hr.special {
     height: 34px;
     background: url(../img/hr-spec.png) center center no-repeat
 }
+#canvas{
+    width: 385px;
+    margin-bottom: 30px;
+}
 .medium-txt {
     padding: 10px 10%;
     font-size: 24px;
@@ -190,6 +194,10 @@ hr.special {
     -moz-transition: all .5s ease 0s;
     -ms-transition: all .5s ease 0s;
     transition: all .5s ease 0s
+}
+.logo{
+    font-size: 40px;
+    line-height: 1.0;
 }
 .logo-area {
     padding: 0;
@@ -402,11 +410,17 @@ a.nav-order-btn:hover {
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 10
-}
-.banner-btm-img img {
+    z-index: 10;
     width: 100%;
-    max-width: 1100px
+    opacity: 0.1;
+}
+.banner-btm-img img ,#home{
+    /*background-image: url(/img/trans_mixed_pies_1.png);*/
+    width: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 .about-area {
     padding: 0;
@@ -1039,6 +1053,12 @@ div.modal-footer{
     h5 {
         font-size: 16px
     }
+    h1.animated.fadeInUp.visible{
+        font-size: 105px;
+    }
+    .animated{
+        font-size: 15px;
+    }
     .header-area {
         padding: 10px 0;
         position: inherit;
@@ -1261,6 +1281,12 @@ div.modal-footer{
     }
 }
 @media (max-width: 380px) {
+    h1.animated.fadeInUp.visible{
+        font-size: 35px;
+    }
+    .animated{
+        font-size: 25px;
+    }
     .logo-area {
         text-align: center
     }

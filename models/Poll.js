@@ -52,6 +52,21 @@ Poll.prototype.set = function(key, value) {
 	this.data[key] = value;
 };
 
+Poll.all = function(callback) {
+	var polls = [];
+	db.polls.find(function (err, docs) {
+		if (err) {
+			return callback(err);
+		}
+		docs.forEach(function (element, index) {
+			console.log(element);
+			polls.push(new Poll(element));
+		});
+
+		return callback(null, polls);
+	});
+};
+
 Poll.generateCode = function()
 {
 	var code = '';

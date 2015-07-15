@@ -3,30 +3,38 @@ var mongojs = require('mongojs');
 var db = mongojs('polls_db',['polls']);
 var router = express.Router();
 var path = require('path');
+var request = require('request');
 var Poll = require('../models/Poll');
 
-router.get('/create', function (req, res) {
-	console.log('This is the get polls/create route');
-	var token = Poll.generateToken();
-	// req.session.token = token;
-	// res.locals = {token: token};
-	// res.render('create');
-	res.sendFile('create.html', { root: path.join(__dirname, '../public') });
+router.get('/', function (req, res) {
+	Poll.all(function (err, polls) {
+		if (err) res.status(500).send('Unable to load all polls at this time.');
+
+		return res.render('all', {polls: polls});
+	});
 });
 
-router.post('/create', function (req, res)
-{
-	var data = req.body;
+router.get('/create', function (req, res) {
+	res.render('create');
+	// res.sendFile('create.html', { root: path.join(__dirname, '../public') });
+});
+
+router.post('/create', function (req, res) {
+	var data = {
+		question: req.body.question,
+		choices: req.body.choices
+	};
 	var responses = [];
 	var poll = new Poll(data);
 	var created_at = Date.now();
-	var expires_at = created_at + 2592000000;
+	var expires_at = created_at + 2592000000; // 30 days equivalent in ms
 	var code = Poll.generateCode();
 	var token = Poll.generateToken();
-	// console.log(req.session.token + ' this is from the post create route');
+	var reCaptchaEndpoint = 'https://www.google.com/recaptcha/api/siteverify';
+	var reCaptchaResponse = req.body.recaptchaResponse;
 
-	poll.get('choices').forEach(function(element, index)
-	{
+	// construct the responses object from the choices
+	poll.get('choices').forEach(function(element, index) {
 		responses[index] = {
 			count: 0,
 			choice: element
@@ -39,135 +47,102 @@ router.post('/create', function (req, res)
 	poll.set('expires_at', expires_at);
 	poll.set('token', token);
 
-	poll.save(function(err, result)
-	{
-		if(err) res.status(404).send('Poll unable to save. Please try again.');
-		console.log('post create');
-		console.log(result);
-
-		// TODO: create a successful creation page with links to share via social media
-		// res.sendFile(path.join(__dirname, '../public', 'results.html'));
-		return res.status(200).send({code: code, token: token});
-		// return res.render('poll', {poll: result});
-		// return res.redirect('/' + code + '?token=' + token);
+	poll.save(function(err, result) {
+		if (err) res.status(404).send('Poll unable to save. Please try again.');
+		request.post(reCaptchaEndpoint, {form: {secret: process.env['RECAPTCHA_SECRET_KEY'], response: reCaptchaResponse }},  function (error, response, body) {
+			var body = JSON.parse(body);
+			var error = JSON.parse(error);
+			if (error) return res.status(403).send('Failed reCatptcha Test. Are you sure you\'re not a bot?');
+			if (body.success) {
+				console.log('success responding with 200');
+				return res.status(200).send({code: code, token: token}); //response to Angular App Poll Create
+			}
+		});
 	});
 });
 
-router.get('/:code', function (req, res)
-{
+router.get('/:code', function (req, res) {
 	var code = req.params.code;
-	var token = req.query.token || null;
+	var token = req.query.token || false;
 	var poll = null;
-	var deletePoll = false;
+	var creator = false; // whether client created, i.e. unique token is present in URL, the displayed poll
 
-	Poll.findByCode(code, function(err, instance)
-	{
-		if(err) res.status(404).send('Poll not found.');
+	Poll.findByCode(code, function (err, instance) {
+		if (err) res.status(404).send('Poll not found.');
 		poll = instance;
-		console.log(poll);
-		// if(poll.get('token') === token)
-		// {
-			deletePoll = true;
-			// poll.delete(function(err, status)
-			// {
-			// 	if(err) res.status(500).send('Unable to delete your poll.');
-			// 	res.send(status);
-			// });
-		// }
-		console.log(poll);
-		console.log('found poll');
-		res.render("poll", {poll: poll.data, title: 'Pollgeni.us', delete: deletePoll});
+
+		if (poll.get('token') === token) {
+			creator = true;
+		}
+		res.render("poll", {poll: poll.data, title: 'Pollgeni.us', creator: creator});
 	});
 });
 
 router.put('/:code', function (req, res) {
-	console.log('made it to the put action');
 	var code = req.params.code;
 	var poll = null;
 	var countToIncrement = null;
 	var redirectUrl = '/polls/' + code + '/results';
 
-	console.log("Connection from the polls/create get route");
-	console.log(io);
-
 	io.to(code).emit('poll submission', code);
 
-
-	Poll.findByCode(code, function(err, instance)
-	{
-		if(err) res.status(500).send('Unable to locate the poll on which you voted.');
+	Poll.findByCode(code, function (err, instance) {
+		if (err) res.status(500).send('Unable to locate the poll on which you voted.');
 
 		poll = instance;
 		var choices = poll.get('choices');
 		var newResponses = poll.get('responses');
 
-		poll.get('responses').forEach(function(element, index)
-		{
-			if(req.body.pollChoice === element.choice)
-			{
+		poll.get('responses').forEach(function(element, index) {
+			if (req.body.pollChoice === element.choice) {
 				newResponses[index].count = element.count + 1;
 				newResponses[index].choice = element.choice;
 			} else {
 				newResponses[index] = element;
 			}
-
 		});
 
 		poll.set('responses', newResponses);
-		poll.save(function(err, result)
-		{
-			console.log('redirecting: ' + redirectUrl);
-			if(err) res.status(500).send('Unable to persist your vote to the database');
+		poll.save(function(err, result) {
+			if (err) res.status(500).send('Unable to persist your vote to the database');
 			return res.redirect(redirectUrl);
 		});
-
 	});
 
 });
 
-router.delete('/:code', function(req, res)
-{
-	console.log(req.body);
-	console.log('dis da body');
+router.delete('/:code', function (req, res) {
 	var token = req.body.token; //not from url params to avoid hacking
 	var code = req.params.code;
 	var poll = null;
 
-	Poll.findByCode(code, function(err, instance)
-	{
-		if(err) return res.status(404).send('Poll not found.');
+	Poll.findByCode(code, function(err, instance) {
+		if (err) return res.status(404).send('Poll not found.');
 		poll = instance;
-		if(poll.get('token') === token)
-		{
-			poll.delete(function(err, status)
-			{
-				if(err) return res.status(500).send('Unable to delete your poll. Please contact Turner Logic.');
-
+		if (poll.get('token') === token) {
+			poll.delete(function(err, status) {
+				if (err) return res.status(500).send('Unable to delete your poll. Please contact Turner Logic.');
 				return res.redirect('/');
 			});
+		} else {
+			return res.status(403).send('Your token does not match that of the poll.');
 		}
-
-		return res.status(403).send('Quit trying to hack us, asshole.');
-
 	});
 });
 
 
 router.get('/:code/results', function (req, res)
 {
-	res.render('results');
+	return res.render('results');
 });
 
-router.get('/:code/json-results', function (req, res)
-{
+router.get('/:code/json-results', function (req, res) {
 	var code = req.params.code;
 
-	Poll.findByCode(code, function(err, poll)
-	{
-		if(err) res.status(404).send('JSON data unavailable');
+	Poll.findByCode(code, function(err, poll) {
+		if (err) res.status(404).send('JSON data unavailable');
 		res.json(poll.data);
 	});
-
 });
 
 module.exports = router;

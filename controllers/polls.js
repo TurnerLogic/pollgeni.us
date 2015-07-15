@@ -63,7 +63,7 @@ router.post('/create', function (req, res) {
 
 router.get('/:code', function (req, res) {
 	var code = req.params.code;
-	var token = req.query.token || null;
+	var token = req.query.token || false;
 	var poll = null;
 	var creator = false; // whether client created, i.e. unique token is present in URL, the displayed poll
 

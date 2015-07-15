@@ -10,11 +10,14 @@
 	}
 	body {
 		font-family: 'Raleway', sans-serif;
+		background-color: #2C303F;
+		height: none !important;
 	}
 
 	input[type='text'] {
 		font-size: 24px;
 		font-family: 'Raleway', sans-serif;
+		box-shadow: 0 7px 7px -5px black;
 	}
 
 	#question {
@@ -22,10 +25,11 @@
 	}
 
 	#poll-submit {
-		color: #F0A830;
+		color: #EEB902;
 		background-color: white;
 		border-radius: 5px;
-		border: 3px solid #F0A830;
+		border: 3px solid #EEB902;
+		box-shadow: 0 7px 7px -5px black;
 	}
 
 	#add-choice-btn, #clear-choice-btn {
@@ -33,6 +37,7 @@
 		width: 75px;
 		background-color: rgb(30, 159, 180);
 		border: 3px solid rgb(30, 159, 180);
+		box-shadow: 0 7px 7px -5px black;
 	}
 
 	#add-choice-btn {
@@ -64,15 +69,17 @@
 		width: 50px;
 	}
 
-	.container {
-		border: 1px #D3D3D3 solid;
-		/*border-radius: 15px;*/
-		margin-top: 100px;
+	#content {
+		border: 5px solid rgb(30, 159, 180);
+		border-radius: 15px;
+		margin-top: 89px;
 		background-color: white;
+		padding-left: 32px;
+		padding-right: 32px;
 	}
 
-	body {
-		background-color: #2C303F
+	header.header-area {
+		background-color: #2C303F;
 	}
 
 	#contact-recaptcha {
@@ -82,8 +89,64 @@
 	#contact-recaptcha body {
 		font-family: 'Raleway';
 	}
+
+	#choice {
+		text-align: left;
+		margin: 25px 0px;
+	}
+
+	#choices-table {
+		margin-top: 12px;
+	}
+
+	#title {
+		margin: 25px 0px;
+		text-align: center;
+		font-size: 3em;
+		color: rgb(30, 159, 180);
+	}
 </style>
 {{/yield-styles}}
+
+<div id="content" class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 id="title">Poll Geni.us Builder</h1>
+			<input id="question" type="text" class="form-control" placeholder="Add your poll question..." ng-model="question" required>
+		</div>
+	</div>
+		<form role="form" ng-submit="addChoice()">
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button id="add-choice-btn" class="btn btn-success"><span class="glyphicon glyphicon-list glyphicon-left"></span></button>
+				</span>
+			<input type="text" class="form-control choice" id="choice" placeholder="Add a choice to your poll..." ng-model="choiceNew" required>
+			</div>
+			<div id="contact-recaptcha" class="g-recaptcha" data-sitekey="6LfMyQkTAAAAAAn4sMfHHYRHiFgARWdlMEmRLDcG"></div>
+		</form>
+		<div class="row">
+			<div class="col-lg-4 col-lg-offset-4">
+				<button id="poll-submit" class="btn-block btn-lg" ng-click="submitPoll()">Submit Poll</button>
+			</div>
+		</div>
+		<table id="choices-table" class="table" ng-show="choices.length > 0">
+			<thead>
+				<tr>
+					<th class="choice-options">Options</th>
+					<th>Choice</th>
+				</tr>
+			</thead>
+		<tbody>
+			<tr ng-repeat="choice in choices">
+		<td class="choice-options">
+		<button class="btn btn-danger btn-xs" ng-click="removeChoice($index)">Remove</button>
+			</td>
+			<td>{[{ choice }]}</td>
+			</tr>
+		</tbody>
+		</table>
+		<p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
+	</div>
 
 {{#yield-scripts}}
 <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
@@ -92,6 +155,9 @@
 <script src='https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit async defer'></script>
 <script>
 (function() {
+
+$( '.menu-cont' ).children().removeClass('active');
+$( '.menu-cont' ).children().last().addClass('active');
 var app = angular.module('pollCreateApp', []);
 
 app.config(function ($interpolateProvider) {
@@ -167,44 +233,3 @@ $scope.submitPoll = function() {
 }());
 </script>
 {{/yield-scripts}}
-
-<div class="container">
-	<div class="row">
-		<div class="col-md-12">
-			<h1>Poll Builder</h1>
-			<input id="question" type="text" class="form-control" placeholder="Add a question" ng-model="question" required>
-		</div>
-	</div>
-	<h2>Add Choice</h2>
-		<form role="form" ng-submit="addChoice()">
-			<div class="input-group">
-				<span class="input-group-btn">
-					<button id="add-choice-btn" class="btn btn-success"><span class="glyphicon glyphicon-list glyphicon-left"></span></button>
-				</span>
-			<input type="text" class="form-control choice" id="text" placeholder="Add a response" ng-model="choiceNew" required>
-			</div>
-			<div id="contact-recaptcha" class="g-recaptcha" data-sitekey="6LfMyQkTAAAAAAn4sMfHHYRHiFgARWdlMEmRLDcG"></div>
-		</form>
-		<div class="row">
-			<div class="col-lg-4 col-lg-offset-4">
-				<button id="poll-submit" class="btn-block btn-lg" ng-click="submitPoll()">Submit Poll</button>
-			</div>
-		</div>
-		<table class="table" ng-show="choices.length > 0">
-			<thead>
-				<tr>
-					<th class="choice-options">Options</th>
-					<th>Choice</th>
-				</tr>
-			</thead>
-		<tbody>
-			<tr ng-repeat="choice in choices">
-		<td class="choice-options">
-		<button class="btn btn-danger btn-xs" ng-click="removeChoice($index)">Remove</button>
-			</td>
-			<td>{[{ choice }]}</td>
-			</tr>
-		</tbody>
-		</table>
-		<p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
-	</div>

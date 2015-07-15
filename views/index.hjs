@@ -6,16 +6,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="description" content="">
     <meta name="keywords" content="">
-    
+
     <link rel="shortcut icon" href="img/favicon.ico">
-    
+
     <link type="text/css" rel="stylesheet" href="css/bootstrap.css"><!-- bootstrap.css -->
     <link type="text/css" rel="stylesheet" href="css/font-awesome.min.css"><!-- font-awesome -->
     <link type="text/css" rel="stylesheet" href="css/animate.min.css"><!-- animate css -->
-    <link type="text/css" rel="stylesheet" href="css/order-form.css"><!-- animate css -->
-    <link rel="stylesheet" type="text/css" href="css/angular-chart.css"><!-- angular chart css -->
     <link type="text/css" rel="stylesheet" href="css/style.css"><!-- page styling -->
-    
+
 <!-- Google Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
     <link href='http://fonts.googleapis.com/css?family=Roboto:100,300,100italic,300italic,400,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
@@ -24,65 +22,36 @@
 </head>
 
 <body>
-<!-- THIS DIV CAUSES THE SPINNING GIF AS THE PAGE LOADS -->
-    <div id="mask">
-        <div id="loader">      
-        </div>
-    </div>
-<!-- ==================================================== -->
-
-<!--===================== NAVIGATION =====================-->
-    <header class="header-area">
-    	<div class="container clearfix">
-        
-        	<div class="logo-area">
-                <a href="#" class="logo"><img src="img/logo.png" alt=""></a>
-                <span class="phone">This is where the logo will go</span>
-                <a class="toggle-btn"><i class="fa fa-bars"></i></a>
-            </div>
-            <nav class="nav-main">
-            	<ul class="menu-cont">
-                	<li class="active"><a href="#home">Home</a></li>
-                    <li><a href="/test">Polls</a></li>
-                    <li><a data-toggle="modal" data-target="#myModal">Create Poll</a></li>
-                </ul>
-            </nav>
-        
-        </div>
-    </header>
-<!-- =========================================================-->
 
 <!--===================== LANDING SCREEN =====================-->
     <section id="home">
     	<div id="particles">
-        
+
             <div class="cont-area">
-            
+
                 <div class="container banner-area">
-                
+
                     <ul class="slides clearfix">
-                    
+
                         <li>
                             <h1>Poll Genius</h1>
                             <h5>Polls For What Matters</h5>
                             <a href="/test" class="button-large">View Polls	</a>
-                        </li>                        
+                        </li>
                     </ul>
-                    
+
                 </div>
-                
+
             </div>
-            
-            <div class="banner-btm-img"><img src="img/buildings.png" alt=""></div>
-        
-    	</div>    
+            <div class="banner-btm-img img-responsive"><img src="img/trans_mixed_pies_2.png" alt=""></div>
+    	</div>
     </section>
 <!-- ============================================================================= -->
 
 <!--============================ ABOUT SECTION OF PAGE ============================-->
     <section class="about-area" id="about">
         <div class="about-top-area">
-            <div class="container">    
+            <div class="container">
                 <div class="row colum-contents clearfix">
 
                 	<div class="col-md-6 col-conts animated" data-animation="fadeInLeft" data-animation-delay="200">
@@ -97,7 +66,7 @@
                  		quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
                  		consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
                  		cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-                 		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>                 			
+                 		proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
             </div>
         </div>
     </section>
@@ -107,7 +76,7 @@
     <section class="statistics-main">
     	<div class="solid-bg">
         	<div class="container">
-            
+
             	<div class="row clearfix">
                 	<div class="col-md-3 col-cont animated" data-animation="fadeInRight" data-animation-delay="200">
                     	<span class="icon-cont"><i class="fa fa-heart"></i></span>
@@ -133,7 +102,7 @@
                         <hr>
                         <span class="count-btm">Clients</span>
                     </div>
-                </div>    
+                </div>
             </div>
         </div>
     </section>
@@ -143,12 +112,12 @@
 <!--========================= SECTION FOR POPULAR POLLS ========================-->
     <section class="services-main" id="services">
     	<div class="container">
-        
-            <h2 class="animated">Popular Polls</h2>            
 
-            <div class="row service-all clearfix" ng-controller="appCtrl"> 
+            <h2 class="animated">Popular Polls</h2>
+
+            <div class="row service-all clearfix" ng-controller="appCtrl">
                 <div class="col-md-4 service-single" ng-repeat="eachPoll in polls | first: 3">
-   				
+
                 	<canvas id="doughnut" class="chart chart-doughnut" data="eachPoll.data"
   					labels="eachPoll.labels"></canvas>
                     <h5>{% eachPoll.title %}</h5>
@@ -161,34 +130,34 @@
         </div>
     </section>
 <!-- =========================================================================== -->
-   
-   
+
+
 <!--=========================== FOOTER AREA OF PAGE =============================-->
     <footer class="footer-area">
         <!-- Start: Footer Top -->
         <div class="footer-top">
         	<div class="container">
             	<div class="row clearfix">
-                
+
                 	<!-- Start: Footer Menu -->
                     <div class="col-md-2 footer-menu animated" data-animation="fadeInLeft" data-animation-delay="200">
                     	<nav class="footer-nav">
                         	<ul>
                             	<li><a href="#">Home</a></li>
-                                <li><a href="/test">Polls</a></li>  
+                                <li><a href="/test">Polls</a></li>
                                 <li><a data-toggle="modal" data-target="#myModal">Create Poll</a></li>
                             </ul>
                         </nav>
                     </div>
                 	<!-- End: Footer Menu -->
-                
+
                 	<!-- Start: Footer About -->
                     <div class="col-md-4 footer-about animated" data-animation="fadeInUp" data-animation-delay="400">
                     	<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc euismod sed libero at congue. Praesent vulputate dolor velit, in condimentum odio pellentesin ondimentum odio pellentesque</p>
-                    	
+
                     </div>
                 	<!-- End: Footer About -->
-                    
+
                     <!-- Start: Footer Address -->
                     <div class="col-md-3 footer-address animated" data-animation="fadeInUp" data-animation-delay="600">
                     	<ul>
@@ -198,7 +167,7 @@
                         </ul>
                     </div>
                     <!-- End: Footer Address -->
-                
+
                     <!-- Start: Footer Map -->
                     <div class="col-md-3 footer-map animated" data-animation="fadeInRight" data-animation-delay="800">
                         <ul class="social-footer">
@@ -209,20 +178,17 @@
                         </ul>
                     </div>
                     <!-- End: Footer Map -->
-                
+
                 </div>
             </div>
         </div>
         <!-- End: Footer Top -->
-        
+
         <!-- Start: Footer Bottom -->
         <div class="footer-bottom">
-        	<div class="container">
-                <p>A project by JD Garza in collaboration with Turner Logic</p>
-            </div>
         </div>
         <!-- End: Footer Bottom -->
-        
+
     </footer>
 <!-- ============================================================================== -->
 
@@ -263,10 +229,8 @@
   </div>
 </div>
 <!-- =================================================================================== -->
-	
 
-	<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script> <!-- angular js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-filter/0.5.4/angular-filter.min.js"></script>
+
 	<script type="text/javascript" src="js/chart.min.js"></script><!-- chart js -->
 
     <script type="text/javascript">
@@ -306,23 +270,9 @@
             plotData();
 
 
-    </script><!-- for canvas element -->  
+    </script><!-- for canvas element -->
 
-	<script type="text/javascript" src="js/angular-chart.js"></script><!-- angular chartJS -->
-	<script type="text/javascript" src="models/Poll.js"></script><!-- Poll JS model -->
-	<script src="/socket.io/socket.io.js"></script><!-- socket.io -->
-	<script type="text/javascript" src="js/jquery.js"></script><!-- jquery -->
-    <script type="text/javascript" src="js/bootstrap.js"></script><!-- Bootstrap Js -->
-    <script type="text/javascript" src="js/jquery.particleground.js"></script><!-- Particle Header Js -->
-    <script type="text/javascript" src="js/particle.js"></script><!-- Particle Header Js -->
-    <script type="text/javascript" src="js/jquery.flexslider.js"></script><!-- Flexslider Js -->
-    <script type="text/javascript" src="js/flexslider-settings.js"></script><!-- Flexslider Settings Js -->
-    <script type="text/javascript" src="js/jquery.easytabs.min.js"></script><!-- Easy Tab Js -->
-    <script type="text/javascript" src="js/easytabs-settings.js"></script><!-- Easy Tab Js -->
-    <script type="text/javascript" src="js/isotope.pkgd.js"></script><!-- Isotope packaged -->
-    <script type="text/javascript" src="js/jquery.appear.js"></script><!-- Appear Js -->
-    <script type="text/javascript" src="js/jquery-scrollToFixed.js"></script><!-- Scroll To Fixed Js -->
-    <script type="text/javascript" src="js/settings.js"></script><!-- Settings Js -->
-    <script type="text/javascript" src="js/forms.js"></script><!-- Contact Form Js -->
+    <script type="text/javascript" src="/js/particle.min.js"></script><!-- Particle Header Js -->
+	  <script type="text/javascript" src="/js/particle.js"></script><!-- Particle Header Js -->
 </body>
 </html>

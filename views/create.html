@@ -1,196 +1,235 @@
-<html ng-app="pollCreateApp">
-	<head>
-		<title>Create your poll!</title>
-		<link rel="stylesheet" href="../css/bootstrap.min.css">
-		<link rel="stylesheet" href="../fonts/glyphicons-halflings-regular.ttf">
-		<link rel="stylesheet" href="../fonts/fontawesome-webfont.ttf">
-		<link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
-		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
-		<script src="../js/floatlabels.min.js"></script>
+{{#yield-styles}}
+<link rel="stylesheet" href="/css/bootstrap.min.css">
+<link rel="stylesheet" href="/fonts/fontawesome-webfont.ttf">
+<link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
+<style>
+	#question, .choice {
+		height: 60px;
+		border: 3px solid rgb(30, 159, 180);
+		border-radius: 5px;
+	}
+	body {
+		font-family: 'Raleway', sans-serif;
+		background-color: #2C303F;
+		height: none !important;
+	}
 
-		<style>
-			#question, .choice {
-				height: 60px;
-				border: 3px solid #78C0A8;
-				border-radius: 5px;
-			}
-			body {
-				font-family: 'Raleway', sans-serif;
-			}
+	input[type='text'] {
+		font-size: 24px;
+		font-family: 'Raleway', sans-serif;
+		box-shadow: 0 7px 7px -5px black;
+	}
 
-			input[type='text'] {
-				font-size: 24px;
-				font-family: 'Raleway', sans-serif;
-			}
+	#question {
+		padding-left: 20px;
+	}
 
-			#question {
-				padding-left: 20px;
-			}
+	#poll-submit {
+		color: #EEB902;
+		background-color: white;
+		border-radius: 5px;
+		border: 3px solid #EEB902;
+		box-shadow: 0 7px 7px -5px black;
+	}
 
-			#poll-submit {
-				color: #F0A830;
-				background-color: white;
-				border-radius: 5px;
-				border: 3px solid #F0A830;
-			}
+	#add-choice-btn, #clear-choice-btn {
+		height: 60px;
+		width: 75px;
+		background-color: rgb(30, 159, 180);
+		border: 3px solid rgb(30, 159, 180);
+		box-shadow: 0 7px 7px -5px black;
+	}
 
-			#add-choice-btn, #clear-choice-btn {
-				height: 60px;
-				width: 75px;
-				background-color: #78C0A8;
-				border: 3px solid #78C0A8;
-			}
+	#add-choice-btn {
+		border-top-left-radius: 5px;
+		border-bottom-left-radius: 5px;
+	}
 
-			#add-choice-btn {
-				border-top-left-radius: 5px;
-				border-bottom-left-radius: 5px;
-			}
+	#clear-choice-btn {
+		border-top-right-radius: 5px;
+		border-bottom-right-radius: 5px;
+	}
 
-			#clear-choice-btn {
-				border-top-right-radius: 5px;
-				border-bottom-right-radius: 5px;
-			}
+	span.glyphicon {
+		font-size: 2.25em;
+		position: relative;
+	}
 
-			span.glyphicon {
-				font-size: 2.25em;
-				position: relative;
-			}
+	.glyphicon-left {
+		color: white;
+		top: 0;
+		/*left: 5;*/
+	}
 
-			.glyphicon-left {
-				color: #FCEBB6;
-				top: 0;
-				/*left: 5;*/
-			}
+	label.label-floatlabel {
+		padding-left: 17px;
+	}
 
-			.glyphicon-right {
-				color: #F07818;
-				top: 0;
-				/*left: -5;*/
-			}
+	.choice-options {
+		width: 50px;
+	}
 
-			label.label-floatlabel {
-				padding-left: 17px;
-			}
+	#content {
+		border: 5px solid rgb(30, 159, 180);
+		border-radius: 15px;
+		margin-top: 89px;
+		background-color: white;
+		padding-left: 32px;
+		padding-right: 32px;
+	}
 
-			.choice-options {
-				width: 50px;
-			}
-		</style>
-	</head>
-	<body ng-controller="PollCreateCtrl">
-		<div style="padding-top: 50px" class="container">
-			<div class="row">
-				<h1>Poll Builder</h1>
-				<p> If you want to edit or delete your poll in the future, save this unique token: <strong><span id="token">{{token}}</span></strong>.</p>
-				<input id="question" type="text" class="form-control floatlabel" placeholder="Add a question" ng-model="question" required>
+	header.header-area {
+		background-color: #2C303F;
+	}
+
+	#contact-recaptcha {
+		margin-top: 15px;
+	}
+
+	#contact-recaptcha body {
+		font-family: 'Raleway';
+	}
+
+	#choice {
+		text-align: left;
+		margin: 25px 0px;
+	}
+
+	#choices-table {
+		margin-top: 12px;
+	}
+
+	#title {
+		margin: 25px 0px;
+		text-align: center;
+		font-size: 3em;
+		color: rgb(30, 159, 180);
+	}
+</style>
+{{/yield-styles}}
+
+<div id="content" class="container">
+	<div class="row">
+		<div class="col-md-12">
+			<h1 id="title">Poll Geni.us Builder</h1>
+			<input id="question" type="text" class="form-control" placeholder="Add your poll question..." ng-model="question" required>
+		</div>
+	</div>
+		<form role="form" ng-submit="addChoice()">
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button id="add-choice-btn" class="btn btn-success"><span class="glyphicon glyphicon-list glyphicon-left"></span></button>
+				</span>
+			<input type="text" class="form-control choice" id="choice" placeholder="Add a choice to your poll..." ng-model="choiceNew" required>
 			</div>
+			<div id="contact-recaptcha" class="g-recaptcha" data-sitekey="6LfMyQkTAAAAAAn4sMfHHYRHiFgARWdlMEmRLDcG"></div>
+		</form>
+		<div class="row">
+			<div class="col-lg-4 col-lg-offset-4">
+				<button id="poll-submit" class="btn-block btn-lg" ng-click="submitPoll()">Submit Poll</button>
+			</div>
+		</div>
+		<table id="choices-table" class="table" ng-show="choices.length > 0">
+			<thead>
+				<tr>
+					<th class="choice-options">Options</th>
+					<th>Choice</th>
+				</tr>
+			</thead>
+		<tbody>
+			<tr ng-repeat="choice in choices">
+		<td class="choice-options">
+		<button class="btn btn-danger btn-xs" ng-click="removeChoice($index)">Remove</button>
+			</td>
+			<td>{[{ choice }]}</td>
+			</tr>
+		</tbody>
+		</table>
+		<p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
+	</div>
 
+{{#yield-scripts}}
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script value="test"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.16/angular.min.js"></script>
+<script src='https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit async defer'></script>
+<script>
+(function() {
 
-		      <h2>Add Choice</h2>
-		      <form role="form" ng-submit="addChoice()">
-		        <div class="input-group">
-		        	<span class="input-group-btn">
-		        		<button id="add-choice-btn" class="btn btn-success"><span class="glyphicon glyphicon-plus glyphicon-left"></span></button>
-		        	</span>
-		          <input type="text" class="form-control choice" id="text" placeholder="Add a response" ng-model="choiceNew" required>
-		          <span class="input-group-btn">
-		        	<button id="clear-choice-btn" type="button" class="btn btn-default" ng-click="choiceNew = ''"><i class="fa fa-eraser"></i></button>
-		          </span>
-		        </div>
-		      </form>
-		      <div class="row">
-		      	<div class="col-lg-4 col-lg-offset-4">
-		      		<button id="poll-submit" class="btn-block btn-lg" ng-click="submitPoll()">Submit Poll</button>
-		      	</div>
-		      </div>
+$( '.menu-cont' ).children().removeClass('active');
+$( '.menu-cont' ).children().last().addClass('active');
+var app = angular.module('pollCreateApp', []);
 
-		      <table class="table" ng-show="choices.length > 0">
-		        <thead>
-		          <tr>
-		            <th class="choice-options">Options</th>
-		            <th>Choice</th>
-		          </tr>
-		        </thead>
-		        <tbody>
-		          <tr ng-repeat="choice in choices">
-		            <td class="choice-options">
-		              <button class="btn btn-danger btn-xs" ng-click="removeChoice($index)">Remove</button>
-		            </td>
-		            <td>{[{ choice }]}</td>
-		          </tr>
-		        </tbody>
-		      </table>
+app.config(function ($interpolateProvider) {
+ $interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+});
 
-		      <p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
-      </div>
-	</body>
-	<script>
-	(function() {
-		$( 'input.floatlabel' ).floatlabel({
-			slideInput: false,
-			labelEndTop: '7px'
-		});
+app.factory('pollService', function($http) {
+return {
+	savePoll: function(data, cb) {
+		$http.post('/polls/create', data).success(cb);
+	}
+}
+});
 
-		var app = angular.module('pollCreateApp', []);
-		app.config(function($interpolateProvider)
+app.controller('PollCreateCtrl', function( $scope, pollService ) {
+
+$scope.choices = [];
+
+$scope.recaptchaResponse = null;
+$scope.choiceNew = "";
+$scope.choiceEdit = "";
+
+$scope.question = "";
+
+$scope.poll = {};
+
+$scope.addQuestion = function()
+{
+	console.log('question added');
+};
+
+$scope.removeChoice = function(index)
+{
+	$scope.choices.splice(index, 1);
+};
+
+$scope.addChoice = function()
+{
+	if($scope.choices.indexOf($scope.choiceNew) === -1)
+	{
+		$scope.choices.push($scope.choiceNew);
+		$scope.choiceNew = '';
+		console.log($scope.choices);
+	} else {
+		console.log('Duplicate choices are not allowed.');
+	}
+};
+
+$scope.submitPoll = function() {
+
+	$scope.recaptchaResponse = $( '#g-recaptcha-response' ).val();
+	console.log($scope.recaptchaResponse);
+
+	$scope.poll = {
+		question: $scope.question,
+		choices: $scope.choices,
+		recaptchaResponse: $scope.recaptchaResponse
+	};
+
+	pollService.savePoll($scope.poll, function(data, status) {
+		console.log(data);
+		if(status === 200)
 		{
-			$interpolateProvider.startSymbol('{[{').endSymbol('}]}');
+			var redirectUrl = data.code + '?token=' + data.token;
+			window.location = redirectUrl;
+		} else if(status === 403) {
+			// some dom element flash message about failure
+		}
 		});
+};
 
-		app.factory('pollService', function($http) {
-			return {
-				savePoll: function(data, cb) {
-					$http.post('/polls/create', data).success(cb);
-				}
-			}
-		});
-
-		app.controller('PollCreateCtrl', function( $scope, pollService ) {
-
-			$scope.choices = [];
-
-			$scope.choiceNew = "";
-			$scope.choiceEdit = "";
-			$scope.token = $( '#token' ).text();
-
-			$scope.question = "";
-
-			$scope.poll = {};
-
-			$scope.removeChoice = function(index)
-			{
-				$scope.choices.splice(index, 1);
-			};
-
-			$scope.addChoice = function()
-			{
-				if($scope.choices.indexOf($scope.choiceNew) === -1)
-				{
-					$scope.choices.push($scope.choiceNew);
-					$scope.choiceNew = '';
-					console.log($scope.choices);
-				} else {
-					console.log('Duplicate choices are not allowed.');
-				}
-			};
-
-			$scope.submitPoll = function() {
-
-				$scope.poll = {
-					question: $scope.question,
-					choices: $scope.choices,
-					token: $scope.token
-				};
-
-				pollService.savePoll($scope.poll, function(data) {
-					console.log(data);
-						// window.location = data.code + '?token=' + data.token;
-				});
-			};
-
-
-		});
-	}());
-	</script>
-</html>
+});
+}());
+</script>
+{{/yield-scripts}}

@@ -10,7 +10,7 @@ body,
 html {
     font-family: Roboto, sans-serif;
     font-weight: 300;
-    height: 100%;
+    /*height: 100%; CREATES BUGS ON ANGULAR APP PAGE*/
     width: 100%;
     line-height: 24px;
     font-size: 16px;

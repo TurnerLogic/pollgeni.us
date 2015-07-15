@@ -1,31 +1,29 @@
-<html>
+<html ng-app='pollCreateApp'>
 	<head>
 		<title>{{title}}</title>
 		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-		    <meta charset="utf-8">
-    	<title>Poll Genius</title>
-    	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    	<meta name="description" content="">
-    	<meta name="keywords" content="">
-	
-    	<link rel="shortcut icon" href="img/favicon.ico">
-	
-    	<link type="text/css" rel="stylesheet" href="/css/bootstrap.css"><!-- bootstrap.css -->
-    	<link type="text/css" rel="stylesheet" href="/css/font-awesome.min.css"><!-- font-awesome -->
-    	<link type="text/css" rel="stylesheet" href="/css/animate.min.css"><!-- animate css -->
-    	<link type="text/css" rel="stylesheet" href="/css/order-form.css"><!-- animate css -->
-    	<link rel="stylesheet" type="text/css" href="/css/angular-chart.css"><!-- angular chart css -->
-    	<link type="text/css" rel="stylesheet" href="/css/style.css"><!-- page styling -->
-	
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+		<meta name="description" content="">
+		<meta name="keywords" content="">
+		<link rel="shortcut icon" href="img/favicon.ico">
+		<link type="text/css" rel="stylesheet" href="/css/bootstrap.css"><!-- bootstrap.css -->
+		<link type="text/css" rel="stylesheet" href="/css/font-awesome.min.css"><!-- font-awesome -->
+		<link type="text/css" rel="stylesheet" href="/css/animate.min.css"><!-- animate css -->
+		<link type="text/css" rel="stylesheet" href="/css/order-form.css"><!-- animate css -->
+		<link rel="stylesheet" type="text/css" href="/css/angular-chart.css"><!-- angular chart css -->
+		<link type="text/css" rel="stylesheet" href="/css/style.css"><!-- page styling -->
 		<!-- Google Fonts -->
-    	<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    	<link href='http://fonts.googleapis.com/css?family=Roboto:100,300,100italic,300italic,400,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+		<link href='http://fonts.googleapis.com/css?family=Roboto:100,300,100italic,300italic,400,400italic,500,500italic,700,700italic,900,900italic' rel='stylesheet' type='text/css'>
+		{{{yield-styles}}}
 	</head>
-	<body>
+	<body ng-controller="PollCreateCtrl">
 		{{> navbar}}
- 		{{{ yield }}}
+		{{{ yield }}}
 		{{> footer}}
+		{{{yield-scripts}}}
 	</body>
 </html>

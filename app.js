@@ -25,6 +25,8 @@ app.get('/', function (req, res) {
 	res.render("index", {title: 'Welcome to Pollgeni.us!'});
 });
 
+app.use('/polls', require('./controllers/polls'));
+
 app.get('/:code', function (req, res) {
 	var code = req.params.code;
 	var redirectUrl = '/polls/' + code;
@@ -116,8 +118,6 @@ io.on('connection', function (socket) {
 	// 	console.log('disconnecting');
 	// });
 });
-
-app.use('/polls', require('./controllers/polls'));
 
 
 app.use(express.static(app_root + "/public"));

@@ -18,6 +18,8 @@
 		font-family: 'globerThin', sans-serif;
 		font-size: 60px;
 		line-height: 0.9;
+		text-align: center;
+		padding-top: 10px;
 	}
 	p{
 		font-family: 'globerThin', sans-serif;
@@ -52,18 +54,20 @@
 	}
 
 	.pie-box{
-		background-color: #4fc143;
-		color: #fff;
+		background-color: rgba(79, 193, 67, 0.1);
+		color: #000;
+		border: 10px solid #4fc143;
 	}
 	.poll-choices{
 		background-color: #124859;
 	}
 	.chatArea{
 		background-color: #00a3d9;
+		border: black 1px solid;
 	}
-	 #messages { 
+	 #messages {
 	 	font-family: 'globerThin', sans-serif;
-	 	list-style-type: none; margin: 0; padding: 0; 
+	 	list-style-type: none; margin: 0; padding: 0;
 
 	 }
      #messages li { padding: 5px 10px; }
@@ -73,77 +77,95 @@
      }
      .form{
      	display: inline-block;
+     	list-style-type: none;
+     	font-family:  'globerThin', sans-serif;
+     	color: white;
+     	font-size: 25px;
+     }
+
+     .scrollable {
+     	height: 400px;
+     	overflow-y: auto;
+     }
+
+     .inputMessage {
+     	position: absolute;
+     	bottom: 5%;
+     	display: block;
+     	width: 95%;
+     	max-height: 40px;
+     	max-width: 95%;
+     	height: 40px;
+     	border-radius: 10px;
+     	resize: none;
+     	font-family: 'globerThin', sans-serif;
+     	font-size: 20px;
+     }
+
+     .usernameInput {
+     	width: 100%;
+     	height: 40px;
+     	color: black;
+     }
+
+     #poll-results {
+     	margin: auto;
+     }
+     #pollContainer {
+     	text-align: center;
+     }
+
+     .col-md-6 {
+     	border-radius: 15px;
+     	min-height:  500px;
+     }
+
+     ul#pages {
+     	padding-top: 5px;
+     	padding-left: 0px;
+     }
+     .login.page {
+     	text-align: center;
+     	list-style: none;
+     	position: relative;
+     	margin-top: 25%;
      }
 
 	</style>
 	<body>
-<div class="row">
-
-		<div class="col-md-6 pie-box">
-			<h1 id="pollTitle"></h1>
-			<div id="pollContainer" class="container">
-			<div class="col-md-1"></div>
-				<div class="col-md-3">
-					<canvas id="pollResults" width="250" height="240"></canvas>
-				</div>
-			</div>
-		</div>
-
-	<section id="chat-section">
-		<ul id="pages">
-			<li class="chat page">
-					<div class="chatArea">
-						<ul id="messages"></ul>
-					</div>
-					<input class="inputMessage" placeholder="Type here..."/>
-			</li>
-			<li class="login page">
-					<div class="form">
-					<h3 class="title">What's your nickname?</h3>
-						<input class="usernameInput" type="text" maxlength="14" />
-					</div>
-			</li>
-		</ul>
-	</section>
-
-</div>
-
-	<section class="poll-choices">
 		<div class="container">
-			<div class="col-md-12">
-				<div class="container">
-					<div class="row">
-							<div class="col-md-3">
-									<div class="circle">
-										<p align="center">yes</p>
-									</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class="circle">
-									<p align="center">yes</p>
-								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class="circle">
-									<p align="center">yes</p>
-								</div>
-							</div>
-
-							<div class="col-md-3">
-								<div class="circle">
-									<p align="center">yes</p>
-								</div>
-							</div>
-
+			<div class="row">
+				<div class="col-md-6 pie-box">
+					<h1 id="pollTitle"></h1>
+					<div id="pollContainer" class="row">
+						<canvas id="poll-results" width="250" height="240"></canvas>
 					</div>
 				</div>
+				<section id="chat-section">
+					<div class="col-md-6">
+						<ul id="pages">
+							<li hidden class="chat page scrollable">
+								<div class="chatArea">
+									<ul id="messages"></ul>
+								</div>
+								<div class="chat-input">
+									<textarea class="inputMessage" placeholder="Type here..."></textarea>
+								</div>
+							</li>
+							<li class="login page">
+								<div class="form">
+									<h3 class="title">What's your nickname?</h3>
+									<input class="usernameInput" type="text" maxlength="14" />
+								</div>
+							</li>
+						</ul>
+					</div>
+				</section>
 			</div>
 		</div>
-	</section>
 
-		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<!-- <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script> -->
+		<script src="/js/jquery.js"></script>
 		<script src="/js/Chart.min.js"></script>
 		<script src="/socket.io/socket.io.js"></script>
 		<script src="/js/client.js"></script>
@@ -170,6 +192,11 @@
 			var lastTypingTime;
 			var $currentInput = $usernameInput.focus();
 
+			$( document ).ready(function()
+			{
+				// $( '.chat.page' ).hide();
+			});
+
 			var addParticipantsMessage = function(data)
 			{
 				var message = '';
@@ -187,11 +214,14 @@
 				username = cleanInput($usernameInput.val().trim());
 
 				if(username) {
-					$loginPage.fadeOut();
+					// $loginPage.css('margin-top', '0px');
+					// $loginPage.fadeOut();
+					$loginPage.hide();
 					$chatPage.show();
 					$loginPage.off('click');
 					$currentInput = $inputMessage.focus();
 
+					console.log('emitting add user ' + username);
 					socket.emit('add user', username, code);
 				}
 			}
@@ -199,16 +229,17 @@
 			var sendMessage = function()
 			{
 				var message = cleanInput($inputMessage.val());
-				
+
 				if(message && connected)
 				{
 					$inputMessage.val('');
 					addChatMessage({
-						username: username + " ",
+						username: username + ' ',
 						message: message
 					});
+
+					socket.emit('new message', message, code);
 				}
-				socket.emit('new message', message, code);
 			};
 
 
@@ -229,8 +260,10 @@
 				}
 
 				var $usernameDiv = $('<span class="username"/>')
-					.text(data.username + " ")
-					.css('color', getUsernameColor(data.username));
+					.text(data.username)
+					.css('color', getUsernameColor(data.username))
+					.css('font-weight', '800')
+					.css('font-family', 'Helvetica');
 
 				var $messageBodyDiv = $('<span class="messageBody">')
 					.text(data.message);
@@ -239,7 +272,7 @@
 			    var $messageDiv = $('<li class="message"/>')
 			      .data('username', data.username)
 			      .addClass(typingClass)
-			      .append($usernameDiv, $messageBodyDiv);
+			      .append($usernameDiv, ' ', $messageBodyDiv);
 
 			    addMessageElement($messageDiv, options);
 			};
@@ -251,6 +284,14 @@
 					$(this).remove();
 				});
 			};
+
+			var removeChatTyping = function(data)
+			{
+    			getTypingMessages(data).fadeOut(function ()
+    			{
+      				$(this).remove();
+    			});
+  			}
 
 			var addMessageElement = function(el, options)
 			{
@@ -279,7 +320,7 @@
 			 };
 
 			 var cleanInput = function(input)
-			 {	
+			 {
 			 	return $('<div/>').text(input).text();
 			 }
 
@@ -357,9 +398,10 @@
 		  });
 
 		  socket.on('login', function (data) {
+		  	console.log('login event');
 		    connected = true;
 		    // Display the welcome message
-		    var message = "Welcome to Socket.IO Chat – ";
+		    var message = "Welcome to Pollgeni.us Chat – ";
 		    log(message, {
 		      prepend: true
 		    });
@@ -368,11 +410,13 @@
 
 		  // Whenever the server emits 'new message', update the chat body
 		  socket.on('new message', function (data) {
+		  	console.log('new message');
 		    addChatMessage(data);
 		  });
 
 		  // Whenever the server emits 'user joined', log it in the chat body
 		  socket.on('user joined', function (data) {
+		  	console.log(data.username + " joined")
 		    log(data.username + ' joined');
 		    addParticipantsMessage(data);
 		  });

@@ -9,8 +9,31 @@ var Poll = require('../models/Poll');
 router.get('/', function (req, res) {
 	Poll.all(function (err, polls) {
 		if (err) res.status(500).send('Unable to load all polls at this time.');
-
+		console.log(polls);
 		return res.render('all', {polls: polls});
+	});
+});
+
+router.get('/meta', function (req, res) {
+
+	var meta = {};
+	var count = 0;
+	var activeUsers = 0;
+	Poll.all(function (err, polls) {
+		if (err) res.status(500).send('Unable to process your request at this time.');
+
+		polls.forEach(function (element, index) {
+			console.log(element);
+			element.data.responses.forEach(function (element, index) {
+				console.log(element);
+				count += element.count;
+			});
+		});
+
+		meta['totalSubmissions'] = count;
+		meta['totalPolls'] = polls.length;
+		meta['activeUsers'] = activeUsers;
+		res.json(meta);
 	});
 });
 

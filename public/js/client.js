@@ -55,7 +55,7 @@ var chartOptions = {
 		animateScale: false,
 
 		//String - A legend template
-		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend col-md-4\"><% for (var i=0; i<chartData.length; i++){%><li class=\"col-md-6\"><span style=\"background-color:<%=chartColors[i]%>\"></span><%if(chartData[i].label){%><%=chartData[i].label%><%}%></li><%}%></ul>"
+		legendTemplate : "<div id=\"legend-container\"><% for (var i=0; i<chartData.length; i++){%><div class=\"legend-wrapper clearfix\"><div class=\"legend-color\" style=\"background-color:<%=chartColors[i]%>\"></div><div class=\"legend-label\"><%if(chartData[i].label){%><%=chartData[i].label%><%}%></div></div><%}%></div>"
 
 		};
 
@@ -69,7 +69,7 @@ var spawnChart = function(code) {
 		if (initialLoad) {
 			pollResults = new Chart(ctx).Pie(chartData, chartOptions);
   			var legend = pollResults.generateLegend();
-  			$('.pie-box').prepend(legend);
+  			$( "#pollContainer" ).prepend(legend);
 		} else {
 			console.log('not inital load');
 			updateChartData(chartData);

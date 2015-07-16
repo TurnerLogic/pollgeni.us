@@ -1,4 +1,5 @@
 {{#yield-styles}}
+<link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
 <style>
 #search-btn, #search-input{
 	height: 50px;
@@ -18,14 +19,18 @@
 	border: 5px solid #1E9FB4;
 	border-radius: 0px 5px 5px 0px;
 	text-align: center;
-	font-family: "Roboto", sans-serif;
+	font-family: "Montserrat", sans-serif;
+	font-size: 14pt;
+	color: #1E9FB4;
 }
 
 #poll-create-btn {
 	height: 50px;
-	background-color: #1E9FB4;
-	border: 5px solid white;
-	color: white;
+	background-color: white;
+	border: 5px solid #1E9FB4;
+	color: #1E9FB4;
+	font-family: 'Montserrat';
+	font-weight: 100;
 }
 
 #period {
@@ -53,12 +58,12 @@
 										<span class="input-group-btn">
 											<button id="search-btn" class="btn btn-default" type="submit"><span class='glyphicon glyphicon-search'></span></button>
 										</span>
-										<input id="search-input" type="text" class="form-control" name="code" placeholder="Enter a unique poll code">
+										<input id="search-input" type="text" class="form-control" name="code" placeholder="Enter a unique code...">
 									</div><!-- /input-group -->
 								</form>
 								</div>
 							</div>
-						<a id="poll-create-btn" href="/polls/create" class="button-large">Create Poll</a>
+						<a id="poll-create-btn" href="/polls/create" class="button-large">Create</a>
 					</li>
 				</ul>
 			</div>

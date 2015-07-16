@@ -1,0 +1,202 @@
+<html>
+	<head>
+		<title>Pollgeni.us</title
+
+		<!-- Bootstrap CDN -->
+		<link rel="stylesheet" href="/css/bootstrap.min.css">
+		<link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+		<link rel="icon" href="../public/favicon.ico">
+	</head>
+	<style type="text/css">
+	@font-face { font-family: globerSemiBold; src: url('/fonts/Glober SemiBold Free.otf'); } 
+	@font-face { font-family: globerThin; src: url('/fonts/Glober Thin Free.otf'); } 
+
+	body,html{
+		background-color: #fff;
+		width: 100%;
+		height: 100%;
+	}
+	h1{
+		font-family: 'globerSemiBold', sans-serif;
+		font-size: 60px;
+		line-height: 1.2;
+		text-align: center;
+		margin-top: 0px;
+		margin-bottom: 10px;
+		padding-top: 20px;		
+	}
+	h2{
+		font-family: 'globerThin', sans-serif;
+		font-size: 55px;
+		text-align: center;
+		color: #E9BC1B;
+		margin-top: 0px;
+		margin-bottom: 0px;
+		padding-top: 20px;
+	}
+	p{
+		font-family: 'globerThin', sans-serif;
+		font-size: 35px;
+		padding-top: 75px;
+	}
+	.row{
+		margin-right: 0px;
+		margin-left: 0px;
+	}
+	.col-md-12{
+		padding-top: 20px;
+	}
+	.col-md-6,.col-md-12{
+		padding-bottom: 20px;
+	}
+
+	.col-md-3{
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+
+	.circle{
+		border-radius: 50%;
+		width: 225px;
+		height: 225px;
+		border: 1px solid #fff;
+		background-color: #c76256;
+	}
+	.container{
+		padding-top: 10px;
+		padding-bottom: 10px;
+	}
+	canvas{
+		padding-bottom: 10px;
+	}
+
+	.pie-box{
+		background-color: #9ec0b0;
+		color: #e7e5dc;
+		min-height: 515px;
+		height: 564px;
+
+	}
+	.poll-choices{
+		background-color: #F5EACD;
+		min-height: 515px;
+	}
+	div.chatArea{
+		background-color: #78c0a8;
+		margin-bottom: 25px;
+		overflow: scroll;
+		max-height: 165px;		
+	}
+	 #messages { 
+	 	font-family: 'globerSemiBold', sans-serif;
+	 	list-style-type: none; margin: 0; padding: 0; 
+	 }
+     #messages li {
+      	padding: 5px 10px;
+      	font-size: 15px;
+      }
+     #messages li:nth-child(odd) { background: #eee; }
+     #chat-section{
+     	background-color: #78c0a8;
+     }
+     .form{
+     	display: inline-block;
+     }
+     li.chat.page{
+     	overflow: scroll;
+		max-height: 165px;
+     }
+
+     ul#messages{
+     	overflow: scroll;
+		max-height: 165px;
+		width: 100%;
+     }
+
+     div#chat-section{
+     	height: 165px;
+     	max-height: 165px;
+     	overflow: scroll;
+     	position: relative;
+     	width: 100%;
+
+     }
+     button{
+     	font-family: 'globerThin', sans-serif;
+     	font-size: 35px;
+     	color: #E9BC1B;
+     }
+     div.container{
+     	max-width: 600px;
+     }
+     div.col-md-6.poll-choices{
+     	min-height: 505px;
+     	max-height: 564px;
+     	overflow: scroll;
+     	padding-bottom: 10px;
+     }
+     ul#pages{
+     	padding-left: 0px;
+     	margin-bottom: 0px;
+     	/*width: 100%;*/
+     }
+     .inputMessage{
+		bottom: 0;
+	    position: absolute;
+	    width: 100%;
+
+     }
+     .usernameInput{
+     	bottom: 0;
+     	position: absolute;
+     	width: 100%;
+     }
+	</style>
+	<body>
+		<div class="row">
+
+			<div class="col-md-6 pie-box">
+				<h1 id="pollTitle"></h1>
+				<div id="pollContainer">
+				<div class="col-md-2"></div>
+					<div class="col-md-3">
+						<canvas id="pollResults" width="380" height="380"></canvas>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-md-6 poll-choices">
+				<h2>Vote On This Poll</h2>
+						{{#poll}}
+							<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
+								<div class="container">
+									{{#choices}}
+										<div class="choice-holder col-md-6"> 
+												<button class="circle" name="pollChoice" type="submit" value="{{.}}">{{.}}</button>
+										</div>
+									{{/choices}}
+								</div>
+							</form>
+						{{/poll}}
+			</div>
+		</div>
+
+			<div id="chat-section">
+				<ul id="pages">
+					<li class="chat page">
+							<div class="chatArea">
+								<ul id="messages"></ul>
+							</div>
+					</li>
+				</ul>
+					<input class="inputMessage" placeholder="Type here..."/>
+					<input class="usernameInput" type="text" maxlength="14" placeholder="What's your nickname?"/>
+			</div>
+
+		<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script><!-- socket.io -->
+		<script src="/js/Chart.min.js"></script>
+		<script src="/js/client.js"></script>	
+		<script src="/js/chat-socket.js"></script>
+	</body>
+</html>

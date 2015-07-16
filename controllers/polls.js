@@ -70,6 +70,7 @@ router.get('/:code', function (req, res) {
 	Poll.findByCode(code, function (err, instance) {
 		if (err) res.status(404).send('Poll not found.');
 		poll = instance;
+
 		if (poll.get('token') === token) {
 			creator = true;
 		}
@@ -130,8 +131,8 @@ router.delete('/:code', function (req, res) {
 });
 
 
-router.get('/:code/results', function (req, res) {
-	// res.sendFile('results.html', { root: path.join(__dirname, '../public') });
+router.get('/:code/results', function (req, res)
+{
 	return res.render('results');
 });
 

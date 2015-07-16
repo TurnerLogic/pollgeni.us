@@ -3,21 +3,33 @@
 <link rel="stylesheet" href="/fonts/fontawesome-webfont.ttf">
 <link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
 <style>
-	#question, .choice {
+	#question, #choice {
 		height: 60px;
 		border: 3px solid rgb(30, 159, 180);
-		border-radius: 5px;
 	}
+
+	#question{
+		border-radius: 5px;
+		box-shadow: 0 7px 7px -5px gray;
+	}
+
+	#choice{
+		border-radius: 0px 5px 5px 0px;
+	}
+
 	body {
 		font-family: 'Raleway', sans-serif;
 		background-color: #2C303F;
-		height: none !important;
 	}
 
-	input[type='text'] {
-		font-size: 24px;
+	input[type="text"] {
+		font-size: 16px;
 		font-family: 'Raleway', sans-serif;
-		box-shadow: 0 7px 7px -5px black;
+		outline: none;
+	}
+
+	input:focus {
+		outline: 0;
 	}
 
 	#question {
@@ -27,17 +39,17 @@
 	#poll-submit {
 		color: #EEB902;
 		background-color: white;
-		border-radius: 5px;
+		border-radius: 5px 0px 0px 5px;
 		border: 3px solid #EEB902;
-		box-shadow: 0 7px 7px -5px black;
+		box-shadow: 0 7px 7px -5px gray;
 	}
 
-	#add-choice-btn, #clear-choice-btn {
+	#add-choice-btn {
 		height: 60px;
 		width: 75px;
 		background-color: rgb(30, 159, 180);
 		border: 3px solid rgb(30, 159, 180);
-		box-shadow: 0 7px 7px -5px black;
+		/*box-shadow: 10px 7px 7px -5px gray;*/
 	}
 
 	#add-choice-btn {
@@ -77,13 +89,17 @@
 		padding-left: 32px;
 		padding-right: 32px;
 	}
+	#choice-input-group {
+		box-shadow: 0 7px 7px -5px gray;
+		height: 60px;
+		margin: 25px 0px;
+	}
 
 	header.header-area {
 		background-color: #2C303F;
 	}
 
 	#contact-recaptcha {
-		margin-top: 15px;
 	}
 
 	#contact-recaptcha body {
@@ -91,8 +107,7 @@
 	}
 
 	#choice {
-		text-align: left;
-		margin: 25px 0px;
+		/*margin: 25px 0px;*/
 	}
 
 	#choices-table {
@@ -100,10 +115,21 @@
 	}
 
 	#title {
-		margin: 25px 0px;
+		margin: 25px 0px 0px 0px;
 		text-align: center;
 		font-size: 3em;
 		color: rgb(30, 159, 180);
+	}
+
+	#choices-instructions {
+		margin-top: 12px;
+	}
+
+	#title-hrule {
+		color: rgb(30, 159, 180);
+		width: 100%;
+		margin-bottom: 20px;
+		margin-top: 5px;
 	}
 </style>
 {{/yield-styles}}
@@ -112,20 +138,21 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h1 id="title">Poll Geni.us Builder</h1>
+			<hr id="title-hrule">
 			<input id="question" type="text" class="form-control" placeholder="Add your poll question..." ng-model="question" required>
+			<form role="form" ng-submit="addChoice()">
+				<div id="choice-input-group" class="input-group">
+					<span class="input-group-btn">
+						<button id="add-choice-btn" class="btn btn-success"><span class="glyphicon glyphicon-list glyphicon-left"></span></button>
+					</span>
+				<input type="text" class="form-control choice" id="choice" placeholder="Add a choice to your poll..." ng-model="choiceNew" required>
+				</div>
+				<div id="contact-recaptcha" class="g-recaptcha" data-sitekey="6LfMyQkTAAAAAAn4sMfHHYRHiFgARWdlMEmRLDcG"></div>
+			</form>
 		</div>
 	</div>
-		<form role="form" ng-submit="addChoice()">
-			<div class="input-group">
-				<span class="input-group-btn">
-					<button id="add-choice-btn" class="btn btn-success"><span class="glyphicon glyphicon-list glyphicon-left"></span></button>
-				</span>
-			<input type="text" class="form-control choice" id="choice" placeholder="Add a choice to your poll..." ng-model="choiceNew" required>
-			</div>
-			<div id="contact-recaptcha" class="g-recaptcha" data-sitekey="6LfMyQkTAAAAAAn4sMfHHYRHiFgARWdlMEmRLDcG"></div>
-		</form>
-		<div class="row">
-			<div class="col-lg-4 col-lg-offset-4">
+	<div class="row">
+		<div class="col-lg-4 col-lg-offset-4">
 				<button id="poll-submit" class="btn-block btn-lg" ng-click="submitPoll()">Submit Poll</button>
 			</div>
 		</div>
@@ -145,7 +172,7 @@
 			</tr>
 		</tbody>
 		</table>
-		<p ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
+		<p id="choices-instructions" ng-hide="choices.length > 0">Add choices to your poll to continue.</p>
 	</div>
 
 {{#yield-scripts}}

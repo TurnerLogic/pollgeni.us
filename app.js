@@ -27,17 +27,27 @@ app.get('/', function (req, res) {
 
 app.use('/polls', require('./controllers/polls'));
 
-app.get('/:code', function (req, res) {
-	var code = req.params.code;
+app.post('/', function (req, res) {
+	var code = req.body.code;
 	var redirectUrl = '/polls/' + code;
 
 	res.redirect(redirectUrl);
 });
 
+app.get('/:code', function (req, res) {
+	var code = req.query.code;
+	var redirectUrl = '/polls/' + code;
+
+	res.redirect(redirectUrl);
+});
+
+
+
 var usernames = {};
 var numUsers = [];
 
 io.on('connection', function (socket) {
+	console.log('User connected');
 	var addedUser = false;
 
 	socket.on('subscribe', function(code)

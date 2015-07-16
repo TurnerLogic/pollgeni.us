@@ -159,40 +159,78 @@ div.chatArea{
 
  }
 	 .pie-legend{
-		 display:block;
+		 /*display: block;*/
 		 /*width: 600px;*/
-		 list-style: none;
 		 color: #fff;
 		 background-color: #1e9fb4;
-		 padding-top: 20px;
-		 padding-bottom: 38px;
+		 /*padding-top: 3%;*/
+		 padding-bottom: 3%;
 		 font-size: 30px;
-		 margin-bottom: 0px;
-		 font-family: 'globerThin', sans-serif;
+		 /*margin-bottom: 0px;*/
 		 /*top: 20px;*/
-		 border-radius: 15px;
+		 /*border-radius: 15px;*/
+		 text-align: left;
+		 /*border: 5px white solid;*/
 	 }
 
-	li.col-md-6{
-		line-height: 1.1;
+	#legend-container{
+		font-family: 'globerThin', sans-serif;
+		margin: 0px 0px;
+		padding: 0px 0px;
+		width: 25%;
+		float: right;
+	}
+/*	.legend-label {
+		font-size: 12pt;
+		display: inline;
+		padding: 0px 0px;
+		margin: 0px 0px;
+	}*/
+
+	.legend-wrapper{
+		clear: both;
+		margin: 8px 0px;
 	}
 
-	 ul.pie-legend.col-md-4{
-	 	margin-bottom: 40px;	
-	 	margin-top: 10px;
-	 }
+	.legend-label {
+		float: left;
+		width: 75%;
+		padding-top: 5px;
+	}
+
+	.legend-color {
+		float: left;
+		height: 25px;
+		width: 25px;
+		border-radius: 15px;
+		margin-right: 10px;
+		/*margin-bottom: 10px;*/
+	}
 	 @media (max-width: 991px) {
 		 #pollTitle{
 			 font-size: 55px;
 		 }
 	}
 
+	div.col-md-4{
+		border: 3px white solid;
+		padding: 0px 0px;
+	}
+
+	div.col-md-8{
+		border: 3px white solid;
+	}
+
+/*	div.pie-legend {
+		display: inline-block;
+	}*/
+
 </style>
 {{/yield-styles}}
 
 	<h1 id="pollTitle"></h1>
 		<div class="pie-box container">
-				 	<div id="pollContainer" class="col-md-8">
+				 	<div id="pollContainer" class="col-md-12">
 				 		<div class="col-md-3"></div>
 							<canvas id="poll-results" width="430" height="430"></canvas>
 					</div>

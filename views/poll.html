@@ -1,19 +1,26 @@
+<link rel="stylesheet" type="text/css" href="/css/result_style.css">
+
 {{#poll}}
-	<h1>{{question}}</h1>
-	<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
-	<radiogroup>
-		{{#choices}}
-		<input class="choice" type="radio" name="pollChoice" value="{{.}}">{{.}}</li>
-		{{/choices}}
-	</radiogroup>
-	<button>Submit</button>
-	</form>
+	<div class="poll-choices">
+		<h2>{{question}}</h2>
+			<div class="poll-holder col-md-12">
+			<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
+					{{#choices}}
+						<div class="choice-holder col-xs-4">
+								<button class="circle" name="pollChoice" value="{{.}}">{{.}}</button>
+						</div>
+					{{/choices}}
+			</form>
+			</div>
+	</div>
 {{/poll}}
-{{#creator}}
-	<h4>Bookmark this page to return with admin priveleges in the future.</h4>
-	<p>Would you like to remove your poll?</p>
+
+{{#delete}}
+	<p id="remove-text">Would you like to remove your poll?</p>
 	<form action='/polls/{{poll.code}}?_method=DELETE' method="POST">
-		<input type="hidden" value="{{poll.token}}" name="token">
-		<input type="submit" value="Remove">
+		<input type="hidden" value="{{poll.token}}" name="token" readonly>
+		<input type="submit" id="remove" class="btn btn-info btn-default" value="REMOVE">
 	</form>
-{{/creator}}
+{{/delete}}
+
+<script type="text/javascript" src="/js/polls_choice.js"></script>

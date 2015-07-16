@@ -1,1 +1,3 @@
-$(document).ready(function(){$("#particles").particleground({dotColor:"#424756",lineColor:"#363a49"}),$(".intro").css({"margin-top":-($(".intro").height()/2)})});
+particlesJS.load('particles', 'js/particles.json', function() {
+  console.log('callback - particles.js config loaded');
+});

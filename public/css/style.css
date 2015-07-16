@@ -93,6 +93,10 @@ hr.special {
     height: 34px;
     background: url(../img/hr-spec.png) center center no-repeat
 }
+#canvas{
+    width: 385px;
+    margin-bottom: 30px;
+}
 .medium-txt {
     padding: 10px 10%;
     font-size: 24px;
@@ -190,6 +194,10 @@ hr.special {
     -moz-transition: all .5s ease 0s;
     -ms-transition: all .5s ease 0s;
     transition: all .5s ease 0s
+}
+.logo{
+    font-size: 40px;
+    line-height: 1.0;
 }
 .logo-area {
     padding: 0;
@@ -402,11 +410,17 @@ a.nav-order-btn:hover {
     bottom: 0;
     left: 0;
     width: 100%;
-    z-index: 10
-}
-.banner-btm-img img {
+    z-index: 10;
     width: 100%;
-    max-width: 1100px
+    opacity: 0.1;
+}
+.banner-btm-img img ,#home{
+    /*background-image: url(/img/trans_mixed_pies_1.png);*/
+    width: 100%;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
 }
 .about-area {
     padding: 0;
@@ -693,7 +707,8 @@ a.nav-order-btn:hover {
     text-decoration: none
 }
 .footer-top {
-    padding: 70px 0;
+    padding-top: 20px;
+    padding-bottom: 10px;
     margin: 0
 }
 .footer-nav ul {
@@ -843,6 +858,19 @@ div.modal-footer{
     color: #ecd078;
 }
 
+ul.pull-right{
+    margin-top: 48px;
+}
+
+#company-name{
+    font-size: 40px;
+    color: #47a3da; 
+}
+.col-md-12.footer-about.animated.fadeInUp.visible{
+    color: #fff;
+    font-size: 20px;
+    padding-left: 5px;
+}
 @media (max-width: 1400px) {
     .port-image .mask {
         padding-top: 23%
@@ -1022,6 +1050,12 @@ div.modal-footer{
         font-size: 60px;
         line-height: 100px
     }
+     #company-name{
+        text-align: center;
+    }
+    ul.social-footer{
+        margin-left: 305px;
+    }
 }
 @media (max-width: 480px) {
     h1 {
@@ -1038,6 +1072,12 @@ div.modal-footer{
     }
     h5 {
         font-size: 16px
+    }
+    h1.animated.fadeInUp.visible{
+        font-size: 105px;
+    }
+    .animated{
+        font-size: 15px;
     }
     .header-area {
         padding: 10px 0;
@@ -1259,8 +1299,26 @@ div.modal-footer{
         font-size: 24px;
         line-height: 30px
     }
+
+    ul.pull-right{
+        margin-right: 80px;
+    }
+
+    ul.social-footer{
+        margin-left: 129px;
+    }
+    #company-name{
+        text-align: center;
+    }
 }
+
 @media (max-width: 380px) {
+    h1.animated.fadeInUp.visible{
+        font-size: 35px;
+    }
+    .animated{
+        font-size: 25px;
+    }
     .logo-area {
         text-align: center
     }

@@ -34,7 +34,7 @@ var chartOptions = {
 		segmentShowStroke: true,
 
 		//String - The colour of each segment stroke
-		segmentStrokeColor: "#fff",
+		segmentStrokeColor : "#212635",
 
 		//Number - The width of each segment stroke
 		segmentStrokeWidth: 2,
@@ -55,7 +55,7 @@ var chartOptions = {
 		animateScale: false,
 
 		//String - A legend template
-		legendTemplate: "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<segments.length; i++){%><li><span style=\"background-color:<%=segments[i].fillColor%>\"></span><%if(segments[i].label){%><%=segments[i].label%><%}%></li><%}%></ul>"
+		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend col-md-4\"><% for (var i=0; i<chartData.length; i++){%><li class=\"col-md-6\"><span style=\"background-color:<%=chartColors[i]%>\"></span><%if(chartData[i].label){%><%=chartData[i].label%><%}%></li><%}%></ul>"
 
 		};
 
@@ -68,6 +68,8 @@ var spawnChart = function(code) {
 		chartData = formatJsonData(data);
 		if (initialLoad) {
 			pollResults = new Chart(ctx).Pie(chartData, chartOptions);
+  			var legend = pollResults.generateLegend();
+  			$('.pie-box').prepend(legend);
 		} else {
 			console.log('not inital load');
 			updateChartData(chartData);

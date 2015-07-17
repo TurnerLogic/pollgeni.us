@@ -5,11 +5,18 @@ var router = express.Router();
 var path = require('path');
 var request = require('request');
 var Poll = require('../models/Poll');
+var Logger = require('../lib/logger.js');
+var logger = new Logger('log/poll.log');
+
+
+router.use(function (req, res, next) {
+	logger.log(req.method + ' ' + req.path);
+	next();
+});
 
 router.get('/', function (req, res) {
 	Poll.all(function (err, polls) {
 		if (err) res.status(500).send('Unable to load all polls at this time.');
-		console.log(polls);
 		return res.render('all', {polls: polls});
 	});
 });
@@ -20,12 +27,13 @@ router.get('/meta', function (req, res) {
 	var count = 0;
 	var activeUsers = 0;
 	Poll.all(function (err, polls) {
-		if (err) res.status(500).send('Unable to process your request at this time.');
+		if (err) {
+			logger.error('Unable to locate meta data.');
+			res.status(500).send('Unable to process your request at this time.');
+		}
 
 		polls.forEach(function (element, index) {
-			console.log(element);
 			element.data.responses.forEach(function (element, index) {
-				console.log(element);
 				count += element.count;
 			});
 		});
@@ -38,6 +46,7 @@ router.get('/meta', function (req, res) {
 });
 
 router.get('/create', function (req, res) {
+	logger.log('From the polls/create route');
 	res.render('create');
 	// res.sendFile('create.html', { root: path.join(__dirname, '../public') });
 });
@@ -77,7 +86,7 @@ router.post('/create', function (req, res) {
 			var error = JSON.parse(error);
 			if (error) return res.status(403).send('Failed reCatptcha Test. Are you sure you\'re not a bot?');
 			if (body.success) {
-				console.log('success responding with 200');
+				logger.log('New poll created with code: ' + code + '.');
 				return res.status(200).send({code: code, token: token}); //response to Angular App Poll Create
 			}
 		});
@@ -108,6 +117,7 @@ router.put('/:code', function (req, res) {
 	var redirectUrl = '/polls/' + code + '/results';
 
 	io.to(code).emit('poll submission', code);
+	io.to('public').emit('poll submission', code);
 
 	Poll.findByCode(code, function (err, instance) {
 		if (err) res.status(500).send('Unable to locate the poll on which you voted.');
@@ -144,10 +154,15 @@ router.delete('/:code', function (req, res) {
 		poll = instance;
 		if (poll.get('token') === token) {
 			poll.delete(function(err, status) {
-				if (err) return res.status(500).send('Unable to delete your poll. Please contact Turner Logic.');
+				if (err) {
+					logger.error(JSON.parse(err));
+					logger.error('Failed to delete poll with code: ' + code);
+					return res.status(500).send('Unable to delete your poll. Please contact Turner Logic.');
+				}
 				return res.redirect('/');
 			});
 		} else {
+			logger.log('Attempt to delete poll with improper token', 'warn');
 			return res.status(403).send('Your token does not match that of the poll.');
 		}
 	});

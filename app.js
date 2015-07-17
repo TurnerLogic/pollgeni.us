@@ -7,10 +7,13 @@ var mongojs = require('mongojs');
 var db = mongojs('polls_db', ['polls']);
 var path = require('path');
 var methodOverride = require('method-override');
-var env = require('./.env.js');
+var env = require('./.env');
+var Logger = require('./lib/logger');
 var app_root = __dirname;
+var log_directory = app_root + '/log';
 
 process.env['RECAPTCHA_SECRET_KEY'] = env['RECAPTCHA_SECRET_KEY'];
+
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -54,6 +57,7 @@ io.on('connection', function (socket) {
 	{
 		console.log('somebody subscribed');
 		socket.join(code);
+		socket.join('public');
 	});
 
 	// socket.on('add user', function(username, code)

@@ -85,6 +85,7 @@ router.put('/:code', function (req, res) {
 	var redirectUrl = '/polls/' + code + '/results';
 
 	io.to(code).emit('poll submission', code);
+	io.to('public').emit('code sent', code);
 
 	Poll.findByCode(code, function (err, instance) {
 		if (err) res.status(500).send('Unable to locate the poll on which you voted.');

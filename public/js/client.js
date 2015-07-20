@@ -23,7 +23,6 @@ if($('canvas').hasClass('single-result'))
 {
 	var code = window.location.pathname.toString().split('/')[2];
 	ctx = $("#poll-results").get(0).getContext("2d");
-	socket.emit('subscribe', code);
 }
 
 var COLORS = [
@@ -71,49 +70,33 @@ var spawnChart = function(code,ctx) {
 		console.log(status);
 		chartData = formatJsonData(data);
 
-		if (initialLoad) 
-		{
-			if($('canvas').hasClass('single-result'))
-			{	
+		if (initialLoad) {
+			if ($('canvas').hasClass('single-result')) {
 				pollResults = new Chart(ctx).Pie(chartData, chartOptions);
-	  				var legend = pollResults.generateLegend();
-	  				$('.pie-box').prepend(legend);
-		  	}
-
-		  	else if($('canvas').hasClass('multiple-results'))
-		  	{
-	  			poll = new Chart(ctx).Pie(chartData, chartOptions);
-		  			allPolls.push({
-		  				'pollId': code,
-		  				'poll': ctx,
-		  				'chart': poll
-		  			});
-		  	}
-		  	else
-		  	{
-		  		return null;
-	  		}
-	  	} 
-	  	else
-	  	{
-	  		if($('canvas').hasClass('single-result'))
-	  		{
-				console.log('not inital load');
+					var legend = pollResults.generateLegend();
+					$('.pie-box').prepend(legend);
+			} else if ($('canvas').hasClass('multiple-results')) {
+				poll = new Chart(ctx).Pie(chartData, chartOptions);
+					allPolls.push({
+						'pollId': code,
+						'poll': ctx,
+						'chart': poll
+					});
+			} else {
+				return null;
 			}
-			else if($('canvas').hasClass('multiple-results'))
-			{
-				for(var i = 0; i < allPolls.length; i++)
-				{
-				  if(allPolls[i].pollId == code)
-				  {
-				  	pollResults = allPolls[i].chart;
-
-				  }
+		} else {
+			if ($('canvas').hasClass('single-result')) {
+				console.log('not inital load');
+			} else if ($('canvas').hasClass('multiple-results')) {
+				for (var i = 0; i < allPolls.length; i++) {
+					if(allPolls[i].pollId == code) {
+						pollResults = allPolls[i].chart;
+					}
 				}
 			}
-				updateChartData(chartData);
+			updateChartData(chartData);
 		}
-
 		$( '#pollTitle' ).text(data.question);
 	});
 };
@@ -143,12 +126,9 @@ var formatJsonData = function(poll) {
 	var colorLength = chartColors.length;
 	poll.responses.forEach(function (element, index) {
 		var i = null;
-		if (index > colorLength) 
-		{
+		if (index > colorLength) {
 			i = index - colorLength % colorLength;
-		} 
-		else
-		{
+		} else {
 			i = index;
 		}
 		pollData.push({
@@ -157,31 +137,27 @@ var formatJsonData = function(poll) {
 			label: element.choice
 		});
 	});
-
 	return pollData;
  };
 
 
 $( document ).ready(function () {
-	if($('canvas').hasClass('multiple-results'))
-	{
-		for (var a = 0; a < $('.poll_code').length; a++){
-			 code = $('.poll_code')[a].innerHTML;
-			 ctx = document.getElementById(code).getContext("2d");
-			 spawnChart(code,ctx);
+	if ($('canvas').hasClass('multiple-results')) {
+		for (var a = 0; a < $('.poll_code').length; a++) {
+			code = $('.poll_code')[a].innerHTML;
+			ctx = document.getElementById(code).getContext("2d");
+			spawnChart(code,ctx);
 		};
 		socket.emit('subscribe', 'public');
-	}
-	else
-	{
+	} else {
 		console.log('spawning chart');
+		socket.emit('subscribe', code);
 		spawnChart(code,ctx); // code pulled from url
 		$('.twitter-share-button').attr('href', "https://twitter.com/tweet?text=Hey!%20you%20can%20view%20my%20awesome%20poll!%20at%20pollgeni.us/polls/"+ code+"/");
 	}
 });
 
-socket.on('poll submission', function(code)
-{
+socket.on('poll submission', function(code) {
 	initialLoad = false;
 	console.log('poll submission');
 	spawnChart(code,ctx);

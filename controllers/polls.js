@@ -13,7 +13,6 @@ var session;
 router.use(function (req, res, next) {
 	session = session || req.session;
 	session.voted = session.voted || [];
-	console.log(session);
 	logger.log(req.method + ' ' + req.path);
 	next();
 });
@@ -23,10 +22,6 @@ router.get('/', function (req, res) {
 		if (err) res.status(500).send('Unable to load all polls at this time.');
 		return res.render('all', {polls: polls});
 	});
-});
-
-router.get('/meta', function (req, res) {
-
 });
 
 router.get('/create', function (req, res) {
@@ -112,7 +107,7 @@ router.put('/:code', function (req, res) {
 
 	io.to(code).emit('poll submission', code);
 	io.to('public').emit('poll submission', code);
-	io.to('index').emit('poll submission');
+	io.to('index').emit('poll submission', code);
 
 	Poll.findByCode(code, function (err, instance) {
 		if (err) res.status(500).send('Unable to locate the poll on which you voted.');

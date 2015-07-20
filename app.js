@@ -89,7 +89,7 @@ io.on('connection', function (socket) {
 	{
 		console.log('somebody subscribed');
 		socket.join(room);
-		console.log(code);
+		console.log(room);
 	});
 
 	socket.on('disconnect', function () {

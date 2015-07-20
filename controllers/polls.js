@@ -111,7 +111,7 @@ router.put('/:code', function (req, res) {
 	session.voted.push(code);
 
 	io.to(code).emit('poll submission', code);
-	io.to('public').emit('poll submission', code);
+	io.to('public').emit('code sent', code);
 	io.to('index').emit('poll submission');
 
 	Poll.findByCode(code, function (err, instance) {

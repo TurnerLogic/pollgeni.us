@@ -184,5 +184,14 @@ socket.on('poll submission', function(code)
 {
 	initialLoad = false;
 	console.log('poll submission');
+	console.log(code);
+	spawnChart(code,ctx);
+});
+
+socket.on('code sent', function(code)
+{
+	initialLoad = false;
+	console.log('poll submission');
+	console.log(code);
 	spawnChart(code,ctx);
 });

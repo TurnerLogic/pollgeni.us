@@ -6,14 +6,21 @@ var bodyParser = require('body-parser');
 var mongojs = require('mongojs');
 var db = mongojs('polls_db', ['polls']);
 var path = require('path');
+var session = require('express-session');
 var methodOverride = require('method-override');
 var env = require('./.env');
-var Logger = require('./lib/logger');
+var Logger = require('./lib/Logger');
 var app_root = __dirname;
 var log_directory = app_root + '/log';
 
 process.env['RECAPTCHA_SECRET_KEY'] = env['RECAPTCHA_SECRET_KEY'];
+process.env['SESSION_SECRET'] = env['SESSION_SECRET'];
 
+app.use(session({
+	secret: process.env['SESSION_SECRET'],
+	resave: true,
+	saveUninitialized: true
+}));
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -25,6 +32,7 @@ app.set('layout', 'layouts/default');
 app.set('partials', {navbar: 'includes/navbar', footer: 'includes/footer'});
 
 app.get('/', function (req, res) {
+	console.log(req.session);
 	res.render("index", {title: 'Welcome to Pollgeni.us!'});
 });
 

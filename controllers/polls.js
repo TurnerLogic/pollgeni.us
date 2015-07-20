@@ -5,11 +5,15 @@ var router = express.Router();
 var path = require('path');
 var request = require('request');
 var Poll = require('../models/Poll');
-var Logger = require('../lib/logger.js');
+var Logger = require('../lib/Logger.js');
 var logger = new Logger('log/poll.log');
+var session;
 
 
 router.use(function (req, res, next) {
+	session = req.session;
+	session.voted = session.voted || [];
+	console.log(session);
 	logger.log(req.method + ' ' + req.path);
 	next();
 });
@@ -111,10 +115,20 @@ router.get('/:code', function (req, res) {
 });
 
 router.put('/:code', function (req, res) {
+
 	var code = req.params.code;
 	var poll = null;
 	var countToIncrement = null;
 	var redirectUrl = '/polls/' + code + '/results';
+
+	console.log(session.voted.indexOf(code));
+	console.log('result above');
+	if(session.voted.indexOf(code) >= 0) {
+		logger.log('Attempted second vote on poll: ' + code, 'warn');
+		return res.redirect(redirectUrl);
+	}
+
+	session.voted.push(code);
 
 	io.to(code).emit('poll submission', code);
 	io.to('public').emit('poll submission', code);

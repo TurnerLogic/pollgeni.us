@@ -11,7 +11,7 @@ var session;
 
 
 router.use(function (req, res, next) {
-	session = req.session;
+	session = session || req.session;
 	session.voted = session.voted || [];
 	console.log(session);
 	logger.log(req.method + ' ' + req.path);
@@ -27,26 +27,6 @@ router.get('/', function (req, res) {
 
 router.get('/meta', function (req, res) {
 
-	var meta = {};
-	var count = 0;
-	var activeUsers = 0;
-	Poll.all(function (err, polls) {
-		if (err) {
-			logger.error('Unable to locate meta data.');
-			res.status(500).send('Unable to process your request at this time.');
-		}
-
-		polls.forEach(function (element, index) {
-			element.data.responses.forEach(function (element, index) {
-				count += element.count;
-			});
-		});
-
-		meta['totalSubmissions'] = count;
-		meta['totalPolls'] = polls.length;
-		meta['activeUsers'] = activeUsers;
-		res.json(meta);
-	});
 });
 
 router.get('/create', function (req, res) {
@@ -132,6 +112,7 @@ router.put('/:code', function (req, res) {
 
 	io.to(code).emit('poll submission', code);
 	io.to('public').emit('poll submission', code);
+	io.to('index').emit('poll submission');
 
 	Poll.findByCode(code, function (err, instance) {
 		if (err) res.status(500).send('Unable to locate the poll on which you voted.');

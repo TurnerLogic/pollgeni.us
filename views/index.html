@@ -40,8 +40,6 @@
 </style>
 {{/yield-styles}}
 
-<body>
-
 <!--===================== LANDING SCREEN =====================-->
 <section id="home">
 	<div id="particles">
@@ -103,15 +101,15 @@
 				<div class="row clearfix">
 					<div class="col-md-3 col-cont animated" data-animation="fadeInRight" data-animation-delay="200">
 						<span class="icon-cont"><i class="fa fa-heart"></i></span>
-						<span class="count-txt">1024</span>
+						<span class="count-txt">{{meta.totalPolls}}</span>
 						<hr>
 						<span class="count-btm">Polls</span>
 					</div>
 					<div class="col-md-3 col-cont animated" data-animation="fadeInRight" data-animation-delay="400">
 						<span class="icon-cont"><i class="fa fa-star"></i></span>
-						<span class="count-txt">102</span>
+						<span class="count-txt" id="poll-submissions">{{meta.totalSubmissions}}</span>
 						<hr>
-						<span class="count-btm">Poll Submits</span>
+						<span class="count-btm">Poll Submissions</span>
 					</div>
 					<div class="col-md-3 col-cont animated" data-animation="fadeInRight" data-animation-delay="600">
 						<span class="icon-cont"><i class="fa fa-map-marker"></i></span>
@@ -121,9 +119,9 @@
 					</div>
 					<div class="col-md-3 col-cont animated" data-animation="fadeInRight" data-animation-delay="800">
 						<span class="icon-cont"><i class="fa fa-user-secret"></i></span>
-						<span class="count-txt">1890</span>
+						<span class="count-txt">{{meta.activeUsers}}</span>
 						<hr>
-						<span class="count-btm">Clients</span>
+						<span class="count-btm">Active Users</span>
 					</div>
 				</div>
 			</div>
@@ -143,8 +141,6 @@
 					<h5>{% eachPoll.title %}</h5>
 					<div id="allPolls"></div>
 					<voteOptions></voteOptions>
-					<!-- <button class="btn btn-danger" ng-click="remove(poll._id)">Remove</button> -->
-					<!-- <button class="btn btn-warning" ng-click="edit(poll._id)">Edit</button> -->
 				</div>
 			</div>
 		</div>
@@ -191,11 +187,13 @@
 </div>
 <!-- =================================================================================== -->
 
+{{#yield-scripts}}
 	<script type="text/javascript" src="js/chart.min.js"></script><!-- chart js -->
-
+	<script src="/socket.io/socket.io.js"></script>
     <script type="text/javascript">
             var myColor = ["#ECD078","#D95B43","#C02942","#542437","#53777A","#5B43B2","#245437"];
             var myData = [65,45,25,35,104,99,80];
+            var socket = io();
 
             function getTotal(){
                 var myTotal = 0;
@@ -229,10 +227,16 @@
 
             plotData();
 
+            socket.on('poll submission', function() {
+            	console.log('poll submissions');
+            	console.log();
+            	var currentValue = parseInt($( '#poll-submissions' ).text(), 10);
+            	currentValue++;
+            	$( '#poll-submissions').text(currentValue);
+            });
 
     </script><!-- for canvas element -->
 
     <script type="text/javascript" src="/js/particle.min.js"></script><!-- Particle Header Js -->
 	<script type="text/javascript" src="/js/particle.js"></script><!-- Particle Header Js -->
-</body>
-</html>
+{{/yield-scripts}}

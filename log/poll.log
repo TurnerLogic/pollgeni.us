@@ -15,3 +15,12 @@
 [WARNING] [20/6/2015] Attempted second vote on poll: pf35v
 [INFO] [20/6/2015] GET /pf35v/results
 [INFO] [20/6/2015] GET /pf35v/json-results
+[INFO] [20/6/2015] GET /create
+[INFO] [20/6/2015] From the polls/create route
+[INFO] [20/6/2015] GET /create
+[INFO] [20/6/2015] From the polls/create route
+[INFO] [20/6/2015] GET /img/favicon.ico
+[INFO] [20/6/2015] GET /create
+[INFO] [20/6/2015] From the polls/create route
+[INFO] [20/6/2015] GET /img/favicon.ico
+[INFO] [20/6/2015] GET /

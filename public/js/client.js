@@ -59,19 +59,18 @@ var chartOptions = {
 	//Boolean - Whether we animate the rotation of the Doughnut
 	animateRotate: true,
 
-	//Boolean - Whether we animate scaling the Doughnut from the centre
-	animateScale: false,
-
 	//String - A legend template
-	legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend col-md-4\"><% for (var i=0; i<chartData.length; i++){%><li class=\"col-md-6\"><span style=\"background-color:<%=chartColors[i]%>\"></span><%if(chartData[i].label){%><%=chartData[i].label%><%}%></li><%}%></ul>"
+	legendTemplate : "<div id=\"legend-container\"><% for (var i=0; i<chartData.length; i++){%><div class=\"legend-wrapper clearfix\"><div class=\"legend-color\" style=\"background-color:<%=chartColors[i]%>\"></div><div class=\"legend-label\"><%if(chartData[i].label){%><%=chartData[i].label%><%}%></div></div><%}%></div>"
 };
 
 
 var spawnChart = function(code,ctx) {
 	var jsonResultsUrl = "/polls/" + code + "/json-results";
 
-	$.get(jsonResultsUrl, function(data) {
+	$.get(jsonResultsUrl, function(data, status) {
+		console.log(status);
 		chartData = formatJsonData(data);
+
 		if (initialLoad) 
 		{
 			if($('canvas').hasClass('single-result'))
@@ -171,9 +170,9 @@ $( document ).ready(function () {
 			 ctx = document.getElementById(code).getContext("2d");
 			 spawnChart(code,ctx);
 		};
-		socket.emit('to public', 'public');
-	} 
-	else 
+		socket.emit('subscribe', 'public');
+	}
+	else
 	{
 		console.log('spawning chart');
 		spawnChart(code,ctx); // code pulled from url
@@ -181,275 +180,9 @@ $( document ).ready(function () {
 	}
 });
 
-var addParticipantsMessage = function(data) {
-	var message = '';
-	if (data.numUsers === 1) 
-	{
-		message += "there's 1 participant";
-	} 
-	else
-	{
-		message += "there are " + data.numUsers + " participants";
-	}
-
-	log(message);
-};
-
-var setUsername = function() {
-	username = cleanInput($usernameInput.val().trim());
-	if(username) 
-	{
-		$loginPage.hide();
-		$chatPage.show();
-		$loginPage.off('click');
-		$currentInput = $inputMessage.focus();
-		socket.emit('add user', username, code);
-	}
-};
-
-var sendMessage = function() {
-	var message = cleanInput($inputMessage.val());
-	if (message && connected)
-	{
-		$inputMessage.val('');
-
-			addChatMessage({
-				username: username + ' ',
-				message: message
-			});
-
-		socket.emit('new message', message, code);
-	}
-};
-
-
-var log = function(message, options)
-{
-	var $el = $('<li>').addClass('log').text(message);
-	addMessageElement($el, options);
-}
-
-var addChatMessage = function(data, options)
-{
-	var $typingMessages = getTypingMessages(data);
-	options = options || {};
-	if($typingMessages.length !== 0)
-	{
-		options.fade = false;
-		$typingMessages.remove();
-	}
-
-	var $usernameDiv = $('<span class="username"/>')
-		.text(data.username)
-		.css('color', getUsernameColor(data.username))
-		.css('font-weight', '800')
-		.css('font-family', 'Helvetica');
-
-	var $messageBodyDiv = $('<span class="messageBody">')
-		.text(data.message);
-
-	var typingClass = data.typing ? 'typing' : '';
-    var $messageDiv = $('<li class="message"/>')
-      .data('username', data.username)
-      .addClass(typingClass)
-      .append($usernameDiv, ' ', $messageBodyDiv);
-
-    addMessageElement($messageDiv, options);
-};
-
-var addChatTyping = function(data)
-{
-	getTypingMessages(data).fadeOut(function(){
-		$(this).remove();
-	});
-};
-
-var removeChatTyping = function(data)
-{
-	getTypingMessages(data).fadeOut(function (){
-		$(this).remove();
-	});
-}
-
-var addMessageElement = function(el, options)
-{
-	var $el = $(el);
-
-    if (!options)
-    {
-      options = {};
-    }
-    if (typeof options.fade === 'undefined') 
-    {
-      options.fade = true;
-    }
-    if (typeof options.prepend === 'undefined') 
-    {
-      options.prepend = false;
-    }
-
-    // Apply options
-    if (options.fade) 
-    {
-      $el.hide().fadeIn(FADE_TIME);
-    }
-
-    if (options.prepend)
-    {
-      $messages.prepend($el);
-    } 
-    else 
-    {
-      $messages.append($el);
-    }
-
-    $messages[0].scrollTop = $messages[0].scrollHeight;
-};
-
-var cleanInput = function(input)
-{
-	return $('<div/>').text(input).text();
-}
-
-var updateTyping  = function()
-{
-	if (connected)
-	{
-      if (!typing) 
-      {
-        typing = true;
-        socket.emit('typing', code);
-      }
-      lastTypingTime = (new Date()).getTime();
-
-    	setTimeout(function(){
-	        var typingTimer = (new Date()).getTime();
-	        var timeDiff = typingTimer - lastTypingTime;
-
-	        if (timeDiff >= TYPING_TIMER_LENGTH && typing) 
-	        {
-	          socket.emit('stop typing', code);
-	          typing = false;
-	        }
-        }, TYPING_TIMER_LENGTH);
-    }
-};
-
-var getTypingMessages = function(data)
-{
-	return $('.typing.message').filter(function (i){
-			return $(this).data('username') === data.username;
-	});
-};
-
-var getUsernameColor = function(username)
-{
-	// Compute hash code
-	var hash = 7;
-	for (var i = 0; i < username.length; i++) {
-	   hash = username.charCodeAt(i) + (hash << 5) - hash;
-	}
-	// Calculate color
-	var index = Math.abs(hash % COLORS.length);
-		return COLORS[index];	
-};
-
-$window.keydown(function(event)
-{
-    // Auto-focus the current input when a key is typed
-    if (!(event.ctrlKey || event.metaKey || event.altKey))
-    {
-      $currentInput.focus();
-    }
-    // When the client hits ENTER on their keyboard
-    if (event.which === 13) 
-    {
-      if (username) 
-      {
-        sendMessage();
-        socket.emit('stop typing', code);
-        typing = false;
-      } 
-      else 
-      {
-        setUsername();
-      }
-    }
-});
-
-$inputMessage.on('input', function()
-{
-	updateTyping();
-});
-
-$loginPage.click(function ()
-{
-	$currentInput.focus();
-});
-
-// Focus input when clicking on the message input's border
-$inputMessage.click(function ()
-{
-	$inputMessage.focus();
-});
-
 socket.on('poll submission', function(code)
 {
 	initialLoad = false;
 	console.log('poll submission');
 	spawnChart(code,ctx);
-});
-
-socket.on('code sent',function(code)
-{
-	initialLoad = false;
-	console.log('code sent');
-	spawnChart(code,ctx);
-});
-
-socket.on('login', function (data)
-{
-	console.log('login event');
-	connected = true;
-	// Display the welcome message
-	var message = "Welcome to Pollgeni.us Chat – ";
-		log(message, {
-	  		prepend: true
-		});
-	addParticipantsMessage(data);
-});
-
-// Whenever the server emits 'new message', update the chat body
-socket.on('new message', function (data) 
-{
-	console.log('new message');
-	addChatMessage(data);
-});
-
-// Whenever the server emits 'user joined', log it in the chat body
-socket.on('user joined', function (data) 
-{
-	console.log(data.username + " joined")
-	log(data.username + ' joined');
-	addParticipantsMessage(data);
-});
-
-// Whenever the server emits 'user left', log it in the chat body
-socket.on('user left', function (data)
-{
-	log(data.username + ' left');
-	addParticipantsMessage(data);
-	removeChatTyping(data);
-});
-
-// Whenever the server emits 'typing', show the typing message
-socket.on('typing', function (data) 
-{
-	addChatTyping(data);
-});
-
-// Whenever the server emits 'stop typing', kill the typing message
-socket.on('stop typing', function (data) 
-{
-	removeChatTyping(data);
 });

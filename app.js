@@ -6,11 +6,23 @@ var bodyParser = require('body-parser');
 var mongojs = require('mongojs');
 var db = mongojs('polls_db', ['polls']);
 var path = require('path');
+var session = require('express-session');
 var methodOverride = require('method-override');
-var env = require('./.env.js');
+var Poll = require('./models/Poll');
+var env = require('./.env');
+var Logger = require('./lib/Logger');
 var app_root = __dirname;
+var log_directory = app_root + '/log';
+var totalActiveUsers = 0; // active total
 
 process.env['RECAPTCHA_SECRET_KEY'] = env['RECAPTCHA_SECRET_KEY'];
+process.env['SESSION_SECRET'] = env['SESSION_SECRET'];
+
+app.use(session({
+	secret: process.env['SESSION_SECRET'],
+	resave: true,
+	saveUninitialized: true
+}));
 app.use(methodOverride('_method'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -22,34 +34,66 @@ app.set('layout', 'layouts/default');
 app.set('partials', {navbar: 'includes/navbar', footer: 'includes/footer'});
 
 app.get('/', function (req, res) {
-	res.render("index", {title: 'Welcome to Pollgeni.us!'});
+	var meta = {};
+	var count = 0;
+	var activeUsers = totalActiveUsers;
+	Poll.all(function (err, polls) {
+		if (err) {
+			logger.error('Unable to locate meta data.');
+			res.status(500).send('Unable to process your request at this time.');
+		}
+
+		polls.forEach(function (element, index) {
+			element.data.responses.forEach(function (element, index) {
+				count += element.count;
+			});
+		});
+
+		meta['totalSubmissions'] = count;
+		meta['totalPolls'] = polls.length;
+		meta['activeUsers'] = activeUsers;
+		res.render("index", {title: 'Welcome to Pollgeni.us!', meta: meta});
+	});
+
 });
 
 app.use('/polls', require('./controllers/polls'));
 
-app.get('/:code', function (req, res) {
-	var code = req.params.code;
+app.post('/', function (req, res) {
+	var code = req.body.code;
 	var redirectUrl = '/polls/' + code;
 
 	res.redirect(redirectUrl);
 });
 
+app.get('/:code', function (req, res) {
+	var code = req.query.code;
+	var redirectUrl = '/polls/' + code;
+
+	res.redirect(redirectUrl);
+});
+
+
+
 var usernames = {};
-var numUsers = [];
+var numUsers = []; // per room
 
 io.on('connection', function (socket) {
-	var addedUser = false;
+	socket.join('index');
+	// socket.join('')
+	// console.log('User connected');
+	// var addedUser = false;
+	totalActiveUsers++;
 
-	socket.on('subscribe', function(code)
+	socket.on('subscribe', function(room)
 	{
 		console.log('somebody subscribed');
-		socket.join(code);
+		socket.join(room);
 		console.log(code);
 	});
 
-	socket.on('to public',function(room) {
-		socket.join(room);
-		console.log(room);
+	socket.on('disconnect', function () {
+		totalActiveUsers--;
 	});
 });
 

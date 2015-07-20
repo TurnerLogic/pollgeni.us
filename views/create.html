@@ -156,6 +156,17 @@
 	</div>
 	<div class="row">
 		<div class="col-lg-4 col-lg-offset-4">
+		<form role="form" ng-submit="addChoice()">
+			<div class="input-group">
+				<span class="input-group-btn">
+					<button id="add-choice-btn" class="btn btn-success"><span class="glyphicon glyphicon-list glyphicon-left"></span></button>
+				</span>
+			<input type="text" class="form-control choice" id="choice" placeholder="Add a choice to your poll..." ng-model="choiceNew" required>
+			</div>
+			<div id="contact-recaptcha" class="g-recaptcha" data-sitekey="6LeW4QkTAAAAANyJgMpyr0NafMUq7LJsQD9Z67lT"></div>
+		</form>
+		<div class="row">
+			<div class="col-lg-4 col-lg-offset-4">
 				<button id="poll-submit" class="btn-block btn-lg" ng-click="submitPoll()">Submit Poll</button>
 			</div>
 		</div>

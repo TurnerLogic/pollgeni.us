@@ -865,12 +865,15 @@ ul.pull-right{
 #company-name{
     font-size: 40px;
     color: #47a3da; 
+    margin-bottom: 10px;
 }
-.col-md-12.footer-about.animated.fadeInUp.visible{
+div.col-md-12.footer-about.animated.fadeInUp.visible{
     color: #fff;
     font-size: 20px;
     padding-left: 5px;
+    padding-top: 0px;
 }
+
 @media (max-width: 1400px) {
     .port-image .mask {
         padding-top: 23%

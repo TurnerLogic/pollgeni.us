@@ -85,10 +85,11 @@ io.on('connection', function (socket) {
 	// var addedUser = false;
 	totalActiveUsers++;
 
-	socket.on('subscribe', function(code)
+	socket.on('subscribe', function(room)
 	{
 		console.log('somebody subscribed');
-		socket.join(code);
+		socket.join(room);
+		console.log(code);
 	});
 
 	socket.on('disconnect', function () {

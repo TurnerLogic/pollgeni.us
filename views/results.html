@@ -1,5 +1,8 @@
 {{#yield-styles}}
 <link rel="stylesheet" type="text/css" href="/css/result_style.css">
+<meta property="og:site_name" content="pollgeni.us"/>
+<meta id="site_content" property="og:description" content="" />
+<meta property="og:url" content="http://pollgeni.us:3000/polls/8y773/results" />
 <style type="text/css">
 @font-face { font-family: globerSemiBold; src: url('/fonts/Glober SemiBold Free.otf'); }
 @font-face { font-family: globerThin; src: url('/fonts/Glober Thin Free.otf'); }
@@ -107,8 +110,8 @@ div.chatArea{
 
  ul#messages{
  	overflow: scroll;
-		max-height: 165px;
-		width: 100%;
+	max-height: 165px;
+	width: 100%;
  }
 
  div#chat-section{
@@ -222,29 +225,42 @@ div.chatArea{
 		<div class="pie-box container">
 				 	<div id="pollContainer" class="col-md-12">
 				 		<div class="col-md-3"></div>
-							<canvas id="poll-results" width="430" height="430"></canvas>
+							<canvas class="single-result" id="poll-results" width="430" height="430"></canvas>
 					</div>
 		</div>
+	<a class="twitter-share-button"
+  		href="pollgeni.us" data-url="pollgeni.us" >
+	Tweet</a>
 
+	<div class="fb-share-button" id="share_button" data-layout="button_count">share</div>
 {{#yield-scripts}}
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="/js/Chart.min.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="/js/client.js"></script>
 	<script type="text/javascript">
-
-		$(window).resize(function(){
-
-		  if ($(window).width() < 480)
-		  {
-			$('#poll-results').css("width", "360").css('height', "360");
-
-		  } else {
-
-			$('#poll-results').css("width", "460").css('height', "460");
-
-		  }
-		  
+		$(document).ready(function() {
+			$(window).resize(function(){
+				if ($(window).width() < 480)
+				{
+					$('#poll-results').css("width", "360").css('height', "360");
+				} 
+				else 
+				{
+					$('#poll-results').css("width", "460").css('height', "460");
+				}
+			});
+			var code = window.location.pathname.toString().split('/')[2];
+			$('#share_button').click(function(e){
+				e.preventDefault();
+				FB.ui({
+					method: 'feed',
+					name: document.getElementById('pollTitle').innerHTML,
+					link: ' http://jdgarza.com/',
+					description: "you can vote and view this poll using the code: "+ code + " at pollgeni.us",
+					message: ''
+				});
+			});
 		});
 	</script>
-{{/yield-scripts}}
+{{/yield-scripts}}	

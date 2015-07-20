@@ -10,8 +10,8 @@ Poll.prototype.data = {};
 
 Poll.findByCode = function(code, callback) {
 	db.polls.findOne({code: code}, function (err, data) {
-		console.log(data);
-		console.log('this is the data from findbyCode');
+		// console.log(data);
+		// console.log('this is the data from findbyCode');
 		if(err) return callback(err);
 		callback(null, new Poll(data));
 	});
@@ -59,7 +59,7 @@ Poll.all = function(callback) {
 			return callback(err);
 		}
 		docs.forEach(function (element, index) {
-			console.log(element);
+			// console.log(element);
 			polls.push(new Poll(element));
 		});
 

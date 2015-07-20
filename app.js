@@ -80,16 +80,16 @@ var numUsers = []; // per room
 
 io.on('connection', function (socket) {
 	socket.join('index');
-	// socket.join('')
+	// socket.join('public');
 	// console.log('User connected');
 	// var addedUser = false;
 	totalActiveUsers++;
 
-	socket.on('subscribe', function(room)
-	{
+	socket.on('subscribe', function(room) {
 		console.log('somebody subscribed');
 		socket.join(room);
-		console.log(room);
+		console.log(room + ' this is the room');
+		console.log(socket.rooms);
 	});
 
 	socket.on('disconnect', function () {

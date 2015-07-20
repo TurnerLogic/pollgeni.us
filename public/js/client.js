@@ -64,7 +64,8 @@ socket.emit('subscribe', code);
 var spawnChart = function(code) {
 	var jsonResultsUrl = "/polls/" + code + "/json-results";
 
-	$.get(jsonResultsUrl, function(data) {
+	$.get(jsonResultsUrl, function(data, status) {
+		console.log(status);
 		chartData = formatJsonData(data);
 		if (initialLoad) {
 			pollResults = new Chart(ctx).Pie(chartData, chartOptions);

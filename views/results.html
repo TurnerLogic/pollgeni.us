@@ -203,10 +203,14 @@ ul.pie-legend.col-md-4{
 	float: right;
 }
 
+#share_button{
+	margin-right: 10px;
+}
  @media (max-width: 991px) {
 	 #pollTitle{
 		 font-size: 55px;
 	 }
+}
 }
 
 </style>
@@ -219,11 +223,14 @@ ul.pie-legend.col-md-4{
 							<canvas id="single-result" id="poll-results" width="430" height="430"></canvas>
 					</div>
 		</div>
-	<a class="twitter-share-button"
-  		href="pollgeni.us" data-url="pollgeni.us" >
-	Tweet</a>
 
-	<div class="fb-share-button" id="share_button" data-layout="button_count">share</div>
+	<div class="container">
+		<a class="twitter-share-button"
+  			href="pollgeni.us" data-url="pollgeni.us" >
+		Tweet</a>
+		<div class="col-md-1"></div>
+		<div class="fb-share-button" id="share_button" data-layout="button_count">share</div>
+	</div>
 {{#yield-scripts}}
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="/js/Chart.min.js"></script>

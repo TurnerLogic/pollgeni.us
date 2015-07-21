@@ -3,6 +3,20 @@
  *
  *
 
+var FADE_TIME = 150; // ms
+var TYPING_TIMER_LENGTH = 400; // ms
+var $window = $( window );
+var $usernameInput = $( '.usernameInput' );
+var $messages = $( '#messages' );
+var $inputMessage = $( '.inputMessage' );
+var $loginPage = $('.login.page'); // The login page
+var $chatPage = $('.chat.page'); // The chatroom page
+var username;
+var connected = false;
+var typing = false;
+var lastTypingTime;
+var $currentInput = $usernameInput.focus();
+
  var addParticipantsMessage = function(data) {
 	var message = '';
 	if (data.numUsers === 1) {

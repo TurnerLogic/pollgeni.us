@@ -43,6 +43,8 @@ router.post('/create', function (req, res) {
 	var reCaptchaEndpoint = 'https://www.google.com/recaptcha/api/siteverify';
 	var reCaptchaResponse = req.body.recaptchaResponse;
 
+	io.to('index').emit('poll creation');
+
 	// construct the responses object from the choices
 	poll.get('choices').forEach(function(element, index) {
 		responses[index] = {
@@ -96,12 +98,10 @@ router.put('/:code', function (req, res) {
 	var countToIncrement = null;
 	var redirectUrl = '/polls/' + code + '/results';
 
-	console.log(session.voted.indexOf(code));
-	console.log('result above');
-	// if(session.voted.indexOf(code) >= 0) {
-	// 	logger.log('Attempted second vote on poll: ' + code, 'warn');
-	// 	return res.redirect(redirectUrl);
-	// }
+	if(session.voted.indexOf(code) >= 0) {
+		logger.log('Attempted second vote on poll: ' + code, 'warn');
+		return res.redirect(redirectUrl);
+	}
 
 	session.voted.push(code); // prevents session from voting on poll with variable code more than once
 

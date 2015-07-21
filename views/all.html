@@ -6,7 +6,7 @@
 	div.container.holder{
 		margin-top: 120px;
 	}
-	.poll_code,.question{
+	.poll_code,.question, .poll-link{
 		text-align: center;
 	}
 
@@ -24,21 +24,21 @@
 	}
 	@media screen and (min-width: 641px) and (max-width: 991px){
 		canvas{
-			margin-left:0px;
+			/*margin-left:0px;*/
 			height: 200px;
 			width: 200px;
 		}
 	}
 	@media screen and (min-width: 992px) and (max-width: 1200px){
 		canvas{
-			margin-left: 50px;
+			/*margin-left: 50px;*/
 			height: 200px;
 			width: 200px;
 		}
 	}
 	@media screen and (min-width: 1201px) and (max-width: 1999px){
 		canvas{
-			margin-left: 80px;
+			/*margin-left: 80px;*/
 			height: 200px;
 			width: 200px;
 		}
@@ -46,11 +46,12 @@
 
 </style>
 {{/yield-styles}}
-	<div class=" holder container">
+	<div class="holder container">
 	{{#polls}}
-			<div class="col-xs-4">
+			<div class="col-xs-4" style="text-align: center">
 				<p href="/polls/{{data.code}}/results" class="question">{{data.question}}</p>
-				<p class="poll_code">{{data.code}}</p>
+				<a style="text-align: center" href="/polls/{{data.code}}">{{data.code}}</a>
+				<p hidden class="poll_code">{{data.code}}</p>
 			</div>
 	{{/polls}}
 	</div>
@@ -58,7 +59,7 @@
 <script type="text/javascript">
 	var number = 0;
 	$(document).ready(function() {
-		$.each( $('.col-xs-4'), function( index, value ){	
+		$.each( $('.col-xs-4'), function (index, value) {
 			$(this).prepend('<canvas id="'+ $('.poll_code')[number].innerHTML +'" class="multiple-results" width="200px" height="200px" ></canvas> ');
     		number++;
 		});

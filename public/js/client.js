@@ -1,39 +1,14 @@
 var socket = io();
-var pollResults;
+var chart;
 var allPolls = [];
 var poll = null;
 var ctx = null;
 var initialLoad = true;
 var chartData = [];
-var FADE_TIME = 150; // ms
-var TYPING_TIMER_LENGTH = 400; // ms
-var $window = $( window );
-var $usernameInput = $( '.usernameInput' );
-var $messages = $( '#messages' );
-var $inputMessage = $( '.inputMessage' );
-var $loginPage = $('.login.page'); // The login page
-var $chatPage = $('.chat.page'); // The chatroom page
-var allPollsLocation = window.location.href.slice(23,29);
-var allPollsUrl = '/polls';
-var singlePollLocation = window.location.href.slice(35,43);
-var singlePollUrl = '/results';
-var username;
-var connected = false;
-var typing = false;
-var lastTypingTime;
-var $currentInput = $usernameInput.focus();
 var code = window.location.pathname.toString().split('/')[2];
-
-if(singlePollLocation === singlePollUrl)
-{
-	code = window.location.pathname.toString().split('/')[2];
-	ctx = $("#single-result").get(0).getContext("2d");
-	var resultLocation = window.location.href.slice(23,43);
-	var resultsUrl = allPollsUrl + "/" + code + singlePollUrl;
-}
+var resultsPage = '/polls/' + code + '/results';
+var pollsPage = '/polls';
 var url = window.location.pathname.toString();
-console.log(url);
-
 
 var COLORS = [
 	'#e21400', '#91580f', '#f8a700', '#f78b00',
@@ -77,54 +52,54 @@ var spawnChart = function(code, ctx) {
 	var jsonResultsUrl = "/polls/" + code + "/json-results";
 
 	$.get(jsonResultsUrl, function(data, status) {
+		$( '#poll-title' ).text(data.question);
 		console.log(status);
 		chartData = formatJsonData(data);
 		console.log(chartData);
 
 		if (initialLoad) {
-			if (resultLocation === resultsUrl) {
-				pollResults = new Chart(ctx).Pie(chartData, chartOptions);
-					var legend = pollResults.generateLegend();
-					$('.pie-box').prepend(legend);
-			} else if (allPollsLocation === allPollsUrl) {
+			console.log('on initial load');
+			if (url === pollsPage) {
 				poll = new Chart(ctx).Pie(chartData, chartOptions);
 					allPolls.push({
 						'pollId': code,
 						'poll': ctx,
 						'chart': poll
 					});
-			} else {
-				return null;
+			} else if ( url === resultsPage) {
+				chart = new Chart(ctx).Pie(chartData, chartOptions);
+				var legend = chart.generateLegend();
+				$('.pie-box').prepend(legend);
 			}
 		} else {
-			if (resultLocation === resultsUrl) {
-				console.log('not inital load');
-			} else if (allPollsLocation === allPollsUrl) {
+			if (url === pollsPage) {
 				for (var i = 0; i < allPolls.length; i++) {
 					if(allPolls[i].pollId == code) {
-						pollResults = allPolls[i].chart;
+						chart = allPolls[i].chart;
 					}
 				}
 			}
+			console.log(chartData);
+			console.log('being sent to updateChartData');
 			updateChartData(chartData);
 		}
-		$( '#pollTitle' ).text(data.question);
 	});
 };
 
 var updateChartData = function(data) {
-	console.log(pollResults.segments.length);
+	console.log(chart.segments.length);
 	for (var j = 0; j < data.length; j++) {
-		for (var i = 0; i < pollResults.segments.length; i++) {
-			if (data[j].label === pollResults.segments[i].label) {
-				pollResults.segments[i].value = data[j].value;
+		for (var i = 0; i < chart.segments.length; i++) {
+			if (data[j].label === chart.segments[i].label) {
+				chart.segments[i].value = data[j].value;
 				break;
-			} else if ( i === pollResults.segments.length - 1) {
-				pollResults.addData(data[j]);
+			} else if ( i === chart.segments.length - 1) {
+				chart.addData(data[j]);
 			}
 		}
 	}
-	pollResults.update();
+	console.log('calling update chart');
+	chart.update();
 };
 
 var formatJsonData = function(poll) {
@@ -146,40 +121,28 @@ var formatJsonData = function(poll) {
 	return pollData;
  };
 
-
-$( document ).ready(function () {
-	if (url === '/polls')
-	{
-		console.log('subscribing to public');
-		socket.emit('public');
-	}
-	else if ( url === '/polls/' + code + '/results') 
-	{
-		socket.emit('subscribe', code);
-		console.log(socket.rooms);
-	}
-
-	if ($('canvas').hasClass('multiple-results'))
-	{
-		for (var a = 0; a < $('.poll_code').length; a++) {
-			code = $('.poll_code')[a].innerHTML;
-			ctx = document.getElementById(code).getContext("2d");
-			spawnChart(code,ctx);
-		};
-	} else {
-		console.log('spawning chart');
-		ctx = $("#single-result").get(0).getContext("2d");
-		spawnChart(code,ctx); // code pulled from url
-		$('.twitter-share-button').attr('href', "https://twitter.com/tweet?text=Hey!%20you%20can%20view%20my%20awesome%20poll!%20at%20pollgeni.us/polls/"+ code+"/");
-	}
-});
-
 socket.on('poll submission', function(code) {
 	initialLoad = false;
 	console.log('poll submission');
 	spawnChart(code, ctx);
 });
 
-socket.on('test', function (passedIn) {
-	console.log(passedIn);
+$( document ).ready(function () {
+
+	if (url === pollsPage) {
+		console.log('subscribing to public');
+		socket.emit('public');
+		for (var a = 0; a < $('.poll_code').length; a++) {
+			code = $('.poll_code')[a].innerHTML;
+			ctx = document.getElementById(code).getContext("2d");
+			spawnChart(code, ctx);
+		}
+	} else if (url === resultsPage) {
+		socket.emit('subscribe', code);
+		console.log(socket.rooms);
+		console.log('spawning chart');
+		ctx = $("#chart").get(0).getContext("2d");
+		spawnChart(code, ctx); // code pulled from url
+		$('.twitter-share-button').attr('href', "https://twitter.com/tweet?text=Hey!%20you%20can%20view%20my%20awesome%20poll!%20at%20pollgeni.us/polls/"+ code+"/");
+	}
 });

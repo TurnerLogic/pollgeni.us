@@ -127,9 +127,7 @@ div.chatArea{
  	font-size: 35px;
  	color: #E9BC1B;
  }
-/*     div.container{
- 	max-width: 600px;
- }*/
+
  div.col-md-6.poll-choices{
  	min-height: 505px;
  	max-height: 564px;
@@ -161,71 +159,41 @@ div.chatArea{
  	border-radius: 5px;
 
  }
-	 .pie-legend{
-		 /*display: block;*/
-		 /*width: 600px;*/
-		 color: #fff;
-		 background-color: #1e9fb4;
-		 /*padding-top: 3%;*/
-		 padding-bottom: 3%;
-		 font-size: 30px;
-		 /*margin-bottom: 0px;*/
-		 /*top: 20px;*/
-		 /*border-radius: 15px;*/
-		 text-align: left;
-		 /*border: 5px white solid;*/
+ .pie-legend{
+	 display:block;
+	 list-style: none;
+	 color: #fff;
+	 background-color: #1e9fb4;
+	 padding-top: 20px;
+	 padding-bottom: 38px;
+	 font-size: 30px;
+	 margin-bottom: 0px;
+	 font-family: 'globerThin', sans-serif;
+	 border-radius: 15px;
+ }
+
+li.col-md-6{
+	line-height: 1.1;
+}
+
+ ul.pie-legend.col-md-4{
+ 	margin-bottom: 40px;	
+ 	margin-top: 10px;
+ }
+ @media (max-width: 991px) {
+	 #pollTitle{
+		 font-size: 55px;
 	 }
-
-	#legend-container{
-		font-family: 'globerThin', sans-serif;
-		margin: 0px 0px;
-		padding: 0px 0px;
-		width: 25%;
-		float: right;
-	}
-
-	.legend-wrapper{
-		clear: both;
-		margin: 8px 0px;
-	}
-
-	.legend-label {
-		float: left;
-		width: 75%;
-		padding-top: 5px;
-	}
-
-	.legend-color {
-		float: left;
-		height: 25px;
-		width: 25px;
-		border-radius: 15px;
-		margin-right: 10px;
-		/*margin-bottom: 10px;*/
-	}
-	 @media (max-width: 991px) {
-		 #pollTitle{
-			 font-size: 55px;
-		 }
-	}
-
-	div.col-md-4{
-		border: 3px white solid;
-		padding: 0px 0px;
-	}
-
-	div.col-md-8{
-		border: 3px white solid;
-	}
+}
 
 </style>
 {{/yield-styles}}
 
 	<h1 id="pollTitle"></h1>
 		<div class="pie-box container">
-				 	<div id="pollContainer" class="col-md-12">
+				 	<div id="pollContainer" class="col-md-8">
 				 		<div class="col-md-3"></div>
-							<canvas class="single-result" id="poll-results" width="430" height="430"></canvas>
+							<canvas id="single-result" id="poll-results" width="430" height="430"></canvas>
 					</div>
 		</div>
 	<a class="twitter-share-button"

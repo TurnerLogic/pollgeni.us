@@ -196,16 +196,18 @@
 	</div>
 {{/poll}}
 
-{{#delete}}
+{{#creator}}
 	<p id="remove-text">Would you like to remove your poll?</p>
 	<form action='/polls/{{poll.code}}?_method=DELETE' method="POST">
 		<input type="hidden" value="{{poll.token}}" name="token" readonly>
 		<input type="submit" id="remove" class="btn btn-info btn-default" value="REMOVE">
 	</form>
-{{/delete}}
+{{/creator}}
+{{#yield-scripts}}
 <script type="text/javascript">
 	for(var i = 0; i < $('.col-xs-4').length; i+=3) {
   		$('.col-xs-4').slice(i, i+3).wrapAll("<div class='row'><div class='container'></div></div>");
 	}
 </script>
 <script type="text/javascript" src="/js/polls_choice.js"></script>
+{{/yield-scripts}}

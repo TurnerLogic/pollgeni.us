@@ -7,7 +7,7 @@ var request = require('request');
 var Poll = require('../models/Poll');
 var Logger = require('../lib/Logger.js');
 var logger = new Logger('log/poll.log');
-var session;
+var session = null;
 
 
 router.use(function (req, res, next) {
@@ -56,6 +56,7 @@ router.post('/create', function (req, res) {
 	poll.set('created_at', created_at);
 	poll.set('expires_at', expires_at);
 	poll.set('token', token);
+	poll.set('new', true);
 
 	poll.save(function(err, result) {
 		if (err) res.status(404).send('Poll unable to save. Please try again.');
@@ -97,12 +98,12 @@ router.put('/:code', function (req, res) {
 
 	console.log(session.voted.indexOf(code));
 	console.log('result above');
-	if(session.voted.indexOf(code) >= 0) {
-		logger.log('Attempted second vote on poll: ' + code, 'warn');
-		return res.redirect(redirectUrl);
-	}
+	// if(session.voted.indexOf(code) >= 0) {
+	// 	logger.log('Attempted second vote on poll: ' + code, 'warn');
+	// 	return res.redirect(redirectUrl);
+	// }
 
-	session.voted.push(code);
+	session.voted.push(code); // prevents session from voting on poll with variable code more than once
 
 	io.to(code).emit('poll submission', code);
 	io.to('public').emit('poll submission', code);
@@ -125,6 +126,7 @@ router.put('/:code', function (req, res) {
 		});
 
 		poll.set('responses', newResponses);
+		poll.set('new', false);
 		poll.save(function(err, result) {
 			if (err) res.status(500).send('Unable to persist your vote to the database');
 			return res.redirect(redirectUrl);

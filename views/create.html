@@ -199,9 +199,7 @@
 <script src='https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit async defer'></script>
 <script>
 (function() {
-
-$( '.menu-cont' ).children().removeClass('active');
-$( '.menu-cont' ).children().last().addClass('active');
+$( '#create-poll-nav' ).addClass('active');
 var app = angular.module('pollCreateApp', []);
 
 app.config(function ($interpolateProvider) {

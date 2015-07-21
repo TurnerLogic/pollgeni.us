@@ -79,21 +79,33 @@ var usernames = {};
 var numUsers = []; // per room
 
 io.on('connection', function (socket) {
-	socket.join('index');
-	// socket.join('public');
-	// console.log('User connected');
-	// var addedUser = false;
-	totalActiveUsers++;
+	++totalActiveUsers;
 
-	socket.on('subscribe', function(room) {
-		console.log('somebody subscribed');
-		socket.join(room);
-		console.log(room + ' this is the room');
-		console.log(socket.rooms);
+	socket.on('index', function () {
+		socket.rooms.forEach(function (element, index) {
+			socket.leave(element);
+		});
+		socket.join('index');
+		socket.to('index').emit('meta-connection', totalActiveUsers);
+	});
+	socket.on('public', function () {
+		socket.rooms.forEach(function (element, index) {
+			console.log(element);
+			socket.leave(element);
+		});
+		socket.join('public');
 	});
 
+	socket.on('subscribe', function (room) {
+		socket.join(room);
+		socket.leave('public');
+		socket.leave('index');
+	});
+
+
 	socket.on('disconnect', function () {
-		totalActiveUsers--;
+		--totalActiveUsers;
+		socket.to('index').emit('meta-disconnect', totalActiveUsers);
 	});
 });
 

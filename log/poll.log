@@ -1,4 +1,14 @@
-[INFO] [20/6/2015] GET /c8e3m
-[INFO] [20/6/2015] PUT /c8e3m
-[INFO] [20/6/2015] GET /c8e3m/results
-[INFO] [20/6/2015] GET /c8e3m/json-results
+[INFO] [21/6/2015] GET /j4554/results
+[INFO] [21/6/2015] GET /j4554/json-results
+[INFO] [21/6/2015] GET /create
+[INFO] [21/6/2015] From the polls/create route
+[INFO] [21/6/2015] POST /create
+[INFO] [21/6/2015] New poll created with code: yt7u5.
+[INFO] [21/6/2015] GET /yt7u5
+[INFO] [21/6/2015] GET /yt7u5/results
+[INFO] [21/6/2015] GET /yt7u5/json-results
+[INFO] [21/6/2015] GET /yt7u5/img/favicon.ico
+[INFO] [21/6/2015] PUT /yt7u5
+[INFO] [21/6/2015] GET /yt7u5/json-results
+[INFO] [21/6/2015] GET /yt7u5/results
+[INFO] [21/6/2015] GET /yt7u5/json-results

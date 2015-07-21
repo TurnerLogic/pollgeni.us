@@ -102,7 +102,6 @@ io.on('connection', function (socket) {
 		socket.leave('index');
 	});
 
-
 	socket.on('disconnect', function () {
 		--totalActiveUsers;
 		socket.to('index').emit('meta-disconnect', totalActiveUsers);

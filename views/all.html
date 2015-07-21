@@ -61,7 +61,7 @@
 	$(document).ready(function() {
 		$.each( $('.col-xs-4'), function (index, value) {
 			$(this).prepend('<canvas id="'+ $('.poll_code')[number].innerHTML +'" class="multiple-results" width="200px" height="200px" ></canvas> ');
-    		number++;
+			number++;
 		});
 
 		for(var i = 0; i < $('.col-xs-4').length; i+=3) {

@@ -1,5 +1,5 @@
 var socket = io();
-var chart;
+var chart = null;
 var allPolls = [];
 var poll = null;
 var ctx = null;
@@ -48,43 +48,72 @@ var chartOptions = {
 };
 
 
-var spawnChart = function(code, ctx) {
+var spawnChart = function(code, context) {
 	var jsonResultsUrl = "/polls/" + code + "/json-results";
+	var ctx = context;
 
-	$.get(jsonResultsUrl, function(data, status) {
+	$.get(jsonResultsUrl, function(data) {
 		$( '#poll-title' ).text(data.question);
-		console.log(status);
 		chartData = formatJsonData(data);
 		console.log(chartData);
 
 		if (initialLoad) {
 			console.log('on initial load');
 			if (url === pollsPage) {
-				poll = new Chart(ctx).Pie(chartData, chartOptions);
+				chart = new Chart(ctx).Pie(chartData, chartOptions);
 					allPolls.push({
-						'pollId': code,
-						'poll': ctx,
-						'chart': poll
+						'code': code,
+						'ctx': ctx,
+						'chart': chart
 					});
-			} else if ( url === resultsPage) {
+			} else if (url === resultsPage) {
 				chart = new Chart(ctx).Pie(chartData, chartOptions);
 				var legend = chart.generateLegend();
 				$('.pie-box').prepend(legend);
 			}
 		} else {
 			if (url === pollsPage) {
-				for (var i = 0; i < allPolls.length; i++) {
-					if(allPolls[i].pollId == code) {
-						chart = allPolls[i].chart;
-					}
+				chart = getChart(code);
+				if (chart.total < 1) {
+					chart = new Chart(ctx).Pie(chartData, chartOptions);
+					setChart(code, chart);
 				}
+
+			} else if (url === resultsPage && chart.total < 1) {
+				chart = new Chart(ctx).Pie(chartData, chartOptions);
 			}
 			console.log(chartData);
 			console.log('being sent to updateChartData');
-			updateChartData(chartData);
 		}
+		updateChartData(chartData);
 	});
 };
+
+// From allPolls
+var getChart = function(code) {
+	for (var i = 0; i < allPolls.length; i++) {
+		if(code === allPolls[i].code) {
+			return allPolls[i].chart;
+		}
+	}
+};
+
+var setChart = function(code, chart) {
+	for (var i = 0; i < allPolls.length; i++) {
+		if (code === allPolls[i].code) {
+			allPolls[i].chart = chart;
+		}
+	}
+}
+
+var getTotal = function(cd) {
+	var total = 0;
+	cd.forEach(function (element, index) {
+		total += element.value;
+	});
+
+	return total;
+}
 
 var updateChartData = function(data) {
 	console.log(chart.segments.length);
@@ -100,6 +129,7 @@ var updateChartData = function(data) {
 	}
 	console.log('calling update chart');
 	chart.update();
+	console.log(chart.total + ' this is the chart total');
 };
 
 var formatJsonData = function(poll) {

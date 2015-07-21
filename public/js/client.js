@@ -13,16 +13,22 @@ var $messages = $( '#messages' );
 var $inputMessage = $( '.inputMessage' );
 var $loginPage = $('.login.page'); // The login page
 var $chatPage = $('.chat.page'); // The chatroom page
+var allPollsLocation = window.location.href.slice(23,29);
+var allPollsUrl = '/polls';
+var singlePollLocation = window.location.href.slice(35,43);
+var singlePollUrl = '/results';
 var username;
 var connected = false;
 var typing = false;
 var lastTypingTime;
 var $currentInput = $usernameInput.focus();
 
-if($('canvas').hasClass('single-result'))
+if(singlePollLocation === singlePollUrl)
 {
-	var code = window.location.pathname.toString().split('/')[2];
-	ctx = $("#poll-results").get(0).getContext("2d");
+	code = window.location.pathname.toString().split('/')[2];
+	ctx = $("#single-result").get(0).getContext("2d");
+	var resultLocation = window.location.href.slice(23,43);
+	var resultsUrl = allPollsUrl + "/" + code + singlePollUrl;
 }
 
 var COLORS = [
@@ -71,11 +77,11 @@ var spawnChart = function(code,ctx) {
 		chartData = formatJsonData(data);
 
 		if (initialLoad) {
-			if ($('canvas').hasClass('single-result')) {
+			if (resultLocation === resultsUrl) {
 				pollResults = new Chart(ctx).Pie(chartData, chartOptions);
 					var legend = pollResults.generateLegend();
 					$('.pie-box').prepend(legend);
-			} else if ($('canvas').hasClass('multiple-results')) {
+			} else if (allPollsLocation === allPollsUrl) {
 				poll = new Chart(ctx).Pie(chartData, chartOptions);
 					allPolls.push({
 						'pollId': code,
@@ -86,9 +92,9 @@ var spawnChart = function(code,ctx) {
 				return null;
 			}
 		} else {
-			if ($('canvas').hasClass('single-result')) {
+			if (resultLocation === resultsUrl) {
 				console.log('not inital load');
-			} else if ($('canvas').hasClass('multiple-results')) {
+			} else if (allPollsLocation === allPollsUrl) {
 				for (var i = 0; i < allPolls.length; i++) {
 					if(allPolls[i].pollId == code) {
 						pollResults = allPolls[i].chart;
@@ -142,14 +148,14 @@ var formatJsonData = function(poll) {
 
 
 $( document ).ready(function () {
-	if ($('canvas').hasClass('multiple-results')) {
+	if (allPollsLocation === allPollsUrl) {
 		for (var a = 0; a < $('.poll_code').length; a++) {
 			code = $('.poll_code')[a].innerHTML;
 			ctx = document.getElementById(code).getContext("2d");
 			spawnChart(code,ctx);
 		};
 		socket.emit('subscribe', 'public');
-	} else {
+	} else if(resultLocation === resultsUrl){
 		console.log('spawning chart');
 		socket.emit('subscribe', code);
 		spawnChart(code,ctx); // code pulled from url

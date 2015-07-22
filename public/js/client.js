@@ -16,9 +16,11 @@ var COLORS = [
 	'#3b88eb', '#3824aa', '#a700ff', '#d300e7'
 ];
 var chartColors = [
-	"#F7464A", "#ACBEA3", "#157A6E", "#499F68",
-	"#68A357", "#FF33CC", "#444545", "#666699",
-	"#32213A", "#40090D", "#E3D26F"
+	"#C62E65", "#A1E579", "#2A7D67", "#A31621",
+	"#053C5E", "#BFDBF7", "#FA8334", "#FFE882",
+	"#271033", "#3EFEF1", "#E3D26F", "#C1666B",
+	"#D4B483", "#0B5351", "#F26430", "#9FFFCB",
+	"F9EBE0",  "#D00000", "#939F5C", "#9FFFCB"
 ];
 
 var chartOptions = {
@@ -37,7 +39,7 @@ var chartOptions = {
 	//Boolean - Whether we animate the rotation of the Doughnut
 	animateRotate: true,
 	//String - A legend template
-	legendTemplate : "<div id=\"legend-container\"><% for (var i=0; i<chartData.length; i++){%><div class=\"legend-wrapper clearfix\"><div class=\"legend-color\" style=\"background-color:<%=chartColors[i]%>\"></div><div class=\"legend-label\"><%if(chartData[i].label){%><%=chartData[i].label%><%}%></div></div><%}%></div>"
+	legendTemplate : "<div id=\"legend-container\"><% for (var i=0; i<chartData.length; i++){%><div class=\"legend-wrapper clearfix\"><div class=\"legend-color\" style=\"background-color:<%=chartData[i].color%>\"></div><div class=\"legend-label\"><%if(chartData[i].label){%><%=chartData[i].label%><%}%></div></div><%}%></div>"
 };
 
 // spawnChart() utilizes the globally defined chart object, initially set ot null
@@ -145,11 +147,28 @@ var formatJsonData = function(poll) {
 		}
 		pollData.push({
 			value: element.count,
-			color: chartColors[i],
+			color: chartColors[getRandomInt(0, chartColors.length - 1)],
 			label: element.choice
 		});
 	});
 	return pollData;
+ };
+
+ function getRandomInt(min, max) {
+ 	return Math.floor(Math.random() * (max - min)) + min;
+ }
+
+ function getUniqueColor(pollData) {
+ 	var uniqueColor = chartColors[getRandomInt(0, chartColors.length - 1)];
+ 	var usedColors = [];
+ 	$.each(pollData, function(element, index) {
+ 		usedColors.push(element.color);
+ 	});
+ 	while($.inArray(usedColors, uniqueColor) != -1) {
+ 		uniqueColor = chartColors[getRandomInt(0, chartColors.length - 1)];
+ 	}
+
+ 	return uniqueColor;
  };
 
 socket.on('poll submission', function(code) {

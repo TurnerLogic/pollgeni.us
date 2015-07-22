@@ -29,7 +29,7 @@ router.put('/polls/:id', function (req, res) {
 			update: {
 				$set: {
 							title: req.body.title,
-						    option1: req.body.option1,
+						  option1: req.body.option1,
 					 		option2: req.body.option2,
 					 		votesForOption1: req.body.votesForOption1,
 					 		votesForOption2: req.body.votesForOption2,

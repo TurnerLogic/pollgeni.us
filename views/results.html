@@ -127,9 +127,7 @@ div.chatArea{
  	font-size: 35px;
  	color: #E9BC1B;
  }
-/*     div.container{
- 	max-width: 600px;
- }*/
+
  div.col-md-6.poll-choices{
  	min-height: 505px;
  	max-height: 564px;
@@ -165,66 +163,80 @@ div.chatArea{
  	border-radius: 5px;
 
  }
-	 .pie-legend{
-		 /*display: block;*/
-		 /*width: 600px;*/
-		 color: #fff;
-		 background-color: #1e9fb4;
-		 /*padding-top: 3%;*/
-		 padding-bottom: 3%;
-		 font-size: 30px;
-		 /*margin-bottom: 0px;*/
-		 /*top: 20px;*/
-		 /*border-radius: 15px;*/
-		 text-align: left;
-		 /*border: 5px white solid;*/
+ .pie-legend{
+	 display:block;
+	 list-style: none;
+	 color: #fff;
+	 background-color: #1e9fb4;
+	 padding-top: 20px;
+	 padding-bottom: 38px;
+	 font-size: 30px;
+	 margin-bottom: 0px;
+	 font-family: 'globerThin', sans-serif;
+	 border-radius: 15px;
+ }
+
+li.col-md-6{
+	line-height: 1.1;
+}
+#legend-container{
+	font-family: 'globerThin', sans-serif;
+	margin: 0px 0px;
+	padding: 0px 0px;
+	width: 25%;
+	float: left;
+}
+
+ul.pie-legend.col-md-4{
+	margin-bottom: 40px;
+	margin-top: 10px;
+}
+
+#company-name{
+	font-size: 40px;
+	font-family: 'Montserrat',sans-serif;
+	margin-top: 10px;
+	float: left;
+}
+
+.footer-text{
+	font-size: 20px;
+	padding-top: 0px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+	line-height: 24px;
+}
+.col-md-12.footer-about.animated.fadeInUp.visible{
+	padding-bottom: 0px;
+}
+.legend-color {
+	float: left;
+	height: 25px;
+	width: 25px;
+	border-radius: 15px;
+	margin-right: 10px;
+	/*margin-bottom: 10px;*/
+}
+@media (max-width: 991px) {
+	 #poll-title{
+		 font-size: 55px;
 	 }
+	#company-name{
+		float: none;
+		text-align: center;
+	}
+}
 
-	#legend-container{
-		font-family: 'globerThin', sans-serif;
-		margin: 0px 0px;
-		padding: 0px 0px;
-		width: 25%;
-		float: left;
-	}
+.twitter-share-button,.fb-share-button{
+	float: right;
+}
 
-	.legend-wrapper{
-		clear: both;
-		margin: 8px 0px;
-	}
-
-	.legend-label {
-		float: left;
-		width: 75%;
-		padding-top: 5px;
-	}
-
-	.legend-color {
-		float: left;
-		height: 25px;
-		width: 25px;
-		border-radius: 15px;
-		margin-right: 10px;
-		/*margin-bottom: 10px;*/
-	}
-	 @media (max-width: 991px) {
-		 #poll-title{
-			 font-size: 55px;
-		 }
-	}
-
-	div.col-md-4{
-		border: 3px white solid;
-		padding: 0px 0px;
-	}
-
-	div.col-md-8{
-		border: 3px white solid;
-	}
-	.social-media {
-		margin: 5px 0px;
-	}
-
+div.col-md-8{
+	border: 3px white solid;
+}
+.social-media {
+	margin: 5px 0px;
+}
 </style>
 {{/yield-styles}}
 	<h1 id="poll-title"></h1>
@@ -254,8 +266,8 @@ div.chatArea{
 				if ($(window).width() < 480)
 				{
 					$('#poll-results').css("width", "360").css('height', "360");
-				} 
-				else 
+				}
+				else
 				{
 					$('#poll-results').css("width", "460").css('height', "460");
 				}
@@ -273,4 +285,4 @@ div.chatArea{
 			});
 		});
 	</script>
-{{/yield-scripts}}	
+{{/yield-scripts}}

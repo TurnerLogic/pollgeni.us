@@ -10,8 +10,6 @@ Poll.prototype.data = {};
 
 Poll.findByCode = function(code, callback) {
 	db.polls.findOne({code: code}, function (err, data) {
-		// console.log(data);
-		// console.log('this is the data from findbyCode');
 		if(err) return callback(err);
 		callback(null, new Poll(data));
 	});
@@ -61,8 +59,7 @@ Poll.paginate = function(limit, page, callback) {
 		docs.forEach(function (element, index) {
 			polls.push(new Poll(element));
 		});
-
-		return callback(null, polls);
+			return callback(null, polls);
 	});
 };
 

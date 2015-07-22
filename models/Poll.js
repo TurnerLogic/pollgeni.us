@@ -52,14 +52,13 @@ Poll.prototype.set = function(key, value) {
 	this.data[key] = value;
 };
 
-Poll.all = function(limit, page, callback) {
+Poll.paginate = function(limit, page, callback) {
 	var polls = [];
 	db.polls.find().limit(limit).sort({created_at: -1}).skip((page - 1) * limit, function (err, docs) {
 		if (err) {
 			return callback(err);
 		}
 		docs.forEach(function (element, index) {
-			// console.log(element);
 			polls.push(new Poll(element));
 		});
 
@@ -67,35 +66,42 @@ Poll.all = function(limit, page, callback) {
 	});
 };
 
-Poll.generateCode = function()
-{
-	var code = '';
+Poll.all = function(callback) {
+	var polls = [];
+	db.polls.find(function (err, docs) {
+		if (err) {
+			return callback(err);
+		}
 
+		docs.forEach(function (element, index) {
+			polls.push(new Poll(element));
+		});
+
+		return callback(null, polls);
+	});
+};
+
+Poll.generateCode = function() {
+	var code = '';
 	var validChars = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'j', 'k', 'm', 'n', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z'];
 	var validDigits = ['2', '3', '4', '5', '6', '7', '8', '9'];
 
-	for(var i = 0; i < 5; i++)
-	{
-		if(Math.random() > 0.5)
-		{
+	for (var i = 0; i < 5; i++) {
+		if (Math.random() > 0.5) {
 			code += validChars[getRandomInt(0, validChars.length - 1)];
 		} else {
-
 			code += validDigits[getRandomInt(0, validDigits.length - 1)];
 		}
 	}
-
 	return code;
 };
 
-Poll.generateToken = function()
-{
+Poll.generateToken = function() {
 	return randToken.generate(16);
 }
 
 
-var getRandomInt = function(max, min)
-{
+var getRandomInt = function(max, min) {
 	return Math.floor(Math.random() * (max - min)) + min;
 };
 

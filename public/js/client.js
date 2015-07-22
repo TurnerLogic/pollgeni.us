@@ -20,7 +20,7 @@ var chartColors = [
 	"#053C5E", "#BFDBF7", "#FA8334", "#FFE882",
 	"#271033", "#3EFEF1", "#E3D26F", "#C1666B",
 	"#D4B483", "#0B5351", "#F26430", "#9FFFCB",
-	"F9EBE0",  "#D00000", "#939F5C", "#9FFFCB"
+	"#F9EBE0",  "#D00000", "#939F5C"
 ];
 
 var chartOptions = {
@@ -73,13 +73,14 @@ var spawnChart = function(code, context) {
 
 var respawnChart = function(code, context) {
 	var jsonResultsUrl = "/polls/" + code + "/json-results";
-	var ctx = context;
+	var ctx = getCtx(code) || context;
 
 	$.get(jsonResultsUrl, function (data) {
 		var chartData = formatJsonData(data);
 		if(url === pollsPage) {
 			// locate chart to update by code from allPolls array
 			chart = getChart(code);
+			console.log(chart);
 
 			// if the 'poll submission' provides the first vote for the poll
 			// i.e. total < 1, reinstantiate the chart with the new data set.
@@ -102,10 +103,18 @@ var respawnChart = function(code, context) {
 // From allPolls
 var getChart = function(code) {
 	for (var i = 0; i < allPolls.length; i++) {
-		if(code === allPolls[i].code) {
+		if (code === allPolls[i].code) {
 			return allPolls[i].chart;
 		}
 	}
+};
+
+var getCtx = function(code) {
+	for (var i = 0; i < allPolls.length; i++) {
+		if (code === allPolls[i].code) {
+			return allPolls[i].ctx;
+		}
+	};
 };
 
 // In allPolls @ code
@@ -138,16 +147,11 @@ var updateChartData = function(data) {
 var formatJsonData = function(poll) {
 	var pollData = [];
 	var colorLength = chartColors.length;
+	var uniqueColors = getUniqueColors(poll.responses.length);
 	poll.responses.forEach(function (element, index) {
-		var i = null;
-		if (index > colorLength) {
-			i = index - colorLength % colorLength;
-		} else {
-			i = index;
-		}
 		pollData.push({
 			value: element.count,
-			color: chartColors[getRandomInt(0, chartColors.length - 1)],
+			color: uniqueColors[index],
 			label: element.choice
 		});
 	});
@@ -158,24 +162,23 @@ var formatJsonData = function(poll) {
  	return Math.floor(Math.random() * (max - min)) + min;
  }
 
- function getUniqueColor(pollData) {
- 	var uniqueColor = chartColors[getRandomInt(0, chartColors.length - 1)];
- 	var usedColors = [];
- 	$.each(pollData, function(element, index) {
- 		usedColors.push(element.color);
- 	});
- 	while($.inArray(usedColors, uniqueColor) != -1) {
- 		uniqueColor = chartColors[getRandomInt(0, chartColors.length - 1)];
+ function getUniqueColors(length) {
+ 	var uniqueColors = [];
+ 	var nColor;
+ 	var start = getRandomInt(0, chartColors.length - 1);
+ 	for (var i = 0; i < length; i++) {
+ 		nColor = chartColors[start];
+ 		uniqueColors[i] = nColor;
+ 		start = (chartColors.length - 1 / start === 1) ? 0 : start + 1;
  	}
-
- 	return uniqueColor;
+ 	return uniqueColors;
  };
 
 socket.on('poll submission', function(code) {
 	// /polls or /polls/:code/results has already loaded
 	// and spawnChart need not instantiate new charts (unless vote total < 1)
 	initialLoad = false;
-
+	console.log(code);
 	// context is now being passed to avoid overwriting the
 	// global ctx, only needed to carry the ctx value in .ready(cb)
 	respawnChart(code, ctx);

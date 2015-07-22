@@ -141,6 +141,10 @@ div.chatArea{
  	margin-bottom: 0px;
  	/*width: 100%;*/
  }
+
+ #pollContainer {
+ 	text-align: center;
+ }
  .inputMessage{
 		bottom: 0;
     position: absolute;
@@ -217,22 +221,28 @@ div.chatArea{
 	div.col-md-8{
 		border: 3px white solid;
 	}
+	.social-media {
+		margin: 5px 0px;
+	}
 
 </style>
 {{/yield-styles}}
-
 	<h1 id="poll-title"></h1>
 		<div class="pie-box container">
 				 	<div id="pollContainer" class="col-md-12">
-				 		<div class="col-md-3"></div>
-							<canvas class="single-result" id="chart" width="430" height="430"></canvas>
+						<canvas class="single-result" id="chart" width="430" height="430"></canvas>
 					</div>
 		</div>
-	<a class="twitter-share-button"
-  		href="pollgeni.us" data-url="pollgeni.us" >
-	Tweet</a>
-
-	<div class="fb-share-button" id="share_button" data-layout="button_count">share</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-1 social-media">
+					<a class="twitter-share-button" href="pollgeni.us" data-url="pollgeni.us" >Tweet</a>
+				</div>
+				<div class="col-md-1 social-media">
+					<div class="fb-share-button" id="share_button" data-layout="button_count">share</div>
+				</div>
+			</div>
+		</div>
 {{#yield-scripts}}
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="/js/chart.min.js"></script>

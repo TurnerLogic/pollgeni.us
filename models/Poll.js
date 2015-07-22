@@ -52,9 +52,9 @@ Poll.prototype.set = function(key, value) {
 	this.data[key] = value;
 };
 
-Poll.all = function(callback) {
+Poll.all = function(limit, page, callback) {
 	var polls = [];
-	db.polls.find(function (err, docs) {
+	db.polls.find().limit(limit).sort({created_at: -1}).skip((page - 1) * limit, function (err, docs) {
 		if (err) {
 			return callback(err);
 		}

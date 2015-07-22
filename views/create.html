@@ -87,7 +87,7 @@
 	#content {
 		border: 5px solid rgb(30, 159, 180);
 		border-radius: 15px;
-		margin-top: 100px;
+		margin-top: 12%;
 		background-color: white;
 		padding-left: 32px;
 		padding-right: 32px;
@@ -185,6 +185,10 @@
 <script src='https://www.google.com/recaptcha/api.js?onload=vcRecaptchaApiLoaded&render=explicit async defer'></script>
 <script>
 (function() {
+$(document).ready(function () {
+	var height = $(window).height();
+	$( '.footer-area' ).css('position', 'relative').css('top', 0.5 * height);
+})
 $( '#create-poll-nav' ).addClass('active');
 var app = angular.module('pollCreateApp', []);
 

@@ -63,11 +63,13 @@
 					<p hidden class="poll_code">{{data.code}}</p>
 				</div>
 		{{/polls}}
-		<div class="row" style="text-align: center">
-			<a href="/polls?page={{previous}}"><span class="glyphicon glyphicon-menu-left"></span></a>
-			<a href="/polls?page={{next}}"><span class="glyphicon glyphicon-menu-right"></span></a>
-		</div>
-  </div>
+
+<nav>
+  <ul class="pager">
+    <li class="previous"><a href="/polls?page={{previous}}"><span aria-hidden="true">&larr;</span> Older</a></li>
+    <li class="next"><a href="/polls?page={{next}}">Newer <span aria-hidden="true">&rarr;</span></a></li>
+  </ul>
+</nav>
 
 <script type="text/javascript">
 	var number = 0;
@@ -98,6 +100,13 @@
 				$('canvas').css('width','100px').css('height','100px');
 			}
 		});
+		if({{previous}} == 0)
+		{
+			$('.previous').addClass('disabled');
+			$('.previous').click(function(){
+				return false;
+			});
+		}
 	});
 </script>
 {{#yield-scripts}}

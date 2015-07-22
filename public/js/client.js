@@ -20,7 +20,7 @@ var chartColors = [
 	"#053C5E", "#BFDBF7", "#FA8334", "#FFE882",
 	"#271033", "#3EFEF1", "#E3D26F", "#C1666B",
 	"#D4B483", "#0B5351", "#F26430", "#9FFFCB",
-	"F9EBE0",  "#D00000", "#939F5C", "#9FFFCB"
+	"#F9EBE0",  "#D00000", "#939F5C"
 ];
 
 var chartOptions = {
@@ -138,16 +138,11 @@ var updateChartData = function(data) {
 var formatJsonData = function(poll) {
 	var pollData = [];
 	var colorLength = chartColors.length;
+	var uniqueColors = getUniqueColors(poll.responses.length);
 	poll.responses.forEach(function (element, index) {
-		var i = null;
-		if (index > colorLength) {
-			i = index - colorLength % colorLength;
-		} else {
-			i = index;
-		}
 		pollData.push({
 			value: element.count,
-			color: chartColors[getRandomInt(0, chartColors.length - 1)],
+			color: uniqueColors[index],
 			label: element.choice
 		});
 	});
@@ -158,17 +153,19 @@ var formatJsonData = function(poll) {
  	return Math.floor(Math.random() * (max - min)) + min;
  }
 
- function getUniqueColor(pollData) {
- 	var uniqueColor = chartColors[getRandomInt(0, chartColors.length - 1)];
- 	var usedColors = [];
- 	$.each(pollData, function(element, index) {
- 		usedColors.push(element.color);
- 	});
- 	while($.inArray(usedColors, uniqueColor) != -1) {
- 		uniqueColor = chartColors[getRandomInt(0, chartColors.length - 1)];
+ function getUniqueColors(length) {
+ 	var uniqueColors = [];
+ 	var nColor;
+ 	var start = getRandomInt(0, chartColors.length - 1);
+ 	for (var i = 0; i < length; i++) {
+ 		nColor = chartColors[start];
+ 		uniqueColors[i] = nColor;
+ 		console.log(chartColors.length - 1);
+ 		console.log(start);
+ 		start = (chartColors.length - 1 / start === 1) ? 0 : start + 1;
+ 		console.log(nColor);
  	}
-
- 	return uniqueColor;
+ 	return uniqueColors;
  };
 
 socket.on('poll submission', function(code) {

@@ -58,8 +58,8 @@
 	<div class="holder container">
 		{{#polls}}
 				<div class="col-xs-4" style="text-align: center">
-					<p href="/polls/{{data.code}}/results" class="question">{{data.question}}</p>
-					<a style="text-align: center" href="/polls/{{data.code}}">{{data.code}}</a>
+					<a href="/polls/{{data.code}}/"><p class="question">{{data.question}}</p></a>
+					<p style="text-align: center">{{data.code}}</p>
 					<p hidden class="poll_code">{{data.code}}</p>
 				</div>
 		{{/polls}}

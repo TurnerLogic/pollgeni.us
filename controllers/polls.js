@@ -30,7 +30,6 @@ router.get('/', function (req, res) {
 router.get('/create', function (req, res) {
 	logger.log('From the polls/create route');
 	res.render('create');
-	// res.sendFile('create.html', { root: path.join(__dirname, '../public') });
 });
 
 router.post('/create', function (req, res) {

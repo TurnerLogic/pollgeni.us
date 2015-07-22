@@ -47,13 +47,19 @@
 </style>
 {{/yield-styles}}
 	<div class="holder container">
-	{{#polls}}
-			<div class="col-xs-4" style="text-align: center">
-				<p href="/polls/{{data.code}}/results" class="question">{{data.question}}</p>
-				<a style="text-align: center" href="/polls/{{data.code}}">{{data.code}}</a>
-				<p hidden class="poll_code">{{data.code}}</p>
-			</div>
-	{{/polls}}
+		{{#polls}}
+				<div class="col-xs-4" style="text-align: center">
+					<p href="/polls/{{data.code}}/results" class="question">{{data.question}}</p>
+					<a style="text-align: center" href="/polls/{{data.code}}">{{data.code}}</a>
+					<p hidden class="poll_code">{{data.code}}</p>
+				</div>
+		{{/polls}}
+		<nav>
+		  <ul class="pager">
+		    <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
+		    <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
+		  </ul>
+		</nav>
 	</div>
 
 <script type="text/javascript">
@@ -84,7 +90,7 @@
 			{
 				$('canvas').css('width','100px').css('height','100px');
 			}
-		})
+		});
 	});
 </script>
 {{#yield-scripts}}

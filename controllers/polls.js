@@ -99,10 +99,10 @@ router.put('/:code', function (req, res) {
 	var countToIncrement = null;
 	var redirectUrl = '/polls/' + code + '/results';
 
-	if(session.voted.indexOf(code) >= 0) {
-		logger.log('Attempted second vote on poll: ' + code, 'warn');
-		return res.redirect(redirectUrl);
-	}
+	// if(session.voted.indexOf(code) >= 0) {
+	// 	logger.log('Attempted second vote on poll: ' + code, 'warn');
+	// 	return res.redirect(redirectUrl);
+	// }
 
 	session.voted.push(code); // prevents session from voting on poll with variable code more than once
 

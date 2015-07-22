@@ -1,2 +1,4 @@
 node_modules
 .env.js
+log/cron.log
+log/poll.log

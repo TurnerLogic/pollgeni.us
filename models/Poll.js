@@ -10,8 +10,6 @@ Poll.prototype.data = {};
 
 Poll.findByCode = function(code, callback) {
 	db.polls.findOne({code: code}, function (err, data) {
-		// console.log(data);
-		// console.log('this is the data from findbyCode');
 		if(err) return callback(err);
 		callback(null, new Poll(data));
 	});
@@ -52,9 +50,9 @@ Poll.prototype.set = function(key, value) {
 	this.data[key] = value;
 };
 
-Poll.all = function(callback) {
+Poll.all = function(limit, page, callback) {
 	var polls = [];
-	db.polls.find(function (err, docs) {
+	db.polls.find().limit(limit).sort({created_at: -1}).skip((page - 1) * limit, function (err, docs) {
 		if (err) {
 			return callback(err);
 		}
@@ -62,8 +60,7 @@ Poll.all = function(callback) {
 			// console.log(element);
 			polls.push(new Poll(element));
 		});
-
-		return callback(null, polls);
+			return callback(null, polls);
 	});
 };
 

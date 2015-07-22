@@ -18,9 +18,18 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', function (req, res) {
-	Poll.all(function (err, polls) {
-		if (err) res.status(500).send('Unable to load all polls at this time.');
-		return res.render('all', {polls: polls});
+	var page = parseInt(req.query.page) || 1;
+	page = page < 1 || isNaN(page) ? 1 : page;
+	Poll.all(6, page, function (err, polls) {
+		if (err)
+		{
+			res.status(500).send('Unable to load all polls at this time.');
+		}
+		if(polls.length < 1)
+		{
+		 	return res.redirect('/polls?page=' + (page - 1));
+	 	}
+		return res.render('all', {polls: polls, next: page + 1, previous: page - 1});
 	});
 });
 
@@ -98,10 +107,10 @@ router.put('/:code', function (req, res) {
 	var countToIncrement = null;
 	var redirectUrl = '/polls/' + code + '/results';
 
-	if(session.voted.indexOf(code) >= 0) {
-		logger.log('Attempted second vote on poll: ' + code, 'warn');
-		return res.redirect(redirectUrl);
-	}
+	// if(session.voted.indexOf(code) >= 0) {
+	// 	logger.log('Attempted second vote on poll: ' + code, 'warn');
+	// 	return res.redirect(redirectUrl);
+	// }
 
 	session.voted.push(code); // prevents session from voting on poll with variable code more than once
 

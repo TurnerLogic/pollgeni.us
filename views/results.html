@@ -139,6 +139,10 @@ div.chatArea{
  	margin-bottom: 0px;
  	/*width: 100%;*/
  }
+
+ #pollContainer {
+ 	text-align: center;
+ }
  .inputMessage{
 		bottom: 0;
     position: absolute;
@@ -184,7 +188,7 @@ li.col-md-6{
 }
 
 ul.pie-legend.col-md-4{
-	margin-bottom: 40px;	
+	margin-bottom: 40px;
 	margin-top: 10px;
 }
 
@@ -213,7 +217,7 @@ ul.pie-legend.col-md-4{
 	margin-right: 10px;
 	/*margin-bottom: 10px;*/
 }
- @media (max-width: 991px) {
+@media (max-width: 991px) {
 	 #poll-title{
 		 font-size: 55px;
 	 }
@@ -227,28 +231,30 @@ ul.pie-legend.col-md-4{
 	float: right;
 }
 
-#share_button{
-	margin-right: 10px;
+div.col-md-8{
+	border: 3px white solid;
 }
-
+.social-media {
+	margin: 5px 0px;
+}
 </style>
 {{/yield-styles}}
-
 	<h1 id="poll-title"></h1>
 		<div class="pie-box container">
-				 	<div id="pollContainer" class="col-md-8">
-				 		<div class="col-md-3"></div>
-							<canvas class="single-result" id="chart" width="430" height="430"></canvas>
+				 	<div id="pollContainer" class="col-md-12">
+						<canvas class="single-result" id="chart" width="430" height="430"></canvas>
 					</div>
 		</div>
-
-	<div class="container">
-		<a class="twitter-share-button"
-  			href="pollgeni.us" data-url="pollgeni.us" >
-		Tweet</a>
-		<div class="col-md-1"></div>
-		<div class="fb-share-button" id="share_button" data-layout="button_count">share</div>
-	</div>
+		<div class="container">
+			<div class="row">
+				<div class="col-md-1 social-media">
+					<a class="twitter-share-button" href="pollgeni.us" data-url="pollgeni.us" >Tweet</a>
+				</div>
+				<div class="col-md-1 social-media">
+					<div class="fb-share-button" id="share_button" data-layout="button_count">share</div>
+				</div>
+			</div>
+		</div>
 {{#yield-scripts}}
 	<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
 	<script src="/js/chart.min.js"></script>
@@ -260,8 +266,8 @@ ul.pie-legend.col-md-4{
 				if ($(window).width() < 480)
 				{
 					$('#poll-results').css("width", "360").css('height', "360");
-				} 
-				else 
+				}
+				else
 				{
 					$('#poll-results').css("width", "460").css('height', "460");
 				}
@@ -279,4 +285,4 @@ ul.pie-legend.col-md-4{
 			});
 		});
 	</script>
-{{/yield-scripts}}	
+{{/yield-scripts}}

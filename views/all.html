@@ -44,6 +44,15 @@
 		}
 	}
 
+	.glyphicon {
+		font-size: 3em;
+		font-weight: bold;
+	}
+
+	.three-by-one {
+		margin: 10px 0px;
+	}
+
 </style>
 {{/yield-styles}}
 	<div class="holder container">
@@ -54,13 +63,11 @@
 					<p hidden class="poll_code">{{data.code}}</p>
 				</div>
 		{{/polls}}
-		<nav>
-		  <ul class="pager">
-		    <li class="previous"><a href="#"><span aria-hidden="true">&larr;</span> Older</a></li>
-		    <li class="next"><a href="#">Newer <span aria-hidden="true">&rarr;</span></a></li>
-		  </ul>
-		</nav>
-	</div>
+		<div class="row" style="text-align: center">
+			<a href="/polls?page={{previous}}"><span class="glyphicon glyphicon-menu-left"></span></a>
+			<a href="/polls?page={{next}}"><span class="glyphicon glyphicon-menu-right"></span></a>
+		</div>
+  </div>
 
 <script type="text/javascript">
 	var number = 0;
@@ -71,7 +78,7 @@
 		});
 
 		for(var i = 0; i < $('.col-xs-4').length; i+=3) {
-  			$('.col-xs-4').slice(i, i+3).wrapAll("<div class='row'><div class='container'></div></div>");
+  			$('.col-xs-4').slice(i, i+3).wrapAll("<div class='row'><div class='three-by-one container'></div></div>");
 		}
 		$(window).resize(function(){
 			if($(window).width() < 1200)
@@ -100,4 +107,3 @@
 	$( '#polls-nav' ).addClass('active');
 </script>
 {{/yield-scripts}}
-

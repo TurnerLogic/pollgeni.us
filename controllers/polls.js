@@ -18,9 +18,12 @@ router.use(function (req, res, next) {
 });
 
 router.get('/', function (req, res) {
-	Poll.all(function (err, polls) {
+	var page = parseInt(req.query.page) || 1;
+	page = page < 1 || isNaN(page) ? 1 : page;
+	Poll.all(6, page, function (err, polls) {
 		if (err) res.status(500).send('Unable to load all polls at this time.');
-		return res.render('all', {polls: polls});
+		if(polls.length < 1) return res.redirect('/polls?page=' + (page - 1));
+		return res.render('all', {polls: polls, next: page + 1, previous: page - 1});
 	});
 });
 

@@ -10,6 +10,11 @@
 		text-align: center;
 	}
 
+	.question {
+		margin-top: 8px;
+		color: #575554;
+	}
+
 	@media screen and (min-width:0px) and (max-width: 500px){
 		canvas{
 			height: 100px;
@@ -66,8 +71,8 @@
 
 <nav>
   <ul class="pager">
-    <li class="previous"><a href="/polls?page={{previous}}"><span aria-hidden="true">&larr;</span> Older</a></li>
-    <li class="next"><a href="/polls?page={{next}}">Newer <span aria-hidden="true">&rarr;</span></a></li>
+    <li class="previous"><a href="/polls?page={{previous}}"><span aria-hidden="true">&larr;</span> Newer</a></li>
+    <li class="next"><a href="/polls?page={{next}}">Older <span aria-hidden="true">&rarr;</span></a></li>
   </ul>
 </nav>
 

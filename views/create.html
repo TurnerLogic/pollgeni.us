@@ -236,11 +236,6 @@ $scope.question = "";
 
 $scope.poll = {};
 
-$scope.addQuestion = function()
-{
-	console.log('question added');
-};
-
 $scope.removeChoice = function(index)
 {
 	$scope.choices.splice(index, 1);
@@ -252,16 +247,13 @@ $scope.addChoice = function()
 	{
 		$scope.choices.push($scope.choiceNew);
 		$scope.choiceNew = '';
-		console.log($scope.choices);
-	} else {
-		console.log('Duplicate choices are not allowed.');
 	}
 };
 
 $scope.submitPoll = function() {
 
 	$scope.recaptchaResponse = $( '#g-recaptcha-response' ).val();
-	console.log($scope.recaptchaResponse);
+
 
 	$scope.poll = {
 		question: $scope.question,
@@ -270,7 +262,6 @@ $scope.submitPoll = function() {
 	};
 
 	pollService.savePoll($scope.poll, function(data, status) {
-		console.log(data);
 		if(status === 200)
 		{
 			var redirectUrl = data.code + '?token=' + data.token;
@@ -282,7 +273,7 @@ $scope.submitPoll = function() {
 };
 
 $(window).resize(function() {
-	console.log($(window).height());
+
 	if($(window).width() <= 480) {
 		$( '#content' ).css('margin-top', '30px');
 	} else {

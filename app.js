@@ -17,6 +17,7 @@ var totalActiveUsers = 0; // active total
 
 process.env['RECAPTCHA_SECRET_KEY'] = env['RECAPTCHA_SECRET_KEY'];
 process.env['SESSION_SECRET'] = env['SESSION_SECRET'];
+process.env['RECAPTCHA_SITE_KEY'] = env['RECAPTCHA_SITE_KEY'];
 
 app.use(session({
 	secret: process.env['SESSION_SECRET'],

@@ -1,0 +1,46 @@
+#search-btn, #search-input{
+	height: 50px;
+}
+
+#search-btn {
+	border-radius: 5px 0px 0px 5px;
+	border-left: 5px solid #1E9FB4;
+	border-top: 5px solid #1E9FB4;
+	border-bottom: 5px solid #1E9FB4;
+	background-color: #1E9FB4;
+	color: white;
+	margin-left: 0px;
+}
+
+#search-input {
+	border: 5px solid #1E9FB4;
+	border-radius: 0px 5px 5px 0px;
+	text-align: center;
+	font-family: "Montserrat", sans-serif;
+	font-size: 14pt;
+	color: #1E9FB4;
+}
+
+#poll-create-btn {
+	height: 50px;
+	background-color: white;
+	border: 5px solid #1E9FB4;
+	color: #1E9FB4;
+	font-family: 'Montserrat';
+	font-weight: 100;
+}
+
+#period {
+	color: #1E9FB4;
+}
+
+#option-text{
+	margin: 0px;
+}
+
+#app-name{
+	margin-bottom: 40px;
+}
+#info-text{
+	line-height: 23px;
+}

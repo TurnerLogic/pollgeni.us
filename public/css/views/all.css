@@ -1,0 +1,60 @@
+html,body{
+  background-color: #212635;
+}
+div.container.holder{
+  margin-top: 120px;
+}
+.poll_code,.question, .poll-link{
+  text-align: center;
+}
+
+@media screen and (min-width:0px) and (max-width: 500px){
+  canvas{
+    height: 100px;
+    width: 100px;
+  }
+}
+@media screen and (min-width: 501px) and (max-width: 640px){
+  canvas{
+    height: 150px;
+    width: 150px;
+  }
+}
+@media screen and (min-width: 641px) and (max-width: 991px){
+  canvas{
+    /*margin-left:0px;*/
+    height: 200px;
+    width: 200px;
+  }
+}
+@media screen and (min-width: 992px) and (max-width: 1200px){
+  canvas{
+    /*margin-left: 50px;*/
+    height: 200px;
+    width: 200px;
+  }
+}
+@media screen and (min-width: 1201px) and (max-width: 1999px){
+  canvas{
+    /*margin-left: 80px;*/
+    height: 200px;
+    width: 200px;
+  }
+}
+
+.glyphicon {
+  font-size: 3em;
+  font-weight: bold;
+}
+
+.three-by-one {
+  margin: 10px 0px;
+}
+
+.col-xs-4{
+  height: 375px;
+}
+.link-btn{
+  width: 120px;
+  height: 60px;
+}

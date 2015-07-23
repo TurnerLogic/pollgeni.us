@@ -1,0 +1,146 @@
+html{
+  background-color: #2C303F;
+}
+#question, #choice {
+  height: 60px;
+  border: 3px solid rgb(30, 159, 180);
+}
+
+#question{
+  border-radius: 5px;
+  box-shadow: 0 7px 7px -5px gray;
+}
+
+#choice{
+  border-radius: 0px 5px 5px 0px;
+}
+
+body {
+  font-family: 'Raleway', sans-serif;
+  background-color: #2C303F;
+}
+
+input[type="text"] {
+  font-size: 16px;
+  font-family: 'Raleway', sans-serif;
+  outline: none;
+}
+
+input:focus {
+  outline: 0;
+}
+
+#question {
+  padding-left: 20px;
+}
+
+#poll-submit {
+  color: #EEB902;
+  background-color: white;
+  border-radius: 5px 0px 0px 5px;
+  border: 3px solid #EEB902;
+  box-shadow: 0 7px 7px -5px gray;
+}
+
+#add-choice-btn {
+  height: 60px;
+  width: 75px;
+  background-color: rgb(30, 159, 180);
+  border: 3px solid rgb(30, 159, 180);
+  /*box-shadow: 10px 7px 7px -5px gray;*/
+}
+
+#add-choice-btn {
+  border-top-left-radius: 5px;
+  border-bottom-left-radius: 5px;
+}
+
+#clear-choice-btn {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+span.glyphicon {
+  font-size: 2.25em;
+  position: relative;
+}
+
+.glyphicon-left {
+  color: white;
+  top: 0;
+  /*left: 5;*/
+}
+
+label.label-floatlabel {
+  padding-left: 17px;
+}
+
+.choice-options {
+  width: 50px;
+}
+
+#content {
+  border: 5px solid rgb(30, 159, 180);
+  border-radius: 15px;
+  margin-top: 100px;
+  background-color: white;
+  padding-left: 32px;
+  padding-right: 32px;
+}
+#choice-input-group {
+  box-shadow: 0 7px 7px -5px gray;
+  height: 60px;
+  margin: 25px 0px;
+}
+
+header.header-area {
+  background-color: #2C303F;
+}
+
+#contact-recaptcha {
+}
+
+#contact-recaptcha body {
+  font-family: 'Raleway';
+}
+
+#choice {
+  /*margin: 25px 0px;*/
+}
+
+#choices-table {
+  margin-top: 12px;
+}
+
+#title {
+  margin: 25px 0px 0px 0px;
+  text-align: center;
+  font-size: 3em;
+  color: rgb(30, 159, 180);
+}
+
+#choices-instructions {
+  margin-top: 12px;
+}
+
+#title-hrule {
+  color: rgb(30, 159, 180);
+  width: 100%;
+  margin-bottom: 20px;
+  margin-top: 5px;
+}
+#company-name{
+  font-size: 40px;
+  font-family: 'Montserrat',sans-serif;
+  margin-top: 10px;
+  float: left;
+  font-weight: 700;
+}
+
+.footer-text{
+  font-size: 20px;
+  padding-top: 0px;
+  font-family: 'Roboto', sans-serif;
+  font-weight: 300;
+  line-height: 24px;
+}

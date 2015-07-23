@@ -1,6 +1,6 @@
 var mongojs = require('mongojs');
 var db = mongojs('polls_db', ['polls']);
-var Logger = require('../lib/logger.js');
+var Logger = require('../lib/logger');
 var logger = new Logger('log/cron.log');
 
 var today = Date.now();

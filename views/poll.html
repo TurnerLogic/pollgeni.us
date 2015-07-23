@@ -40,6 +40,10 @@
 		padding-top: 10px;
 		padding-bottom: 10px;
 	}
+
+	#content {
+		align: center;
+	}
 	canvas{
 		padding-bottom: 10px;
 	}
@@ -123,7 +127,8 @@
 	 }
 
 	.choice-holder{
-		margin-bottom: 15px;
+		margin: 15px 0px;
+		text-align: center;
 	}
 
 	.container > p {
@@ -139,7 +144,13 @@
 
 	#remove{
 		margin-left: 10px;
+		background-color: #FE5F55;
+		border: 0px;
 
+	}
+
+	#remove-poll {
+		text-align: center;
 	}
 
 	.col-md-12{
@@ -157,7 +168,7 @@
 		}
 		.circle{
 			width: 175px;
-			height: 175px;			
+			height: 175px;
 		}
 	}
 
@@ -183,31 +194,40 @@
 	</style>
 {{/yield-styles}}
 {{#poll}}
-	<div class="poll-choices container">
+	<div  class="poll-choices container">
 		<h2 id="question">{{question}}</h2>
 			<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
-					{{#choices}}
-						<div class="choice-holder col-xs-4">
-							<div class="col-md-2"></div>
-								<button class="circle" name="pollChoice" value="{{.}}">{{.}}</button>
-						</div>
-					{{/choices}}
+					<div class="row">
+						{{#choices}}
+							<div class="col-sm-4 choice-holder">
+									<button class="circle" name="pollChoice" value="{{.}}">{{.}}</button>
+							</div>
+						{{/choices}}
+					</div>
 			</form>
 	</div>
 {{/poll}}
 
 {{#creator}}
-	<p id="remove-text">Would you like to remove your poll?</p>
-	<form action='/polls/{{poll.code}}?_method=DELETE' method="POST">
-		<input type="hidden" value="{{poll.token}}" name="token" readonly>
-		<input type="submit" id="remove" class="btn btn-info btn-default" value="REMOVE">
-	</form>
+<div class="container">
+	<div class="row" id="remove-poll">
+		<p id="remove-text">Bookmark this page to delete your poll in the future.</p>
+		<form action='/polls/{{poll.code}}?_method=DELETE' method="POST">
+			<input type="hidden" value="{{poll.token}}" name="token" readonly>
+			<input type="submit" id="remove" class="btn btn-info btn-default" value="REMOVE">
+		</form>
+	</div>
+</div>
 {{/creator}}
 {{#yield-scripts}}
 <script type="text/javascript">
-	for(var i = 0; i < $('.col-xs-4').length; i+=3) {
-  		$('.col-xs-4').slice(i, i+3).wrapAll("<div class='row'><div class='container'></div></div>");
-	}
+	$( document ).ready(function () {
+	  	var choices = $( '.choice-holder' );
+		var gridSize = (choices.length < 3) ? 12 / choices.length : 4;
+		choices.removeClass('col-sm-4');
+		choices.addClass('col-sm-' + gridSize);
+	});
+
 </script>
 <script type="text/javascript" src="/js/polls_choice.js"></script>
 {{/yield-scripts}}

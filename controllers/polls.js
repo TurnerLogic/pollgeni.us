@@ -101,6 +101,10 @@ router.put('/:code', function (req, res) {
 	var countToIncrement = null;
 	var redirectUrl = '/polls/' + code + '/results';
 
+	if (session.voted.indexOf(code) !== -1) {
+		return res.redirect(redirectUrl);
+	}
+
 	session.voted.push(code); // prevents session from voting on poll with variable code more than once
 
 	io.to(code).emit('poll submission', code);

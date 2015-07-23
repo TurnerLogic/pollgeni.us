@@ -80,7 +80,6 @@ var respawnChart = function(code, context) {
 		if(url === pollsPage) {
 			// locate chart to update by code from allPolls array
 			chart = getChart(code);
-			console.log(chart);
 
 			// if the 'poll submission' provides the first vote for the poll
 			// i.e. total < 1, reinstantiate the chart with the new data set.
@@ -165,7 +164,6 @@ var formatJsonData = function(poll) {
  function getUniqueColors(length) {
  	var uniqueColors = [];
  	var nColor;
- 	console.log(chartColors.length);
  	var start =  getRandomInt(0, chartColors.length - 1);
  	for (var i = 0; i < length; i++) {
  		nColor = chartColors[start];
@@ -179,7 +177,6 @@ socket.on('poll submission', function(code) {
 	// /polls or /polls/:code/results has already loaded
 	// and spawnChart need not instantiate new charts (unless vote total < 1)
 	initialLoad = false;
-	console.log(code);
 	// context is now being passed to avoid overwriting the
 	// global ctx, only needed to carry the ctx value in .ready(cb)
 	respawnChart(code, ctx);

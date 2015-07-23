@@ -147,13 +147,10 @@
     socket.emit('index');
 
     		socket.on('meta-connection', function (numUsers) {
-    			console.log('connected');
     			$( '#active-users' ).text(numUsers);
     		});
 
     		socket.on('meta-disconnect', function (numUsers) {
-    			console.log('diconnect');
-    			console.log(numUsers);
     			$( '#active-users' ).text(numUsers);
     		});
 
@@ -198,8 +195,6 @@
             plotData();
 
             socket.on('poll submission', function() {
-            	console.log('poll submissions');
-            	console.log();
             	var currentValue = parseInt($( '#poll-submissions' ).text(), 10);
             	currentValue++;
             	$( '#poll-submissions').text(currentValue);

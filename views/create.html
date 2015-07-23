@@ -87,7 +87,7 @@
 	#content {
 		border: 5px solid rgb(30, 159, 180);
 		border-radius: 15px;
-		margin-top: 12%;
+		margin-top: 130px;
 		background-color: white;
 		padding-left: 32px;
 		padding-right: 32px;
@@ -165,7 +165,7 @@
 					</span>
 				<input type="text" class="form-control choice" id="choice" placeholder="Add a choice to your poll..." ng-model="choiceNew" required>
 				</div>
-				<div id="contact-recaptcha" class="g-recaptcha" data-sitekey="6LeW4QkTAAAAANyJgMpyr0NafMUq7LJsQD9Z67lT"></div>
+				<div id="contact-recaptcha" class="g-recaptcha" data-sitekey="6LfMyQkTAAAAAAn4sMfHHYRHiFgARWdlMEmRLDcG"></div>
 			</form>
 		</div>
 	</div>
@@ -203,6 +203,11 @@
 $(document).ready(function () {
 	var height = $(window).height();
 	$( '.footer-area' ).css('position', 'relative').css('top', 0.5 * height);
+	if($(window).width() <= 480) {
+		$( '#content' ).css('margin-top', '30px');
+	} else {
+		$( '#content' ).css('margin-top', '130px');
+	}
 })
 $( '#create-poll-nav' ).addClass('active');
 var app = angular.module('pollCreateApp', []);
@@ -275,6 +280,15 @@ $scope.submitPoll = function() {
 		}
 	});
 };
+
+$(window).resize(function() {
+	console.log($(window).height());
+	if($(window).width() <= 480) {
+		$( '#content' ).css('margin-top', '30px');
+	} else {
+		$( '#content' ).css('margin-top', '130px');
+	}
+});
 
 });
 }());

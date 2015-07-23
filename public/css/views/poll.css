@@ -38,6 +38,10 @@ h1{
   padding-top: 10px;
   padding-bottom: 10px;
 }
+
+#content {
+  align: center;
+}
 canvas{
   padding-bottom: 10px;
 }
@@ -121,7 +125,8 @@ div.chatArea{
  }
 
 .choice-holder{
-  margin-bottom: 15px;
+  margin: 15px 0px;
+  text-align: center;
 }
 
 .container > p {
@@ -137,7 +142,13 @@ div.chatArea{
 
 #remove{
   margin-left: 10px;
+  background-color: #FE5F55;
+  border: 0px;
 
+}
+
+#remove-poll {
+  text-align: center;
 }
 
 .col-md-12{

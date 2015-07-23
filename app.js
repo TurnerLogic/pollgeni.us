@@ -59,6 +59,14 @@ app.get('/', function (req, res) {
 
 app.use('/polls', require('./controllers/polls'));
 
+app.use(function (req, res, next) {
+	res.status(404);
+
+	if (req.accepts('html')) {
+		res.render('404');
+	}
+});
+
 app.post('/', function (req, res) {
 	var code = req.body.code;
 	var redirectUrl = '/polls/' + code;
@@ -109,7 +117,6 @@ io.on('connection', function (socket) {
 });
 
 app.use(express.static(app_root + "/public"));
-
 
 http.listen(3000, function() {
   console.log('listening on *:3000');

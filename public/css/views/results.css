@@ -36,6 +36,7 @@ p{
 }
 .col-md-12{
 	padding-top: 20px;
+	padding-left: 0px;
 }
 .col-md-6,.col-md-12{
 	padding-bottom: 20px;
@@ -178,7 +179,9 @@ li.col-md-6{
 	margin: 0px 0px;
 	padding: 0px 0px;
 	width: 25%;
-	float: left;
+	position: relative;
+	top: 0;
+	left: 0;
 }
 
 ul.pie-legend.col-md-4{
@@ -191,6 +194,10 @@ ul.pie-legend.col-md-4{
 	font-family: 'Montserrat',sans-serif;
 	margin-top: 10px;
 	float: left;
+}
+
+.legend-wrapper {
+	margin: 3px 0px;
 }
 
 .footer-text{
@@ -211,6 +218,10 @@ ul.pie-legend.col-md-4{
 	margin-right: 10px;
 	/*margin-bottom: 10px;*/
 }
+
+.media-container {
+	text-align: center;
+}
 @media (max-width: 991px) {
 	 #poll-title{
 		 font-size: 55px;
@@ -229,5 +240,9 @@ div.col-md-8{
 	border: 3px white solid;
 }
 .social-media {
-	margin: 5px 0px;
+
+}
+.media-wrapper {
+	float: left;
+	margin: 4px 0px;
 }

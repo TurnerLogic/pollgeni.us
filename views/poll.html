@@ -4,15 +4,16 @@
 
 <!-- poll choice container -->
 {{#poll}}
-	<div class="poll-choices container">
+	<div  class="poll-choices container">
 		<h2 id="question">{{question}}</h2>
 			<form id="pollForm" action="/polls/{{code}}?_method=PUT" method="POST">
-					{{#choices}}
-						<div class="choice-holder col-xs-4">
-								<div class="col-md-2"></div>
-								<button class="circle" name="pollChoice" value="{{.}}">{{.}}</button>
-						</div>
-					{{/choices}}
+					<div class="row">
+						{{#choices}}
+							<div class="col-sm-4 choice-holder">
+									<button class="circle" name="pollChoice" value="{{.}}">{{.}}</button>
+							</div>
+						{{/choices}}
+					</div>
 			</form>
 	</div>
 {{/poll}}
@@ -20,11 +21,15 @@
 
 <!-- creator container -->
 	{{#creator}}
-		<p id="remove-text">Would you like to remove your poll?</p>
+	<div class="container">
+		<div class="row" id="remove-poll">
+			<p id="remove-text">Bookmark this page to delete your poll in the future.</p>
 			<form action='/polls/{{poll.code}}?_method=DELETE' method="POST">
 				<input type="hidden" value="{{poll.token}}" name="token" readonly>
 				<input type="submit" id="remove" class="btn btn-info btn-default" value="REMOVE">
 			</form>
+		</div>
+	</div>
 	{{/creator}}
 <!-- ================= -->
 

@@ -2,7 +2,7 @@ $(document).ready(function() {
   $(window).resize(function(){
     if ($(window).width() < 480)
     {
-      $('#poll-results').css("width", "360").css('height', "360");
+      $('#chart').css("width", "360").css('height', "360");
     }
     else
     {

@@ -1,53 +1,6 @@
 {{#yield-styles}}
-<link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'>
-<style>
-#search-btn, #search-input{
-	height: 50px;
-}
-
-#search-btn {
-	border-radius: 5px 0px 0px 5px;
-	border-left: 5px solid #1E9FB4;
-	border-top: 5px solid #1E9FB4;
-	border-bottom: 5px solid #1E9FB4;
-	background-color: #1E9FB4;
-	color: white;
-	margin-left: 0px;
-}
-
-#search-input {
-	border: 5px solid #1E9FB4;
-	border-radius: 0px 5px 5px 0px;
-	text-align: center;
-	font-family: "Montserrat", sans-serif;
-	font-size: 14pt;
-	color: #1E9FB4;
-}
-
-#poll-create-btn {
-	height: 50px;
-	background-color: white;
-	border: 5px solid #1E9FB4;
-	color: #1E9FB4;
-	font-family: 'Montserrat';
-	font-weight: 100;
-}
-
-#period {
-	color: #1E9FB4;
-}
-
-#option-text{
-	margin: 0px;
-}
-
-#app-name{
-	margin-bottom: 40px;
-}
-#info-text{
-	line-height: 23px;
-}
-</style>
+	<link href='http://fonts.googleapis.com/css?family=Raleway:300' rel='stylesheet' type='text/css'> <!-- Google Raleway Font-->
+	<link rel="stylesheet" href="css/views/index.css"/><!-- index css -->
 {{/yield-styles}}
 
 <!--===================== LANDING SCREEN =====================-->
@@ -87,7 +40,7 @@
 		<div class="container">
 			<div class="row colum-contents clearfix">
 				<div class="col-md-6 col-conts animated" data-animation="fadeInLeft" data-animation-delay="200">
-				<h1 class="animated" data-animation="fadeInUp" data-animation-delay="100">This<br>is<br>Poll<br>Genius</h1>
+					<h1 class="animated" data-animation="fadeInUp" data-animation-delay="100">This<br>is<br>Poll<br>Genius</h1>
 				</div>
 				<div class="col-md-6 col-conts animated" data-animation="fadeInLeft" data-animation-delay="200">
 					<canvas class="animated" id="canvas" width="400" height="300"/>
@@ -95,11 +48,11 @@
 					<h4>Polls for the People <br>
 						by the People</h4>
 					<div class="container">
-					<p id="info-text">Whether you're driven by curiosity or analytics, Pollgeni.us is the bespoke polling platform for you.
-					Tailor polls to your target demographic or submit questions to the anonymous masses and watch your
-					results update in real-time. Further engage your audience through the Pollgeni.us chat room
-					and read your participants' rationales. Share unique codes via Twitter and Facebook to redirect traffic to your poll.
-					Publish a series of polls to fine tune your data and differentiate the signal from the noise.</p>
+						<p id="info-text">Whether you're driven by curiosity or analytics, Pollgeni.us is the bespoke polling platform for you.
+						Tailor polls to your target demographic or submit questions to the anonymous masses and watch your
+						results update in real-time. Further engage your audience through the Pollgeni.us chat room
+						and read your participants' rationales. Share unique codes via Twitter and Facebook to redirect traffic to your poll.
+						Publish a series of polls to fine tune your data and differentiate the signal from the noise.</p>
 					</div>
 			</div>
 		</div>
@@ -111,25 +64,19 @@
 	<div class="solid-bg">
 		<div class="container">
 			<div class="row clearfix">
-				<div class="col-md-3 col-cont animated" data-animation="fadeInRight" data-animation-delay="200">
+				<div class="col-md-4 col-cont animated" data-animation="fadeInRight" data-animation-delay="200">
 					<span class="icon-cont"><i class="fa fa-pie-chart fa-1x"></i></span>
 					<span id="total-polls" class="count-txt">{{meta.totalPolls}}</span>
 					<hr>
 					<span class="count-btm">Polls</span>
 				</div>
-				<div class="col-md-3 col-cont animated" data-animation="fadeInRight" data-animation-delay="400">
+				<div class="col-md-4 col-cont animated" data-animation="fadeInRight" data-animation-delay="400">
 					<span class="icon-cont"><i class="fa fa-paper-plane fa-1x"></i></span>
 					<span class="count-txt" id="poll-submissions">{{meta.totalSubmissions}}</span>
 					<hr>
 					<span class="count-btm">Votes</span>
 				</div>
-				<div class="col-md-3 col-cont animated" data-animation="fadeInRight" data-animation-delay="600">
-					<span class="icon-cont"><i class="fa fa-map-marker"></i></span>
-					<span class="count-txt">108</span>
-					<hr>
-					<span class="count-btm">Votes</span>
-				</div>
-				<div class="col-md-3 col-cont animated" data-animation="fadeInRight" data-animation-delay="800">
+				<div class="col-md-4 col-cont animated" data-animation="fadeInRight" data-animation-delay="800">
 					<span class="icon-cont"><i class="fa fa-users"></i></span>
 					<span class="count-txt" id='active-users'>{{meta.activeUsers}}</span>
 					<hr>
@@ -139,80 +86,12 @@
 		</div>
 	</div>
 </section>
-
+<!--=========================================================================-->
 
 {{#yield-scripts}}
 	<script type="text/javascript" src="js/chart.min.js"></script><!-- chart js -->
-	<script src="/socket.io/socket.io.js"></script>
-    <script type="text/javascript">
-    var socket, numUsers;
-
-    // numUsers = parseInt($( '#active-users' ).text(), 10);
-    $( '#home-nav' ).addClass('active');
-    socket = io();
-    socket.emit('index');
-
-    		socket.on('meta-connection', function (numUsers) {
-    			console.log('connected');
-    			$( '#active-users' ).text(numUsers);
-    		});
-
-    		socket.on('meta-disconnect', function (numUsers) {
-    			console.log('diconnect');
-    			console.log(numUsers);
-    			$( '#active-users' ).text(numUsers);
-    		});
-
-    		socket.on('poll creation', function () {
-    			var totalPolls = parseInt( $('#total-polls').text() );
-    			totalPolls++;
-    			$( '#total-polls' ).text(totalPolls);
-    		})
-            var myColor = ["#ECD078","#D95B43","#C02942","#542437","#53777A","#5B43B2","#245437"];
-            var myData = [65,45,25,35,104,99,80];
-
-            function getTotal(){
-                var myTotal = 0;
-                for (var j = 0; j < myData.length; j++) {
-                    myTotal += (typeof myData[j] == 'number') ? myData[j] : 0;
-                }
-                return myTotal;
-            }
-
-            function plotData() {
-                var canvas;
-                var ctx;
-                var lastend = 0;
-                var myTotal = getTotal();
-
-                canvas = document.getElementById("canvas");
-                ctx = canvas.getContext("2d");
-                ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-                for (var i = 0; i < myData.length; i++) {
-                    ctx.fillStyle = myColor[i];
-                    ctx.beginPath();
-                    ctx.moveTo(200,150);
-                    ctx.arc(200,150,150,lastend,lastend+
-                      (Math.PI*2*(myData[i]/myTotal)),false);
-                    ctx.lineTo(200,150);
-                    ctx.fill();
-                    lastend += Math.PI*2*(myData[i]/myTotal);
-                }
-            }
-
-            plotData();
-
-            socket.on('poll submission', function() {
-            	console.log('poll submissions');
-            	console.log();
-            	var currentValue = parseInt($( '#poll-submissions' ).text(), 10);
-            	currentValue++;
-            	$( '#poll-submissions').text(currentValue);
-            });
-
-    </script><!-- for canvas element -->
-
-    <script type="text/javascript" src="/js/particle.min.js"></script><!-- Particle Header Js -->
-	<script type="text/javascript" src="/js/particle.js"></script><!-- Particle Header Js -->
+	<script src="/socket.io/socket.io.js"></script> <!-- socket.io -->
+	<script type="text/javascript" src="js/views/index_js.js"></script><!-- index js -->
+  <script type="text/javascript" src="/js/particle/particle.min.js"></script><!-- Particle Header Js -->
+	<script type="text/javascript" src="/js/particle/particle.js"></script><!-- Particle Header Js -->
 {{/yield-scripts}}

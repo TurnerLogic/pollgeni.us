@@ -165,11 +165,12 @@ var formatJsonData = function(poll) {
  function getUniqueColors(length) {
  	var uniqueColors = [];
  	var nColor;
- 	var start = getRandomInt(0, chartColors.length - 1);
+ 	console.log(chartColors.length);
+ 	var start =  getRandomInt(0, chartColors.length - 1);
  	for (var i = 0; i < length; i++) {
  		nColor = chartColors[start];
  		uniqueColors[i] = nColor;
- 		start = (chartColors.length - 1 / start === 1) ? 0 : start + 1;
+ 		start = ((chartColors.length - 1) / start === 1) ? 0 : start + 1;
  	}
  	return uniqueColors;
  };

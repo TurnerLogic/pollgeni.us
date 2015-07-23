@@ -27,7 +27,8 @@ router.get('/', function (req, res) {
 });
 
 router.get('/create', function (req, res) {
-	res.render('create');
+	console.log(process.env['RECAPTCHA_SITE_KEY']);
+	res.render('create', {site_key: process.env['RECAPTCHA_SITE_KEY']});
 });
 
 router.post('/create', function (req, res) {

@@ -72,13 +72,13 @@ warpspeed site:create node pollgenius.dev --force
 
 ## Install Dependencies
 
-Express.js utilizes Node Package Manager (npm) to manage its dependencies. To install the required libraries listed in the `package.json`, run the following commands: 
+Node.js utilizes Node Package Manager (npm) to manage its dependencies. To install the required libraries listed in the `package.json`, run the following commands: 
 
 ```
 # RUN THESE COMMANDS FROM YOUR VM
 
 # cd to the project's root directory
-cd ~/sites/warpspeed-express.dev
+cd ~/sites/pollgenius.dev
 
 # install dependencies
 npm install

@@ -47,6 +47,37 @@
 #info-text{
 	line-height: 23px;
 }
+
+#github-fork {
+	display: inline-block;
+	border: 1px dashed #1F4A0C;
+	color: #fff;
+	background-color: #1F4A0C
+	-webkit-transform: skew(0deg);
+    -moz-transform: skew(0deg);
+    transform: skew(0deg);
+}
+
+#github-fork button {
+	background-color: #1F4A0C;
+	margin: 0;
+	padding: 5px 10px;
+	border: 0px;
+}
+
+#github-fork a {
+	color: white;
+	font-weight: 500;
+}
+
+#fork-wrapper {
+	margin-top: 25px;
+	display: inline-block;
+	border: 5px solid #1F4A0C;
+	-webkit-transform: skew(-15deg);
+    -moz-transform: skew(-15deg);
+    transform: skew(-15deg);
+}
 </style>
 {{/yield-styles}}
 
@@ -66,13 +97,20 @@
 										<span class="input-group-btn">
 											<button id="search-btn" class="btn btn-default" type="submit"><span class='glyphicon glyphicon-search'></span></button>
 										</span>
-										<input id="search-input" type="text" class="form-control" name="code" placeholder="Enter a unique code...">
+										<input id="search-input" type="text" class="form-control" name="code" placeholder="Search by unique code...">
 									</div><!-- /input-group -->
 								</form>
 								</div>
 							</div>
 							<h1 id="option-text">or</h1>
 						<a id="poll-create-btn" href="/polls/create" class="button-large">Create a Poll</a>
+					</li>
+					<li>
+						<div id="fork-wrapper">
+							<div id="github-fork">
+								<button><a href="https://github.com/TurnerLogic/pollgeni.us">Fork me on GitHub!</a></button>
+							</div>
+						</div>
 					</li>
 				</ul>
 			</div>

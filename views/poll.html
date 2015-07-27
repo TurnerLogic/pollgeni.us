@@ -2,6 +2,7 @@
 	<style type="text/css">
 	@font-face { font-family: globerSemiBold; src: url('/fonts/Glober SemiBold Free.otf'); }
 	@font-face { font-family: globerThin; src: url('/fonts/Glober Thin Free.otf'); }
+	@font-face { font-family: globerBold; src: url('/fonts/Glober Bold Free.otf'); }
 
 	body,html{
 		background-color: #212635;
@@ -159,9 +160,6 @@
 	}
 
 	 @media (max-width: 991px) {
-/*		 h2{
-			margin-top: 130px;
-		 }*/
 		.col-md-12{
 			padding-top: 40px;
 			padding-left: 5px;
@@ -226,6 +224,20 @@
 		var gridSize = (choices.length < 3) ? 12 / choices.length : 4;
 		choices.removeClass('col-sm-4');
 		choices.addClass('col-sm-' + gridSize);
+
+		if ( $(window).width() < 480 ) {
+			$( '.circle' ).css('font-family', 'globerBold');
+		}
+	});
+
+	$( window ).resize(function () {
+		windowWidth = $( window ).width();
+		if ( windowWidth < 480 ) {
+			$( '.circle' ).css('font-family', 'globerBold');
+		}
+		 if (windowWidth > 480 ) {
+			$( '.circle' ).css('font-family', 'globerThin');
+		}
 	});
 
 </script>

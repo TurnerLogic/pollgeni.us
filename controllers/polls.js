@@ -5,7 +5,7 @@ var router = express.Router();
 var path = require('path');
 var request = require('request');
 var Poll = require('../models/Poll');
-var Logger = require('../lib/Logger.js');
+var Logger = require('../lib/logger');
 var logger = new Logger('log/poll.log');
 var session = null;
 

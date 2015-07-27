@@ -6,13 +6,10 @@ socket = io();
 socket.emit('index');
 
     socket.on('meta-connection', function (numUsers) {
-      console.log('connected');
       $( '#active-users' ).text(numUsers);
     });
 
     socket.on('meta-disconnect', function (numUsers) {
-      console.log('diconnect');
-      console.log(numUsers);
       $( '#active-users' ).text(numUsers);
     });
 
@@ -20,7 +17,7 @@ socket.emit('index');
       var totalPolls = parseInt( $('#total-polls').text() );
       totalPolls++;
       $( '#total-polls' ).text(totalPolls);
-    })
+    });
         var myColor = ["#ECD078","#D95B43","#C02942","#542437","#53777A","#5B43B2","#245437"];
         var myData = [65,45,25,35,104,99,80];
 
@@ -57,8 +54,6 @@ socket.emit('index');
         plotData();
 
         socket.on('poll submission', function() {
-          console.log('poll submissions');
-          console.log();
           var currentValue = parseInt($( '#poll-submissions' ).text(), 10);
           currentValue++;
           $( '#poll-submissions').text(currentValue);

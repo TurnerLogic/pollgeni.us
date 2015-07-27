@@ -8,6 +8,11 @@ div.container.holder{
   text-align: center;
 }
 
+.question {
+  margin-top: 8px;
+  color: #575554;
+}
+
 @media screen and (min-width:0px) and (max-width: 500px){
   canvas{
     height: 100px;
@@ -49,12 +54,4 @@ div.container.holder{
 
 .three-by-one {
   margin: 10px 0px;
-}
-
-.col-xs-4{
-  height: 375px;
-}
-.link-btn{
-  width: 120px;
-  height: 60px;
 }

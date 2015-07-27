@@ -1,5 +1,5 @@
 var number = 0;
-$(document).ready(function(){
+$(document).ready(function() {
   $.each( $('.col-xs-4'), function (index, value) {
     $(this).prepend('<canvas id="'+ $('.poll_code')[number].innerHTML +'" class="multiple-results" width="200px" height="200px" ></canvas> ');
     number++;

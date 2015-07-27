@@ -4,10 +4,9 @@
 		<meta name="description" content="">
 		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 		<title>{{title}}</title>
-		<script src="/js/jquery.js"></script>
+		<script src="/js/jquery/jquery.js"></script>
 		<script src="/js/bootstrap.js"></script>
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-		<title>Poll Genius</title>
 		<meta name="keywords" content="">
 		<link rel="shortcut icon" href="img/favicon.ico">
 		<link type="text/css" rel="stylesheet" href="/css/font-awesome.min.css"><!-- font-awesome -->
@@ -32,61 +31,15 @@
 
 		<!-- for facebook api -->
 		<div id="fb-root"></div>
-		<script>
-		  window.fbAsyncInit = function() {
-			FB.init({
-			  appId      : '1090702837625972',
-			  xfbml      : true,
-			  version    : 'v2.4'
-			});
-		  };
-		  (function(d, s, id){
-			 var js, fjs = d.getElementsByTagName(s)[0];
-			 if (d.getElementById(id)) {return;}
-			 js = d.createElement(s); js.id = id;
-			 js.src = "//connect.facebook.net/en_US/sdk.js";
-			 fjs.parentNode.insertBefore(js, fjs);
-		   }(document, 'script', 'facebook-jssdk'));
-		</script>
 		{{> navbar}}
 		{{{ yield }}}
 		{{> footer}}
 
 		<script src="/socket.io/socket.io.js"></script><!-- socket.io -->
-		<script type="text/javascript" src="/js/jquery.js"></script><!-- jquery -->
-		<script type="text/javascript" src="/js/bootstrap.js"></script><!-- Bootstrap Js -->
-		<script type="text/javascript" src="/js/jquery.appear.js"></script><!-- Appear Js -->
-		<script type="text/javascript" src="/js/jquery-scrollToFixed.js"></script><!-- Scroll To Fixed Js -->
+		<script type="text/javascript" src="/js/jquery/jquery.appear.js"></script><!-- Appear Js -->
+		<script type="text/javascript" src="/js/jquery/jquery-scrollToFixed.js"></script><!-- Scroll To Fixed Js -->
 		<script type="text/javascript" src="/js/settings.js"></script><!-- Settings Js -->
-		<script type="text/javascript">
-			$(window).resize(function () {
-				if ($(window).width() < 991) {
-					$('ul.company-info').removeClass('pull-right').css('margin-right','45px');
-				} else {
-					$('ul.company-info').addClass('pull-right').css('margin-right','0px');
-				}
-			});
-		</script>
-
-<!-- for twitter api -->
-<script>
-	window.twttr = (function(d, s, id) {
-	  var js, fjs = d.getElementsByTagName(s)[0],
-		t = window.twttr || {};
-	  if (d.getElementById(id)) return t;
-	  js = d.createElement(s);
-	  js.id = id;
-	  js.src = "https://platform.twitter.com/widgets.js";
-	  fjs.parentNode.insertBefore(js, fjs);
-
-	  t._e = [];
-	  t.ready = function(f) {
-		t._e.push(f);
-	  };
-
-	  return t;
-	}(document, "script", "twitter-wjs"));
-</script>
+		<script type="text/javascript" src="/js/views/default_js.js"></script>
 		{{{yield-scripts}}}
 	</body>
 </html>

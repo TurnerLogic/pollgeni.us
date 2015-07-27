@@ -101,6 +101,9 @@ module.exports = {
 	'RECAPTCHA_SITE_KEY':'',
 	'SESSION_SECRET': 'secret123'
 };
+
+# the RECAPTCHA_* attributes will be modified once 
+# you register 'pollgenius.dev' with reCAPTCHA below
 ```
 ## Add a Hosts File Entry
 

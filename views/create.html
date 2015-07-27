@@ -94,7 +94,7 @@
 	#choice-input-group {
 		box-shadow: 0 7px 7px -5px gray;
 		height: 60px;
-		margin: 25px 0px;
+		margin: 25px 0px 0px 0px;
 	}
 
 	header.header-area {
@@ -102,6 +102,7 @@
 	}
 
 	#contact-recaptcha {
+		margin-top: 25px;
 	}
 
 	#contact-recaptcha body {
@@ -148,6 +149,13 @@
 		font-weight: 300;
 		line-height: 24px;
 	}
+
+	#choices-validation, #question-validation {
+		color: red;
+		/*padding: 8px;*/
+		margin: 10px 0px 0px 10px;
+	}
+
 </style>
 {{/yield-styles}}
 
@@ -155,8 +163,10 @@
 	<div class="row">
 		<div class="col-md-12">
 			<h1 id="title">Poll Geni.us Builder</h1>
+			<h5 style="text-align:center; color: red" id="error"></h5>
 			<hr id="title-hrule">
 			<input id="question" type="text" class="form-control" placeholder="Add your poll question..." ng-model="question" required>
+			<span hidden id="question-validation" class="warning">Every poll needs a question!</span>
 			<form role="form" ng-submit="addChoice()">
 				<div id="choice-input-group" class="input-group">
 					<span class="input-group-btn">
@@ -164,6 +174,7 @@
 					</span>
 				<input type="text" class="form-control choice" id="choice" placeholder="Add a choice to your poll..." ng-model="choiceNew" required>
 				</div>
+				<span hidden id="choices-validation" class="error">At least two choices are required!</span>
 				<div id="contact-recaptcha" class="g-recaptcha" data-sitekey="{{site_key}}"></div>
 			</form>
 		</div>
@@ -208,6 +219,10 @@ $(document).ready(function () {
 	}
 })
 $( '#create-poll-nav' ).addClass('active');
+$( '#submit-poll' ).click(function(e) {
+	e.preventDefault();
+	$( '#submit-poll').prop('disabled', true);
+})
 var app = angular.module('pollCreateApp', []);
 
 app.config(function ($interpolateProvider) {
@@ -217,7 +232,7 @@ app.config(function ($interpolateProvider) {
 app.factory('pollService', function($http) {
 return {
 	savePoll: function(data, cb) {
-		$http.post('/polls/create', data).success(cb);
+		$http.post('/polls/create', data).success(cb).error(cb);
 	}
 }
 });
@@ -241,6 +256,13 @@ $scope.removeChoice = function(index)
 
 $scope.addChoice = function()
 {
+	var choicesError = $( '#choices-validation' );
+	if ( $scope.choices.length < 1) {
+			choicesError.show();
+		} else {
+			choicesError.hide();
+	}
+
 	if($scope.choices.indexOf($scope.choiceNew) === -1)
 	{
 		$scope.choices.push($scope.choiceNew);
@@ -252,6 +274,22 @@ $scope.submitPoll = function() {
 
 	$scope.recaptchaResponse = $( '#g-recaptcha-response' ).val();
 
+	if (!$scope.question || $scope.choices.length < 2) {
+		var questionError = $( '#question-validation' );
+		var choicesError = $( '#choices-validation' );
+		if (!$scope.question) {
+			questionError.show();
+		} else {
+			questionError.hide();
+		}
+
+		if ( $scope.choices.length < 2) {
+			choicesError.show();
+		} else {
+			choicesError.hide();
+		}
+		return null
+	}
 
 	$scope.poll = {
 		question: $scope.question,
@@ -259,13 +297,14 @@ $scope.submitPoll = function() {
 		recaptchaResponse: $scope.recaptchaResponse
 	};
 
-	pollService.savePoll($scope.poll, function(data, status) {
+	pollService.savePoll($scope.poll, function(data, status, headers, config) {
 		if(status === 200)
 		{
 			var redirectUrl = data.code + '?token=' + data.token;
 			window.location = redirectUrl;
 		} else if(status === 403) {
-			// some dom element flash message about failure
+			$( '#error ').text(data.error);
+			$( '#error ').show();
 		}
 	});
 };

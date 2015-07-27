@@ -36,6 +36,18 @@ router.post('/create', function (req, res) {
 		question: req.body.question,
 		choices: req.body.choices
 	};
+
+	console.log(data.question === null);
+	console.log(data.choices.length === 0);
+	console.log('testing');
+	console.log(req.body.recaptchaResponse);
+	console.log(req.body.recaptchaResponse === '');
+
+	if (data.question === '' || data.choices.length === 0 || req.body.recaptchaResponse === '') {
+		console.log('rendering create');
+		return res.status(403).send({error: 'Your submission is invalid. Each poll needs a question and at least two choices, as well as a validated reCAPTCHA.'});
+	}
+
 	var responses = [];
 	var poll = new Poll(data);
 	var created_at = Date.now();

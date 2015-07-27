@@ -5,7 +5,7 @@ var router = express.Router();
 var path = require('path');
 var request = require('request');
 var Poll = require('../models/Poll');
-var Logger = require('../lib/Logger.js');
+var Logger = require('../lib/logger');
 var logger = new Logger('log/poll.log');
 var session = null;
 
@@ -27,7 +27,8 @@ router.get('/', function (req, res) {
 });
 
 router.get('/create', function (req, res) {
-	res.render('create');
+	console.log(process.env['RECAPTCHA_SITE_KEY']);
+	res.render('create', {site_key: process.env['RECAPTCHA_SITE_KEY']});
 });
 
 router.post('/create', function (req, res) {
@@ -82,13 +83,14 @@ router.get('/:code', function (req, res) {
 	var creator = false; // whether client created, i.e. unique token is present in URL, the displayed poll
 
 	Poll.findByCode(code, function (err, instance) {
-		if (err) res.status(404).send('Poll not found.');
+		if (err) return res.status(404).send('Poll not found.');
+		if (instance.data === null) return res.render('404');
 		poll = instance;
 
 		if (poll.get('token') === token) {
 			creator = true;
 		}
-		res.render("poll", {poll: poll.data, title: 'Pollgeni.us', creator: creator});
+		return res.render("poll", {poll: poll.data, title: 'Pollgeni.us', creator: creator});
 	});
 });
 
@@ -99,10 +101,9 @@ router.put('/:code', function (req, res) {
 	var countToIncrement = null;
 	var redirectUrl = '/polls/' + code + '/results';
 
-	// if(session.voted.indexOf(code) >= 0) {
-	// 	logger.log('Attempted second vote on poll: ' + code, 'warn');
-	// 	return res.redirect(redirectUrl);
-	// }
+	if (session.voted.indexOf(code) !== -1) {
+		return res.redirect(redirectUrl);
+	}
 
 	session.voted.push(code); // prevents session from voting on poll with variable code more than once
 

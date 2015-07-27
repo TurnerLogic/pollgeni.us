@@ -10,13 +10,14 @@ var session = require('express-session');
 var methodOverride = require('method-override');
 var Poll = require('./models/Poll');
 var env = require('./.env');
-var Logger = require('./lib/Logger');
+var Logger = require('./lib/logger');
 var app_root = __dirname;
 var log_directory = app_root + '/log';
 var totalActiveUsers = 0; // active total
 
 process.env['RECAPTCHA_SECRET_KEY'] = env['RECAPTCHA_SECRET_KEY'];
 process.env['SESSION_SECRET'] = env['SESSION_SECRET'];
+process.env['RECAPTCHA_SITE_KEY'] = env['RECAPTCHA_SITE_KEY'];
 
 app.use(session({
 	secret: process.env['SESSION_SECRET'],
@@ -59,13 +60,6 @@ app.get('/', function (req, res) {
 
 app.use('/polls', require('./controllers/polls'));
 
-app.use(function (req, res, next) {
-	res.status(404);
-
-	if (req.accepts('html')) {
-		res.render('404');
-	}
-});
 
 app.post('/', function (req, res) {
 	var code = req.body.code;
@@ -81,6 +75,13 @@ app.get('/:code', function (req, res) {
 	res.redirect(redirectUrl);
 });
 
+app.use(function (req, res, next) {
+	res.status(404);
+
+	if (req.accepts('html')) {
+		res.render('404');
+	}
+});
 
 
 var usernames = {};

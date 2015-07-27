@@ -1,8 +1,265 @@
 {{#yield-styles}}
+<<<<<<< HEAD
 	<meta property="og:site_name" content="pollgeni.us"/>
 	<meta id="site_content" property="og:description" content="" />
 	<meta property="og:url" content="http://pollgeni.us:3000/polls/8y773/results" />
 	<link rel="stylesheet" href="/css/views/results.css" media="screen" title="no title" charset="utf-8"><!-- results css -->
+=======
+<link rel="stylesheet" type="text/css" href="/css/result_style.css">
+<meta property="og:site_name" content="pollgeni.us"/>
+<meta id="site_content" property="og:description" content="" />
+<meta property="og:url" content="http://pollgeni.us:3000/polls/8y773/results" />
+<style type="text/css">
+@font-face { font-family: globerSemiBold; src: url('/fonts/Glober SemiBold Free.otf'); }
+@font-face { font-family: globerThin; src: url('/fonts/Glober Thin Free.otf'); }
+
+body,html{
+	background-color: #212635;
+	width: 100%;
+	height: 100%;
+}
+h1{
+	font-family: 'globerSemiBold', sans-serif;
+	font-size: 95px;
+	line-height: 0.9;
+	text-align: center;
+	margin-top: 110px;
+	margin-bottom: 40px;
+	padding-top: 20px;
+	color: #fff;
+}
+h2{
+	font-family: 'globerThin', sans-serif;
+	font-size: 55px;
+	text-align: center;
+	color: #E9BC1B;
+	margin-top: 0px;
+	margin-bottom: 0px;
+	padding-top: 20px;
+}
+p{
+	font-family: 'globerThin', sans-serif;
+	font-size: 35px;
+	padding-top: 75px;
+}
+.row{
+	margin-right: 0px;
+	margin-left: 0px;
+}
+.col-md-12{
+	padding-top: 20px;
+	padding-left: 0px;
+}
+.col-md-6,.col-md-12{
+	padding-bottom: 20px;
+}
+
+.col-md-3{
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+.circle{
+	border-radius: 50%;
+	width: 225px;
+	height: 225px;
+	border: 1px solid #fff;
+	background-color: #c76256;
+}
+.container{
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+canvas{
+	padding-bottom: 10px;
+}
+
+.pie-box{
+	background-color: #212635;
+	color: #e7e5dc;
+/*		min-height: 515px;
+	height: 564px;*/
+}
+.poll-choices{
+	background-color: #F5EACD;
+	min-height: 515px;
+}
+
+div.chatArea{
+	background-color: #78c0a8;
+	margin-bottom: 25px;
+	overflow: scroll;
+	max-height: 165px;
+}
+ #messages {
+ 	font-family: 'globerSemiBold', sans-serif;
+ 	list-style-type: none; margin: 0; padding: 0;
+ }
+ #messages li {
+  	padding: 5px 10px;
+  	font-size: 15px;
+  }
+ #messages li:nth-child(odd) { background: #eee; }
+ #chat-section{
+ 	background-color: #78c0a8;
+ }
+ .form{
+ 	display: inline-block;
+ 	list-style-type: none;
+ 	font-family:  'globerThin', sans-serif;
+ 	color: white;
+ 	font-size: 25px;
+ }
+ li.chat.page{
+ 	overflow: scroll;
+	max-height: 165px;
+ }
+
+ ul#messages{
+ 	overflow: scroll;
+	max-height: 165px;
+	width: 100%;
+ }
+
+ div#chat-section{
+ 	height: 165px;
+ 	max-height: 165px;
+ 	overflow: scroll;
+ 	position: relative;
+ 	width: 100%;
+
+ }
+ button{
+ 	font-family: 'globerThin', sans-serif;
+ 	font-size: 35px;
+ 	color: #E9BC1B;
+ }
+
+ div.col-md-6.poll-choices{
+ 	min-height: 505px;
+ 	max-height: 564px;
+ 	overflow: scroll;
+ 	padding-bottom: 10px;
+ }
+ ul#pages{
+ 	padding-left: 0px;
+ 	margin-bottom: 0px;
+ 	/*width: 100%;*/
+ }
+
+ #pollContainer {
+ 	text-align: center;
+ }
+ .inputMessage{
+		bottom: 0;
+    position: absolute;
+    width: 100%;
+
+ }
+ .usernameInput{
+ 	bottom: 0;
+ 	position: absolute;
+ 	width: 100%;
+ }
+
+ li > span{
+ 	display: inline-block;
+ 	margin-right: 10px;
+ 	width: 25px;
+ 	height: 25px;
+ 	border-radius: 5px;
+
+ }
+ .pie-legend{
+	 display:block;
+	 list-style: none;
+	 color: #fff;
+	 background-color: #1e9fb4;
+	 padding-top: 20px;
+	 padding-bottom: 38px;
+	 font-size: 30px;
+	 margin-bottom: 0px;
+	 font-family: 'globerThin', sans-serif;
+	 border-radius: 15px;
+ }
+
+li.col-md-6{
+	line-height: 1.1;
+}
+#legend-container{
+	font-family: 'globerThin', sans-serif;
+	margin: 0px 0px;
+	padding: 0px 0px;
+	width: 25%;
+	position: relative;
+	top: 0;
+	left: 0;
+}
+
+ul.pie-legend.col-md-4{
+	margin-bottom: 40px;
+	margin-top: 10px;
+}
+
+#company-name{
+	font-size: 40px;
+	font-family: 'Montserrat',sans-serif;
+	margin-top: 10px;
+	float: left;
+}
+
+.legend-wrapper {
+	margin: 5px 0px;
+}
+
+.footer-text{
+	font-size: 20px;
+	padding-top: 0px;
+	font-family: 'Roboto', sans-serif;
+	font-weight: 300;
+	line-height: 24px;
+}
+.col-md-12.footer-about.animated.fadeInUp.visible{
+	padding-bottom: 0px;
+}
+.legend-color {
+	float: left;
+	height: 25px;
+	width: 25px;
+	border-radius: 15px;
+	margin-right: 10px;
+	/*margin-bottom: 10px;*/
+}
+
+.media-container {
+	text-align: center;
+}
+@media (max-width: 991px) {
+	 #poll-title{
+		 font-size: 55px;
+	 }
+	#company-name{
+		float: none;
+		text-align: center;
+	}
+}
+
+.twitter-share-button,.fb-share-button{
+	float: right;
+}
+
+div.col-md-8{
+	border: 3px white solid;
+}
+.legend-label {
+	padding-top: 4px;
+}
+.media-wrapper {
+	float: left;
+	margin: 4px 0px;
+}
+</style>
+>>>>>>> 573c281b978d17bdf6b9ba0384179abe08006d9c
 {{/yield-styles}}
 
 <!-- poll container -->

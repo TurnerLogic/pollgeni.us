@@ -25,7 +25,7 @@ To clone the repository to your local machine (not in your VM), use the followin
 # RUN THIS COMMAND FROM YOUR LOCAL ENVIRONMENT
 
 cd ~/Sites
-git clone git@github.com:YOUR_USERNAME/pollgeni.us.git
+git clone git@github.com:YOUR_USERNAME/pollgeni.us.git pollgenius.dev
 ```
 
 ## Create a Database

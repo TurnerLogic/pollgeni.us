@@ -7,14 +7,6 @@ var request = require('request');
 var Poll = require('../models/Poll');
 var Logger = require('../lib/logger');
 var logger = new Logger('log/poll.log');
-var session = null;
-
-
-router.use(function (req, res, next) {
-	session = session || req.session;
-	session.voted = session.voted || [];
-	next();
-});
 
 router.get('/', function (req, res) {
 	var page = parseInt(req.query.page) || 1;
@@ -113,12 +105,6 @@ router.put('/:code', function (req, res) {
 	var countToIncrement = null;
 	var redirectUrl = '/polls/' + code + '/results';
 
-	if (session.voted.indexOf(code) !== -1) {
-		return res.redirect(redirectUrl);
-	}
-
-	session.voted.push(code); // prevents session from voting on poll with variable code more than once
-
 	io.to(code).emit('poll submission', code);
 	io.to('public').emit('poll submission', code);
 	io.to('index').emit('poll submission', code);
@@ -174,8 +160,7 @@ router.delete('/:code', function (req, res) {
 });
 
 
-router.get('/:code/results', function (req, res)
-{
+router.get('/:code/results', function (req, res) {
 	return res.render('results');
 });
 
